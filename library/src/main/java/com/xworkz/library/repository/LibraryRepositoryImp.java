@@ -1,6 +1,7 @@
 package com.xworkz.library.repository;
 
 import com.xworkz.library.entity.LibraryEntity;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.*;
@@ -8,9 +9,11 @@ import javax.persistence.*;
 @Repository
 public class LibraryRepositoryImp implements LibraryRepository{
 
+    @Autowired
+    EntityManagerFactory emf;
+
     @Override
-    public boolean save(LibraryEntity entity) {
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("x-workz");
+    public boolean signUp(LibraryEntity entity) {
         EntityManager em = null;
         EntityTransaction et = null;
 
@@ -21,6 +24,7 @@ public class LibraryRepositoryImp implements LibraryRepository{
             et.begin();
             em.persist(entity);
             et.commit();
+            System.out.println("Data Saved");
 
             return true;
         }
@@ -37,12 +41,12 @@ public class LibraryRepositoryImp implements LibraryRepository{
     }
 
     @Override
-    public LibraryEntity find(String name) {
+    public LibraryEntity signIn(String name) {
 
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("x-workz");
+
         EntityManager em = null;
         EntityTransaction et = null;
-        LibraryEntity libraryEntity = new LibraryEntity();
+        LibraryEntity libraryEntity ;
 
         try{
             em = emf.createEntityManager();
@@ -50,14 +54,15 @@ public class LibraryRepositoryImp implements LibraryRepository{
             et.begin();
 
 
-            Query query = em.createNamedQuery("getSignUpDetails");
-            query.setParameter("nameBy",name);
+            Query query = em.createNamedQuery("getByUsernameAndPassword");
+            query.setParameter("name",name);
 
             libraryEntity=(LibraryEntity) query.getSingleResult();
 
-            System.out.println(libraryEntity);
+            System.out.println("Details are here");
 
             et.commit();
+            return  libraryEntity;
 
 
         }
@@ -70,7 +75,47 @@ public class LibraryRepositoryImp implements LibraryRepository{
         finally {
             em.close();
         }
-        return libraryEntity;
+        return null;
     }
 
+    @Override
+    public Boolean forgotPassword(String email, String password, String confirmPassword) {
+
+        EntityManager em = null;
+        EntityTransaction et = null;
+        LibraryEntity libraryEntity = new LibraryEntity();
+
+        try{
+            em = emf.createEntityManager();
+            et = em.getTransaction();
+            et.begin();
+
+            Query query = em.createNamedQuery("getEntityByEmail");
+            query.setParameter("email",email);
+
+            libraryEntity =(LibraryEntity) query.getSingleResult();
+
+
+            System.out.println("Entity found");
+            libraryEntity.setPassword(password);
+            libraryEntity.setConfirmPassword(confirmPassword);
+            et.commit();
+
+            return true;
+
+        }
+        catch (Exception e){
+            if(et.isActive()){
+                et.rollback();
+            }
+            e.printStackTrace();
+        }
+        finally {
+            em.close();
+        }
+
+        return false;
+    }
 }
+
+

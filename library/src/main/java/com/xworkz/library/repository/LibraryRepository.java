@@ -4,8 +4,10 @@ import com.xworkz.library.entity.LibraryEntity;
 
 public interface LibraryRepository {
 
-    boolean save(LibraryEntity entity);
+    boolean signUp(LibraryEntity entity);
 
-    LibraryEntity find(String name);
+    LibraryEntity signIn(String name);
+
+    Boolean forgotPassword(String email, String password, String confirmPassword);
 
 }

@@ -1,10 +1,13 @@
 package com.xworkz.library.service;
 
+import com.xworkz.library.dto.LibraryDTO;
 import com.xworkz.library.entity.LibraryEntity;
 
 public interface LibraryService {
 
-    boolean save(LibraryEntity libraryEntity);
+    boolean signUp(LibraryDTO libraryDTO);
 
-    boolean find(String name, String password);
+    boolean signIn(String name, String password);
+
+    boolean forgotPassword(String email, String password, String confirmPassword);
 }

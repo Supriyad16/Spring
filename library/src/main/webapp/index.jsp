@@ -31,7 +31,10 @@
     </div>
 </nav>
 
-<!-- Main Content -->
+<h3 style="color:green">${logInSuccess}</h3>
+<h3 style="color:green">${updatedPassword}</h3>
+
+
 <div class="container text-center mt-4">
     <h1 class="mb-4">Supriya_Xworkz Library Application</h1>
 
