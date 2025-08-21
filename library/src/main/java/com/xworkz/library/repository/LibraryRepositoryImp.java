@@ -85,24 +85,27 @@ public class LibraryRepositoryImp implements LibraryRepository{
         EntityTransaction et = null;
         LibraryEntity libraryEntity = new LibraryEntity();
 
-        try{
+        try {
             em = emf.createEntityManager();
             et = em.getTransaction();
             et.begin();
 
             Query query = em.createNamedQuery("getEntityByEmail");
-            query.setParameter("email",email);
+            query.setParameter("email", email);
 
-            libraryEntity =(LibraryEntity) query.getSingleResult();
+            libraryEntity = (LibraryEntity) query.getSingleResult();
 
 
-            System.out.println("Entity found");
-            libraryEntity.setPassword(password);
-            libraryEntity.setConfirmPassword(confirmPassword);
-            et.commit();
+            if (libraryEntity != null) {
+                libraryEntity.setPassword(password);
+                libraryEntity.setConfirmPassword(confirmPassword);
+                libraryEntity.setFailedAttempts(0);
+                libraryEntity.setAccountLocked(false);
+                em.merge(libraryEntity);
+                et.commit();
+                return true;
 
-            return true;
-
+            }
         }
         catch (Exception e){
             if(et.isActive()){
@@ -116,6 +119,87 @@ public class LibraryRepositoryImp implements LibraryRepository{
 
         return false;
     }
+
+
+    @Override
+    public LibraryEntity findByName(String name) {
+
+        EntityManager em = null;
+        EntityTransaction et = null;
+        LibraryEntity libraryEntity ;
+        try {
+            em = emf.createEntityManager();
+            et = em.getTransaction();
+            et.begin();
+
+            Query query = em.createNamedQuery("getByUsernameAndPassword");
+            query.setParameter("name",name);
+
+           libraryEntity =(LibraryEntity) query.getSingleResult();
+
+        } catch (Exception e) {
+            if (et.isActive()) et.rollback();
+            e.printStackTrace();
+        } finally {
+            if (em != null)
+                em.close();
+        }
+
+
+
+        return null;
+    }
+
+
+
+    @Override
+    public void lock(LibraryEntity entity) {
+        EntityManager em = null;
+        EntityTransaction et = null;
+        try {
+            em = emf.createEntityManager();
+            et = em.getTransaction();
+            et.begin();
+            em.merge(entity);
+            et.commit();
+        } catch (Exception e) {
+            if (et.isActive()) et.rollback();
+            e.printStackTrace();
+        } finally {
+            if (em != null) em.close();
+        }
+    }
+
+    @Override
+    public boolean updateprofile(LibraryEntity libraryEntity) {
+
+        EntityManager em = null;
+        EntityTransaction et = null;
+        try {
+            em = emf.createEntityManager();
+            et = em.getTransaction();
+            et.begin();
+
+            Query query = em.createNamedQuery("updateProfile");
+            query.setParameter("name", libraryEntity.getName());
+            query.setParameter("age",libraryEntity.getAge());
+            query.setParameter("address",libraryEntity.getAddress());
+            query.setParameter("libraryId",libraryEntity.getLibraryId());
+            query.setParameter("gender",libraryEntity.getGender());
+            query.setParameter("phoneNumber",libraryEntity.getPhoneNumber());
+            query.executeUpdate();
+            et.commit();
+        } catch (Exception e) {
+            if (et.isActive()) et.rollback();
+            e.printStackTrace();
+        } finally {
+            if (em != null) em.close();
+        }
+
+        return false;
+    }
+
 }
+
 
 

@@ -48,8 +48,6 @@ public class LibraryServiceImp implements LibraryService{
         sendEmail(libraryEntity.getEmail());
         libraryRepository.signUp(libraryEntity);
 
-
-
         return true;
     }
 
@@ -71,6 +69,24 @@ public class LibraryServiceImp implements LibraryService{
 
         return libraryRepository.forgotPassword(email,password,confirmPassword);
     }
+
+    @Override
+    public void increaseFailedAttempts(LibraryEntity libraryEntity) {
+        int newAttempts = libraryEntity.getFailedAttempts() + 1;
+        libraryEntity.setFailedAttempts(newAttempts);
+        if (newAttempts >= 3) {
+            libraryEntity.setAccountLocked(true);
+        }
+        libraryRepository.lock(libraryEntity);
+    }
+
+    @Override
+    public void resetFailedAttempts(LibraryEntity libraryEntity) {
+            libraryEntity.setFailedAttempts(0);
+            libraryRepository.lock(libraryEntity);
+        }
+
+
 
 
     private void sendEmail(String email){
@@ -109,5 +125,25 @@ public class LibraryServiceImp implements LibraryService{
         } catch (MessagingException e) {
             e.printStackTrace();
         }
+
+    }
+
+    @Override
+    public LibraryEntity findByName(String name) {
+        return libraryRepository.findByName(name);
+    }
+
+    @Override
+    public boolean updateprofile(LibraryDTO libraryDTO) {
+
+        LibraryEntity libraryEntity=new LibraryEntity();
+        libraryEntity.setName(libraryDTO.getName());
+        libraryEntity.setAge(libraryDTO.getAge());
+        libraryEntity.setAddress(libraryDTO.getAddress());
+        libraryEntity.setLibraryId(libraryDTO.getLibraryId());
+        libraryEntity.setGender(libraryDTO.getGender());
+        libraryEntity.setPhoneNumber(libraryDTO.getPhone());
+
+        return false;
     }
 }

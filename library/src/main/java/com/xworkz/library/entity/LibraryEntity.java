@@ -16,6 +16,7 @@ import javax.persistence.*;
 
 @NamedQuery(name = "getByUsernameAndPassword", query = "select entity from LibraryEntity entity where entity.name =:name")
 @NamedQuery(name = "getEntityByEmail" ,query = "select entity from LibraryEntity entity where entity.email =:email")
+@NamedQuery(name="updateProfile", query = "update LibraryEntity le set e.name=:name, e.age=:age, e.address=:address, e.libraryId=:libraryId, e.gender=:gender, e.phoneNumber=:phoneNumber where email =:email")
 public class LibraryEntity {
 
     @Id
@@ -46,5 +47,9 @@ public class LibraryEntity {
     @Transient
     @Column(name = "confirm_password")
     private String confirmPassword;
+
+    private int failedAttempts = 0;
+
+    private boolean accountLocked = false;
 
 }

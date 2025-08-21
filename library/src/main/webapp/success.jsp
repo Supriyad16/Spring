@@ -30,34 +30,6 @@
         </div>
     </div>
 </nav>
-
-<h3 style="color:green">${logInSuccess}</h3>
-<h3 style="color:green">${updatedPassword}</h3>
-
-
-<div class="container text-center mt-4">
-    <h1 class="mb-4">Supriya_Xworkz Library Application</h1>
-
-    <ul class="list-unstyled">
-        <li class="mb-2">
-      <span class="badge bg-info p-2">
-        <a class="btn btn-info text-white fw-bold" href="signup.jsp">Sign Up</a>
-      </span>
-        </li>
-        <li>
-      <span class="badge bg-info p-2">
-        <a class="btn btn-info text-white fw-bold" href="signin.jsp">Sign In</a>
-      </span>
-        </li>
-
-        <li>
-      <span class="badge bg-info p-2">
-        <a class="btn btn-info text-white fw-bold" href="updateProfile.jsp">Update Profile</a>
-      </span>
-        </li>
-    </ul>
-</div>
-</div>
-
+<h1> Profile Updated Successfully </h1>
 </body>
 </html>

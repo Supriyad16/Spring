@@ -10,4 +10,12 @@ public interface LibraryService {
     boolean signIn(String name, String password);
 
     boolean forgotPassword(String email, String password, String confirmPassword);
+
+    void increaseFailedAttempts(LibraryEntity libraryEntity);
+
+    void resetFailedAttempts(LibraryEntity libraryEntity);
+
+    LibraryEntity findByName(String name);
+
+    boolean updateprofile(LibraryDTO libraryDTO);
 }

@@ -67,6 +67,7 @@ public class LibraryController {
             return modelAndView;
         }
 
+        LibraryEntity libraryEntity = libraryService.findByName(name);
         boolean result = libraryService.signIn(name, password);
         if(!result){
             System.out.println("Not matched");
@@ -75,14 +76,30 @@ public class LibraryController {
             return  modelAndView;
         }
 
+        if (libraryEntity.isAccountLocked()) {
+            modelAndView.addObject("error", "Account locked. Please reset your password.");
+            modelAndView.setViewName("forgotPassword");
+            return modelAndView;
+        }
+
+        if (!libraryEntity.getPassword().equals(password)) {
+            libraryService.increaseFailedAttempts(libraryEntity); // increases and locks if >=3
+            modelAndView.addObject("error", "Invalid password. Attempts left: " + (3 - libraryEntity.getFailedAttempts()));
+            modelAndView.setViewName("signin");
+            return modelAndView;
+        }
+
+        libraryService.resetFailedAttempts(libraryEntity
+        );
+
         System.out.println("matched");
         modelAndView.addObject("logInSuccess", "Successfully Logged In");
         modelAndView.setViewName("index");
         return modelAndView;
     }
 
-  //  @RequestMapping("/forgotPassword")
 
+    @RequestMapping("/forgotPassword")
     private ModelAndView forgotPassword(@Valid LibraryDTO libraryDTO, BindingResult bindingResult, ModelAndView modelAndView) {
 
         if (bindingResult.hasErrors()) {
@@ -106,7 +123,28 @@ public class LibraryController {
         modelAndView.setViewName("index");
         return modelAndView;
 
-
     }
 
+    public ModelAndView updateProfile(@Valid LibraryDTO libraryDTO, BindingResult bindingResult, ModelAndView modelAndView) {
+
+        if (bindingResult.hasErrors()) {
+            modelAndView.addObject("error", "Please correct the errors in the form");
+            modelAndView.setViewName("updateProfile");
+            return modelAndView;
+        }
+
+        boolean result = libraryService.updateprofile(libraryDTO);
+
+        if (!result) {
+            modelAndView.addObject("error", "Profile update failed");
+            modelAndView.setViewName("updateProfile");
+            return modelAndView;
+        }
+
+        modelAndView.addObject("message", "Profile updated successfully");
+        modelAndView.setViewName("success");
+        return modelAndView;
     }
+}
+
+
