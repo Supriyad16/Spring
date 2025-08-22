@@ -46,7 +46,7 @@ public class LibraryDTO {
     private Integer booksTaken;
 
     @NotNull
-    @Pattern(regexp = "^(?=.*[A-Z])(?=.*[^A-Za-z0-9])(?=(.*\\d){3,}).{3,15}$", message = "password should match")
+    @Pattern(regexp = "^(?=.*[A-Z])(?=.*[^A-Za-z0-9])(?=(.*\\d){3,}).{3,15}$", message = "Invalid password")
     private String password;
 
     @NotNull(message = "Confirm Password cannot be empty")

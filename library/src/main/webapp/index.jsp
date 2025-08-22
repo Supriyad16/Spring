@@ -49,7 +49,7 @@
         <a class="btn btn-info text-white fw-bold" href="signin.jsp">Sign In</a>
       </span>
         </li>
-
+<br/>
         <li>
       <span class="badge bg-info p-2">
         <a class="btn btn-info text-white fw-bold" href="updateProfile.jsp">Update Profile</a>

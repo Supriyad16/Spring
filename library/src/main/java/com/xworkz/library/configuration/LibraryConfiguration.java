@@ -12,6 +12,7 @@ import org.springframework.web.servlet.config.annotation.ViewResolverRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import javax.sql.DataSource;
+import java.util.Properties;
 
 
 @Configuration
@@ -34,10 +35,17 @@ public class LibraryConfiguration implements WebMvcConfigurer {
 
         LocalContainerEntityManagerFactoryBean factoryBean = new LocalContainerEntityManagerFactoryBean();
         factoryBean.setDataSource(dataSource());
+        factoryBean.setJpaProperties(jpaProperties());
         factoryBean.setPackagesToScan("com.xworkz.library.entity");
         factoryBean.setJpaVendorAdapter(new HibernateJpaVendorAdapter());
 
         return factoryBean;
+    }
+
+    public Properties jpaProperties(){
+        Properties properties=new Properties();
+        properties.setProperty("hibernate.hbm2ddl.auto","update");
+        return properties;
     }
 
     public DataSource dataSource(){
@@ -46,7 +54,6 @@ public class LibraryConfiguration implements WebMvcConfigurer {
         driverManagerDataSource.setUrl("jdbc:mysql://localhost:3306/library");
         driverManagerDataSource.setUsername("root");
         driverManagerDataSource.setPassword("Xworkzodc@123");
-
         return  driverManagerDataSource;
     }
 }

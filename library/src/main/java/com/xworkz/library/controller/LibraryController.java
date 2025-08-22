@@ -27,16 +27,27 @@ public class LibraryController {
 
     @RequestMapping("/signup")
     public ModelAndView signUp(@Valid LibraryDTO libraryDTO, BindingResult bindingResult) {
+        System.out.println(libraryDTO);
         ModelAndView modelAndView = new ModelAndView();
 
         if (bindingResult.hasErrors()) {
-            modelAndView.addObject("errors", bindingResult.getAllErrors());
+
+            System.out.println("Signup page");
+            List<ObjectError> allErrors = bindingResult.getAllErrors();
+            for (ObjectError error:allErrors){
+                System.out.println(error.getDefaultMessage());
+            }
+
+            modelAndView.addObject("errors", allErrors);
             modelAndView.addObject("value", libraryDTO);
-            modelAndView.setViewName("signup");
+            modelAndView.setViewName("error");
             return modelAndView;
         }
 
         if (!libraryDTO.getPassword().equals(libraryDTO.getConfirmPassword())) {
+
+            System.out.println("confirm password");
+
             modelAndView.addObject("error", "Password and Confirm Password do not match");
             modelAndView.addObject("value", libraryDTO);
             modelAndView.setViewName("signup");
@@ -89,8 +100,7 @@ public class LibraryController {
             return modelAndView;
         }
 
-        libraryService.resetFailedAttempts(libraryEntity
-        );
+        libraryService.resetFailedAttempts(libraryEntity);
 
         System.out.println("matched");
         modelAndView.addObject("logInSuccess", "Successfully Logged In");
@@ -146,5 +156,3 @@ public class LibraryController {
         return modelAndView;
     }
 }
-
-
