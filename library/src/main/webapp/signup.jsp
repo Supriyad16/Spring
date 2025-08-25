@@ -46,7 +46,7 @@
 
 
 
-        <form action="library" class="bg-light p-4 border rounded" method="post">
+        <form action="signup" class="bg-light p-4 border rounded" method="post">
 
             <span style="color:red">${error}</span>
             <span style="color:green">${success}</span>
@@ -112,8 +112,8 @@
                 <span id="passwordErrorId" class="text-danger"></span>
             </div>
             <div class="mb-3">
-                <label for="cpasswordId" class="form-label" >Confirm Password</label>
-                <input type="password" class="form-control" oninput="validateConfirmPassword()" id="cpasswordId" name="cpassword" required>
+                <label for="confirmPassword" class="form-label" >Confirm Password</label>
+                <input type="password" class="form-control" oninput="validateConfirmPassword()" id="confirmPassword" name="confirmPassword" required>
                 <span id="cpasswordErrorId" class="text-danger"></span>
             </div>
 
