@@ -3,6 +3,7 @@ package com.xworkz.library.controller;
 import com.xworkz.library.dto.LibraryDTO;
 import com.xworkz.library.entity.LibraryEntity;
 import com.xworkz.library.service.LibraryService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.util.List;
 
@@ -68,31 +70,47 @@ public class LibraryController {
         return modelAndView;
     }
 
-
     @RequestMapping("/signin")
-    public ModelAndView signIn(@RequestParam String name, @RequestParam String password, ModelAndView modelAndView){
+    public ModelAndView signIn(@RequestParam String userName,
+                               @RequestParam String password,
+                               ModelAndView modelAndView,
+                               HttpSession httpSession) {
 
-        if(name.isEmpty() || password.isEmpty()){
-            modelAndView.addObject("error","username and password cannot be empty");
+        if (userName.isEmpty() || password.isEmpty()) {
+            modelAndView.addObject("error", "username and password cannot be empty");
             modelAndView.setViewName("signin");
             return modelAndView;
         }
 
-        LibraryEntity libraryEntity = libraryService.findByName(name);
-        boolean result = libraryService.signIn(name, password);
-        if(!result){
-            System.out.println("Not matched");
-            modelAndView.addObject("error", "Canot find user");
+        LibraryDTO libraryDTO = libraryService.signIn(userName, password);
+        if (libraryDTO == null) {
+            modelAndView.addObject("error", "Cannot find user");
             modelAndView.setViewName("signin");
-            return  modelAndView;
+            return modelAndView;
         }
 
+        // Copy user details into session
+        LibraryDTO libraryDTO1 = new LibraryDTO();
+        BeanUtils.copyProperties(libraryDTO, libraryDTO1);
+        httpSession.setAttribute("user", libraryDTO1);
+
+        // ✅ Get user entity from DB instead of creating new object
+        LibraryEntity libraryEntity = libraryService.findByUserName(userName);
+
+        if (libraryEntity == null) {
+            modelAndView.addObject("error", "User entity not found");
+            modelAndView.setViewName("signin");
+            return modelAndView;
+        }
+
+        // ✅ Account lock check
         if (libraryEntity.isAccountLocked()) {
             modelAndView.addObject("error", "Account locked. Please reset your password.");
             modelAndView.setViewName("forgotPassword");
             return modelAndView;
         }
 
+        // ✅ Password check
         if (!libraryEntity.getPassword().equals(password)) {
             libraryService.increaseFailedAttempts(libraryEntity); // increases and locks if >=3
             modelAndView.addObject("error", "Invalid password. Attempts left: " + (3 - libraryEntity.getFailedAttempts()));
@@ -100,13 +118,15 @@ public class LibraryController {
             return modelAndView;
         }
 
+        // ✅ Reset attempts after success
         libraryService.resetFailedAttempts(libraryEntity);
 
-        System.out.println("matched");
-        modelAndView.addObject("logInSuccess", "Successfully Logged In");
-        modelAndView.setViewName("index");
+        // ✅ Success
+        modelAndView.addObject("logInSuccess", "Hi " + userName + ", Successfully Logged In. Welcome to Xworkz!");
+        modelAndView.setViewName("profile");
         return modelAndView;
     }
+
 
 
     @RequestMapping("/forgotPassword")
@@ -155,4 +175,4 @@ public class LibraryController {
         modelAndView.setViewName("success");
         return modelAndView;
     }
-}
+

@@ -7,7 +7,7 @@ public interface LibraryService {
 
     boolean signUp(LibraryDTO libraryDTO);
 
-    boolean signIn(String name, String password);
+    LibraryDTO signIn(String name, String password);
 
     boolean forgotPassword(String email, String password, String confirmPassword);
 

@@ -52,7 +52,7 @@ public class LibraryServiceImp implements LibraryService{
     }
 
     @Override
-    public boolean signIn(String name, String password) {
+    public LibraryDTO signIn(String name, String password) {
         LibraryEntity libraryEntity = libraryRepository.signIn(name);
         String retrivePassword = libraryEntity.getPassword();
         String decrypt = basicTextEncryptor.decrypt(retrivePassword);
