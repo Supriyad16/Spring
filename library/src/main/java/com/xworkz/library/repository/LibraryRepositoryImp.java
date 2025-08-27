@@ -43,7 +43,6 @@ public class LibraryRepositoryImp implements LibraryRepository{
     @Override
     public LibraryEntity signIn(String name) {
 
-
         EntityManager em = null;
         EntityTransaction et = null;
         LibraryEntity libraryEntity ;
@@ -53,17 +52,19 @@ public class LibraryRepositoryImp implements LibraryRepository{
             et = em.getTransaction();
             et.begin();
 
-
             Query query = em.createNamedQuery("getByUsernameAndPassword");
             query.setParameter("name",name);
 
-            libraryEntity=(LibraryEntity) query.getSingleResult();
-
+            try{
+                libraryEntity=(LibraryEntity) query.getSingleResult();
+            }
+            catch (NoResultException nrp){
+                System.out.println("Empty Entity");
+                return null;
+            }
             System.out.println("Details are here");
-
             et.commit();
             return  libraryEntity;
-
 
         }
         catch (Exception e){
