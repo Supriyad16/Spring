@@ -4,6 +4,7 @@ import com.xworkz.library.dto.LibraryDTO;
 import com.xworkz.library.entity.LibraryEntity;
 import com.xworkz.library.repository.LibraryRepository;
 import org.jasypt.util.text.BasicTextEncryptor;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -54,15 +55,24 @@ public class LibraryServiceImp implements LibraryService{
     @Override
     public LibraryDTO signIn(String name, String password) {
         LibraryEntity libraryEntity = libraryRepository.signIn(name);
-        String retrivePassword = libraryEntity.getPassword();
-        String decrypt = basicTextEncryptor.decrypt(retrivePassword);
-        System.out.println(decrypt);
 
-        if(name.equals(libraryEntity.getName()) && password.equals(decrypt)){
-            return true;
+        if (libraryEntity == null) {
+            return null;
         }
-        return false;
+
+        String retrievedPassword = libraryEntity.getPassword();
+        String decryptedPassword = basicTextEncryptor.decrypt(retrievedPassword);
+        System.out.println("Decrypted password: " + decryptedPassword);
+
+        if (name.equals(libraryEntity.getName()) && password.equals(decryptedPassword)) {
+
+            LibraryDTO dto = new LibraryDTO();
+            BeanUtils.copyProperties(libraryEntity, dto);
+            return dto;
+        }
+        return null;
     }
+
 
     @Override
     public boolean forgotPassword(String email, String password, String confirmPassword) {
