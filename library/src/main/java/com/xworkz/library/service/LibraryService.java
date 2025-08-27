@@ -11,6 +11,7 @@ public interface LibraryService {
 
     boolean forgotPassword(String email, String password, String confirmPassword);
 
+
     void increaseFailedAttempts(LibraryEntity libraryEntity);
 
     void resetFailedAttempts(LibraryEntity libraryEntity);
