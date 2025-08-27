@@ -36,7 +36,7 @@ public class LibraryController {
 
             System.out.println("Signup page");
             List<ObjectError> allErrors = bindingResult.getAllErrors();
-            for (ObjectError error:allErrors){
+            for (ObjectError error : allErrors) {
                 System.out.println(error.getDefaultMessage());
             }
 
@@ -71,62 +71,52 @@ public class LibraryController {
     }
 
     @RequestMapping("/signin")
-    public ModelAndView signIn(@RequestParam String userName,
+    public ModelAndView signIn(@RequestParam String name,
                                @RequestParam String password,
                                ModelAndView modelAndView,
                                HttpSession httpSession) {
 
-        if (userName.isEmpty() || password.isEmpty()) {
-            modelAndView.addObject("error", "username and password cannot be empty");
+        if (name.isEmpty() || password.isEmpty()) {
+            modelAndView.addObject("error", "Username and password cannot be empty");
             modelAndView.setViewName("signin");
             return modelAndView;
         }
 
-        LibraryDTO libraryDTO = libraryService.signIn(userName, password);
-        if (libraryDTO == null) {
-            modelAndView.addObject("error", "Cannot find user");
-            modelAndView.setViewName("signin");
-            return modelAndView;
-        }
 
-        // Copy user details into session
-        LibraryDTO libraryDTO1 = new LibraryDTO();
-        BeanUtils.copyProperties(libraryDTO, libraryDTO1);
-        httpSession.setAttribute("user", libraryDTO1);
-
-        // ✅ Get user entity from DB instead of creating new object
-        LibraryEntity libraryEntity = libraryService.findByUserName(userName);
+        LibraryEntity libraryEntity = libraryService.findByName(name);
 
         if (libraryEntity == null) {
             modelAndView.addObject("error", "User entity not found");
             modelAndView.setViewName("signin");
+            System.out.println(name);
             return modelAndView;
+
         }
 
-        // ✅ Account lock check
         if (libraryEntity.isAccountLocked()) {
             modelAndView.addObject("error", "Account locked. Please reset your password.");
             modelAndView.setViewName("forgotPassword");
             return modelAndView;
         }
 
-        // ✅ Password check
         if (!libraryEntity.getPassword().equals(password)) {
-            libraryService.increaseFailedAttempts(libraryEntity); // increases and locks if >=3
+            libraryService.increaseFailedAttempts(libraryEntity);
             modelAndView.addObject("error", "Invalid password. Attempts left: " + (3 - libraryEntity.getFailedAttempts()));
             modelAndView.setViewName("signin");
             return modelAndView;
         }
 
-        // ✅ Reset attempts after success
         libraryService.resetFailedAttempts(libraryEntity);
 
-        // ✅ Success
-        modelAndView.addObject("logInSuccess", "Hi " + userName + ", Successfully Logged In. Welcome to Xworkz!");
+        // Login success → store in session
+        LibraryDTO libraryDTO1 = new LibraryDTO();
+        BeanUtils.copyProperties(libraryEntity, libraryDTO1);
+        httpSession.setAttribute("user", libraryDTO1);
+
+        modelAndView.addObject("logInSuccess", "Hi " + name + ", Successfully Logged In. Welcome to Xworkz!");
         modelAndView.setViewName("profile");
         return modelAndView;
     }
-
 
 
     @RequestMapping("/forgotPassword")
@@ -176,3 +166,4 @@ public class LibraryController {
         return modelAndView;
     }
 
+}
