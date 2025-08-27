@@ -46,8 +46,10 @@ public class LibraryDTO {
     private Integer booksTaken;
 
     @NotNull
-    @Pattern(regexp = "^(?=.*[A-Z])(?=.*[^A-Za-z0-9])(?=(.*\\d){3,}).{3,15}$", message = "Invalid password")
+    @Size(min = 4, max = 20, message = "Password must be between 4 and 20 characters")
+    @Pattern( regexp = "^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{4,20}$", message = "Invalid password")
     private String password;
+
 
     @NotNull(message = "Confirm Password cannot be empty")
     private String confirmPassword;
