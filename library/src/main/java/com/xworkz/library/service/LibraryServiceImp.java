@@ -6,6 +6,7 @@ import com.xworkz.library.repository.LibraryRepository;
 import org.jasypt.util.text.BasicTextEncryptor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 
@@ -15,17 +16,15 @@ import javax.mail.internet.MimeMessage;
 import java.util.Properties;
 
 @Service
-public class LibraryServiceImp implements LibraryService{
+public class LibraryServiceImp implements LibraryService {
 
     @Autowired
     private LibraryRepository libraryRepository;
 
-    BasicTextEncryptor basicTextEncryptor;
 
-    public LibraryServiceImp(){
-        basicTextEncryptor = new BasicTextEncryptor();
-        basicTextEncryptor.setPassword("supd");
-    }
+    BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+
+
 
     @Override
     public boolean signUp(LibraryDTO libraryDTO) {
@@ -43,117 +42,115 @@ public class LibraryServiceImp implements LibraryService{
         libraryEntity.setConfirmPassword(libraryDTO.getConfirmPassword());
 
         String password = libraryEntity.getPassword();
-        String encrypt = basicTextEncryptor.encrypt(password);
+        String encrypt = bCryptPasswordEncoder.encode(password);
         libraryEntity.setPassword(encrypt);
 
-        sendEmail(libraryEntity.getEmail());
-        libraryRepository.signUp(libraryEntity);
+//        sendEmail(libraryEntity.getEmail());
+//        libraryRepository.signUp(libraryEntity);
 
         return true;
     }
+
 
     @Override
     public LibraryDTO signIn(String name, String password) {
         LibraryEntity libraryEntity = libraryRepository.signIn(name);
 
         if (libraryEntity == null) {
-            return null;
+            return null; // user not found
         }
 
-        String retrievedPassword = libraryEntity.getPassword();
-        String decryptedPassword = basicTextEncryptor.decrypt(retrievedPassword);
-        System.out.println("Decrypted password: " + decryptedPassword);
-
-        if (name.equals(libraryEntity.getName()) && password.equals(decryptedPassword)) {
-
-            LibraryDTO dto = new LibraryDTO();
-            BeanUtils.copyProperties(libraryEntity, dto);
-            return dto;
+LibraryDTO libraryDTO = new LibraryDTO();
+        if (name.equals(libraryEntity.getName()) && bCryptPasswordEncoder.matches(password, libraryEntity.getPassword())) {
+            System.out.println("Login Successful");
+            return libraryDTO;
         }
-        return null;
+        return null; // wrong password
     }
-
 
     @Override
     public boolean forgotPassword(String email, String password, String confirmPassword) {
-
         return libraryRepository.forgotPassword(email,password,confirmPassword);
     }
-
-    @Override
-    public void increaseFailedAttempts(LibraryEntity libraryEntity) {
-        int newAttempts = libraryEntity.getFailedAttempts() + 1;
-        libraryEntity.setFailedAttempts(newAttempts);
-        if (newAttempts >= 3) {
-            libraryEntity.setAccountLocked(true);
-        }
-        libraryRepository.lock(libraryEntity);
-    }
-
-    @Override
-    public void resetFailedAttempts(LibraryEntity libraryEntity) {
-            libraryEntity.setFailedAttempts(0);
-            libraryRepository.lock(libraryEntity);
-        }
-
-
-
-
-    private void sendEmail(String email){
-        final String username = "dinakaranctsupriya@gmail.com";
-        final String password = "axct yvqw aick doac";
-
-        Properties prop = new Properties();
-        prop.put("mail.smtp.host", "smtp.gmail.com");
-        prop.put("mail.smtp.port", "587");
-        prop.put("mail.smtp.auth", "true");
-        prop.put("mail.smtp.starttls.enable", "true"); //TLS
-
-        Session session = Session.getInstance(prop,
-                new javax.mail.Authenticator() {
-                    protected PasswordAuthentication getPasswordAuthentication() {
-                        return new PasswordAuthentication(username, password);
-                    }
-                });
-
-        try {
-
-            Message message = new MimeMessage(session);
-            message.setFrom(new InternetAddress(username));
-            message.setRecipients(
-                    Message.RecipientType.TO,
-                    InternetAddress.parse(email)
-            );
-            message.setSubject("Successfully Registered");
-            message.setText("Dear ,"
-                    + "\n\n checking email");
-
-            Transport.send(message);
-
-            System.out.println("Done");
-
-        } catch (MessagingException e) {
-            e.printStackTrace();
-        }
-
-    }
-
-    @Override
-    public LibraryEntity findByName(String name) {
-        return libraryRepository.findByName(name);
-    }
-
-    @Override
-    public boolean updateprofile(LibraryDTO libraryDTO) {
-
-        LibraryEntity libraryEntity=new LibraryEntity();
-        libraryEntity.setName(libraryDTO.getName());
-        libraryEntity.setAge(libraryDTO.getAge());
-        libraryEntity.setAddress(libraryDTO.getAddress());
-        libraryEntity.setLibraryId(libraryDTO.getLibraryId());
-        libraryEntity.setGender(libraryDTO.getGender());
-        libraryEntity.setPhoneNumber(libraryDTO.getPhone());
-
-        return false;
-    }
 }
+
+
+
+
+//    @Override
+//    public void increaseFailedAttempts(LibraryEntity libraryEntity) {
+//        int newAttempts = libraryEntity.getFailedAttempts() + 1;
+//        libraryEntity.setFailedAttempts(newAttempts);
+//        if (newAttempts >= 3) {
+//            libraryEntity.setAccountLocked(true);
+//        }
+//        libraryRepository.lock(libraryEntity);
+//    }
+//
+//    @Override
+//    public void resetFailedAttempts(LibraryEntity libraryEntity) {
+//            libraryEntity.setFailedAttempts(0);
+//            libraryRepository.lock(libraryEntity);
+//        }
+
+
+//
+//
+//    private void sendEmail(String email){
+//        final String username = "dinakaranctsupriya@gmail.com";
+//        final String password = "axct yvqw aick doac";
+//
+//        Properties prop = new Properties();
+//        prop.put("mail.smtp.host", "smtp.gmail.com");
+//        prop.put("mail.smtp.port", "587");
+//        prop.put("mail.smtp.auth", "true");
+//        prop.put("mail.smtp.starttls.enable", "true"); //TLS
+//
+//        Session session = Session.getInstance(prop,
+//                new javax.mail.Authenticator() {
+//                    protected PasswordAuthentication getPasswordAuthentication() {
+//                        return new PasswordAuthentication(username, password);
+//                    }
+//                });
+//
+//        try {
+//
+//            Message message = new MimeMessage(session);
+//            message.setFrom(new InternetAddress(username));
+//            message.setRecipients(
+//                    Message.RecipientType.TO,
+//                    InternetAddress.parse(email)
+//            );
+//            message.setSubject("Successfully Registered");
+//            message.setText("Dear ,"
+//                    + "\n\n checking email");
+//
+//            Transport.send(message);
+//
+//            System.out.println("Done");
+//
+//        } catch (MessagingException e) {
+//            e.printStackTrace();
+//        }
+//
+//    }
+//
+//    @Override
+//    public LibraryEntity findByName(String name) {
+//        return libraryRepository.findByName(name);
+//    }
+//
+//    @Override
+//    public boolean updateprofile(LibraryDTO libraryDTO) {
+//
+//        LibraryEntity libraryEntity=new LibraryEntity();
+//        libraryEntity.setName(libraryDTO.getName());
+//        libraryEntity.setAge(libraryDTO.getAge());
+//        libraryEntity.setAddress(libraryDTO.getAddress());
+//        libraryEntity.setLibraryId(libraryDTO.getLibraryId());
+//        libraryEntity.setGender(libraryDTO.getGender());
+//        libraryEntity.setPhoneNumber(libraryDTO.getPhone());
+//
+//        return false;
+//    }
+//}
