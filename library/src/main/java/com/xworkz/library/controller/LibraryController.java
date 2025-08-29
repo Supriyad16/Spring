@@ -3,6 +3,7 @@ package com.xworkz.library.controller;
 import com.xworkz.library.dto.LibraryDTO;
 import com.xworkz.library.entity.LibraryEntity;
 import com.xworkz.library.service.LibraryService;
+import com.xworkz.library.service.LibraryServiceImp;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -71,53 +72,24 @@ public class LibraryController {
     }
 
     @RequestMapping("/signin")
-    public ModelAndView signIn(@RequestParam String name,
-                               @RequestParam String password,
-                               ModelAndView modelAndView,
-                               HttpSession httpSession) {
+    public ModelAndView signIn(@RequestParam String name, @RequestParam String password, ModelAndView modelAndView, HttpSession httpSession) {
 
-        if (name.isEmpty() || password.isEmpty()) {
-            modelAndView.addObject("error", "Username and password cannot be empty");
+        LibraryDTO libraryDTO = new LibraryDTO();
+
+        if (libraryDTO == null) {
+            System.out.println("Not Matched");
+            modelAndView.addObject("error", "User not found");
             modelAndView.setViewName("signin");
             return modelAndView;
         }
-
-
-        LibraryEntity libraryEntity = libraryService.findByName(name);
-
-        if (libraryEntity == null) {
-            modelAndView.addObject("error", "User entity not found");
-            modelAndView.setViewName("signin");
-            System.out.println(name);
-            return modelAndView;
-
-        }
-
-        if (libraryEntity.isAccountLocked()) {
-            modelAndView.addObject("error", "Account locked. Please reset your password.");
-            modelAndView.setViewName("forgotPassword");
-            return modelAndView;
-        }
-
-        if (!libraryEntity.getPassword().equals(password)) {
-            libraryService.increaseFailedAttempts(libraryEntity);
-            modelAndView.addObject("error", "Invalid password. Attempts left: " + (3 - libraryEntity.getFailedAttempts()));
-            modelAndView.setViewName("signin");
-            return modelAndView;
-        }
-
-        libraryService.resetFailedAttempts(libraryEntity);
-
-        // Login success → store in session
-        LibraryDTO libraryDTO1 = new LibraryDTO();
-        BeanUtils.copyProperties(libraryEntity, libraryDTO1);
-        httpSession.setAttribute("user", libraryDTO1);
-
-        modelAndView.addObject("logInSuccess", "Hi " + name + ", Successfully Logged In. Welcome to Xworkz!");
+        LibraryDTO dto = new LibraryDTO();
+        BeanUtils.copyProperties(libraryDTO, dto);
+        httpSession.setAttribute("userData", dto);
+        modelAndView.addObject("logInSuccess", "Hello " + name + ", Welcome to X-Workz");
         modelAndView.setViewName("profile");
         return modelAndView;
-    }
 
+    }
 
     @RequestMapping("/forgotPassword")
     private ModelAndView forgotPassword(@Valid LibraryDTO libraryDTO, BindingResult bindingResult, ModelAndView modelAndView) {
@@ -125,8 +97,8 @@ public class LibraryController {
         if (bindingResult.hasErrors()) {
             List<ObjectError> objectErrors = bindingResult.getAllErrors();
             for (ObjectError error : objectErrors) {
-                if (error.getDefaultMessage().equals("Password must be at least 4 characters ") || error.getDefaultMessage().equals("Confirm Password cannot be empty")) {
-                    modelAndView.addObject("error", "Enter Password");
+                if (error.getDefaultMessage().equals("Password must be between 4 and 20 characters \n It must contain 1 Caps, 1 Small letter, 1 number, 1 special char ")) {
+                    modelAndView.addObject("error", "Password must be between 4 and 20 characters \n It must contain 1 Caps, 1 Small letter, 1 number, 1 special char");
                     modelAndView.setViewName("forgotPassword");
                     return modelAndView;
                 }
@@ -134,36 +106,39 @@ public class LibraryController {
         }
         boolean result = libraryService.forgotPassword(libraryDTO.getEmail(), libraryDTO.getPassword(), libraryDTO.getConfirmPassword());
         if (!result) {
-            modelAndView.addObject("error", "No such email registered");
+            modelAndView.addObject("error", "Email not found");
             modelAndView.setViewName("forgotPassword");
             return modelAndView;
         }
 
-        modelAndView.addObject("updatedPassword", "Password updated successfully");
-        modelAndView.setViewName("index");
+        modelAndView.addObject("updatedPassword", "Password Changed successfully");
+        modelAndView.setViewName("signin");
         return modelAndView;
 
     }
-
-    public ModelAndView updateProfile(@Valid LibraryDTO libraryDTO, BindingResult bindingResult, ModelAndView modelAndView) {
-
-        if (bindingResult.hasErrors()) {
-            modelAndView.addObject("error", "Please correct the errors in the form");
-            modelAndView.setViewName("updateProfile");
-            return modelAndView;
-        }
-
-        boolean result = libraryService.updateprofile(libraryDTO);
-
-        if (!result) {
-            modelAndView.addObject("error", "Profile update failed");
-            modelAndView.setViewName("updateProfile");
-            return modelAndView;
-        }
-
-        modelAndView.addObject("message", "Profile updated successfully");
-        modelAndView.setViewName("success");
-        return modelAndView;
-    }
-
 }
+
+
+//
+//    public ModelAndView updateProfile(@Valid LibraryDTO libraryDTO, BindingResult bindingResult, ModelAndView modelAndView) {
+//
+//        if (bindingResult.hasErrors()) {
+//            modelAndView.addObject("error", "Please correct the errors in the form");
+//            modelAndView.setViewName("updateProfile");
+//            return modelAndView;
+//        }
+//
+//        boolean result = libraryService.updateprofile(libraryDTO);
+//
+//        if (!result) {
+//            modelAndView.addObject("error", "Profile update failed");
+//            modelAndView.setViewName("updateProfile");
+//            return modelAndView;
+//        }
+//
+//        modelAndView.addObject("message", "Profile updated successfully");
+//        modelAndView.setViewName("success");
+//        return modelAndView;
+//    }
+//
+//}
