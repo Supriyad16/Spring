@@ -10,10 +10,10 @@ public interface LibraryRepository {
 
     Boolean forgotPassword(String email, String password, String confirmPassword);
 
-    void lock(LibraryEntity entity);
-
-    LibraryEntity findByName(String name);
-
-    boolean updateprofile(LibraryEntity libraryEntity);
+//    void lock(LibraryEntity entity);
+//
+//    LibraryEntity findByName(String name);
+//
+//    boolean updateprofile(LibraryEntity libraryEntity);
 
 }
