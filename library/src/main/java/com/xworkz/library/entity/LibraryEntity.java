@@ -15,7 +15,7 @@ import javax.persistence.Entity;
 @Entity
 @Table(name="library_db")
 
-@NamedQuery(name = "getByUsernameAndPassword", query = "select entity from LibraryEntity entity where entity.name =:name")
+@NamedQuery(name = "getByName", query = "select entity from LibraryEntity entity where entity.name = :name")
 @NamedQuery(name = "getEntityByEmail" ,query = "select entity from LibraryEntity entity where entity.email =:email")
 @NamedQuery(name = "updateProfile", query = "UPDATE LibraryEntity le SET le.name = :name, le.age = :age, le.address = :address, le.libraryId = :libraryId, le.gender = :gender, le.phoneNumber = :phoneNumber WHERE le.email = :email"
 )
