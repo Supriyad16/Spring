@@ -40,44 +40,43 @@ public class LibraryRepositoryImp implements LibraryRepository{
         return false;
     }
 
+
     @Override
     public LibraryEntity signIn(String name) {
-
         EntityManager em = null;
         EntityTransaction et = null;
-        LibraryEntity libraryEntity ;
+        LibraryEntity libraryEntity = null;
 
-        try{
+        try {
             em = emf.createEntityManager();
             et = em.getTransaction();
             et.begin();
 
-            Query query = em.createNamedQuery("getByUsernameAndPassword");
-            query.setParameter("name",name);
+            Query query = em.createNamedQuery("getByName");
+            query.setParameter("name", name);
 
-            try{
-                libraryEntity=(LibraryEntity) query.getSingleResult();
-            }
-            catch (NoResultException nrp){
-                System.out.println("Empty Entity");
+            try {
+                libraryEntity = (LibraryEntity) query.getSingleResult();
+            } catch (NoResultException e) {
+                System.out.println("User not found with name: " + name);
                 return null;
             }
-            System.out.println("Details are here");
-            et.commit();
-            return  libraryEntity;
 
-        }
-        catch (Exception e){
+            System.out.println("User Found");
+            et.commit();
+            return libraryEntity;
+
+        } catch (Exception e) {
             if(et.isActive()){
                 et.rollback();
             }
             e.printStackTrace();
-        }
-        finally {
+        } finally {
             em.close();
         }
         return null;
     }
+
 
     @Override
     public Boolean forgotPassword(String email, String password, String confirmPassword) {
@@ -122,85 +121,83 @@ public class LibraryRepositoryImp implements LibraryRepository{
     }
 
 
-    @Override
-    public LibraryEntity findByName(String name) {
-
-        EntityManager em = null;
-        EntityTransaction et = null;
-        LibraryEntity libraryEntity ;
-        try {
-            em = emf.createEntityManager();
-            et = em.getTransaction();
-            et.begin();
-
-            Query query = em.createNamedQuery("getByUsernameAndPassword");
-            query.setParameter("name",name);
-
-           libraryEntity =(LibraryEntity) query.getSingleResult();
-
-        } catch (Exception e) {
-            if (et.isActive()) et.rollback();
-            e.printStackTrace();
-        } finally {
-            if (em != null)
-                em.close();
-        }
-
-
-
-        return null;
-    }
-
-
-
-    @Override
-    public void lock(LibraryEntity entity) {
-        EntityManager em = null;
-        EntityTransaction et = null;
-        try {
-            em = emf.createEntityManager();
-            et = em.getTransaction();
-            et.begin();
-            em.merge(entity);
-            et.commit();
-        } catch (Exception e) {
-            if (et.isActive()) et.rollback();
-            e.printStackTrace();
-        } finally {
-            if (em != null) em.close();
-        }
-    }
-
-    @Override
-    public boolean updateprofile(LibraryEntity libraryEntity) {
-
-        EntityManager em = null;
-        EntityTransaction et = null;
-        try {
-            em = emf.createEntityManager();
-            et = em.getTransaction();
-            et.begin();
-
-            Query query = em.createNamedQuery("updateProfile");
-            query.setParameter("name", libraryEntity.getName());
-            query.setParameter("age",libraryEntity.getAge());
-            query.setParameter("address",libraryEntity.getAddress());
-            query.setParameter("libraryId",libraryEntity.getLibraryId());
-            query.setParameter("gender",libraryEntity.getGender());
-            query.setParameter("phoneNumber",libraryEntity.getPhoneNumber());
-            query.executeUpdate();
-            et.commit();
-        } catch (Exception e) {
-            if (et.isActive()) et.rollback();
-            e.printStackTrace();
-        } finally {
-            if (em != null) em.close();
-        }
-
-        return false;
-    }
+//    @Override
+//    public LibraryEntity findByName(String name) {
+//
+//        EntityManager em = null;
+//        EntityTransaction et = null;
+//        LibraryEntity libraryEntity ;
+//        try {
+//            em = emf.createEntityManager();
+//            et = em.getTransaction();
+//            et.begin();
+//
+//            Query query = em.createNamedQuery("getByName");
+//            query.setParameter("name",name);
+//
+//           libraryEntity =(LibraryEntity) query.getSingleResult();
+//
+//        } catch (Exception e) {
+//            if (et.isActive()) et.rollback();
+//            e.printStackTrace();
+//        } finally {
+//            if (em != null)
+//                em.close();
+//        }
+//
+//
+//
+//        return null;
+//    }
+//
+//
+//
+//    @Override
+//    public void lock(LibraryEntity entity) {
+//        EntityManager em = null;
+//        EntityTransaction et = null;
+//        try {
+//            em = emf.createEntityManager();
+//            et = em.getTransaction();
+//            et.begin();
+//            em.merge(entity);
+//            et.commit();
+//        } catch (Exception e) {
+//            if (et.isActive()) et.rollback();
+//            e.printStackTrace();
+//        } finally {
+//            if (em != null) em.close();
+//        }
+//    }
+//
+//    @Override
+//    public boolean updateprofile(LibraryEntity libraryEntity) {
+//
+//        EntityManager em = null;
+//        EntityTransaction et = null;
+//        try {
+//            em = emf.createEntityManager();
+//            et = em.getTransaction();
+//            et.begin();
+//
+//            Query query = em.createNamedQuery("updateProfile");
+//            query.setParameter("name", libraryEntity.getName());
+//            query.setParameter("age",libraryEntity.getAge());
+//            query.setParameter("address",libraryEntity.getAddress());
+//            query.setParameter("libraryId",libraryEntity.getLibraryId());
+//            query.setParameter("gender",libraryEntity.getGender());
+//            query.setParameter("phoneNumber",libraryEntity.getPhoneNumber());
+//            query.executeUpdate();
+//            et.commit();
+//        } catch (Exception e) {
+//            if (et.isActive()) et.rollback();
+//            e.printStackTrace();
+//        } finally {
+//            if (em != null) em.close();
+//        }
+//
+//        return false;
+//    }
 
 }
-
-
 
