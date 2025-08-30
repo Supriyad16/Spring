@@ -1,5 +1,5 @@
 <%@ page isELIgnored="false" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<!--<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>-->
 
 <html lang="en">
 <head>
@@ -12,7 +12,6 @@
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"></script>
 
-<!-- Navbar -->
 <nav class="navbar navbar-expand-lg bg-info-subtle">
     <div class="container-fluid">
         <a class="navbar-brand fw-bold" href="#">Supriya X_workz</a>
@@ -39,16 +38,8 @@
             <div class="card shadow p-4">
                 <h4 class="text-center mb-4">Reset Your Password</h4>
 
-                <!-- Show error message -->
-                <c:if test="${not empty error}">
-                    <div class="alert alert-danger">${error}</div>
-                </c:if>
 
-                <!-- Show success message -->
-                <c:if test="${not empty updatedPassword}">
-                    <div class="alert alert-success">${updatedPassword}</div>
-                </c:if>
-
+                <span style="color:red">${error}</span>
                 <form action="forgotPassword" method="post">
                     <div class="mb-3">
                         <label for="email" class="form-label">Email</label>
@@ -57,7 +48,8 @@
 
                     <div class="mb-3">
                         <label for="password" class="form-label">New Password</label>
-                        <input type="password" id="password" name="password" class="form-control" required minlength="4">
+                        <input type="password" id="password" name="password" class="form-control" required>
+                        <div id="passwordError" class="form-text text-danger"></div>
                     </div>
 
                     <div class="mb-3">
@@ -65,7 +57,7 @@
                         <input type="password" id="confirmPassword" name="confirmPassword" class="form-control" required>
                     </div>
 
-                    <button type="submit" class="btn btn-primary w-100">Update Password</button>
+                    <button type="submit" class="btn btn-primary w-100">Change Password</button>
                 </form>
             </div>
         </div>
@@ -74,3 +66,5 @@
 
 </body>
 </html>
+
+
