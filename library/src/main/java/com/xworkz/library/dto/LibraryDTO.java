@@ -23,7 +23,7 @@ public class LibraryDTO {
     @Max(60)
     private int age;
 
-    @NotNull(message = "Address should be empty")
+    @NotNull(message = "Library Id should not be empty")
     private int libraryId;
 
     @NotNull(message = "gender should not be empty")
