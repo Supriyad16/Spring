@@ -18,5 +18,5 @@ public interface LibraryService {
 //
 //    LibraryEntity findByName(String name);
 //
-//    boolean updateprofile(LibraryDTO libraryDTO);
+   boolean updateprofile(LibraryDTO libraryDTO);
 }
