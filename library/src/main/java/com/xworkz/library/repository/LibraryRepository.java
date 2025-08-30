@@ -14,6 +14,6 @@ public interface LibraryRepository {
 //
 //    LibraryEntity findByName(String name);
 //
-//    boolean updateprofile(LibraryEntity libraryEntity);
+  boolean updateprofile(LibraryEntity libraryEntity);
 
 }
