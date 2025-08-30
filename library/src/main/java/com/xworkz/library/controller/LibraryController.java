@@ -116,29 +116,33 @@ public class LibraryController {
         return modelAndView;
 
     }
+
+
+
+@RequestMapping("/updateProfile")
+    public ModelAndView updateProfile(@Valid LibraryDTO libraryDTO, BindingResult bindingResult, ModelAndView modelAndView) {
+
+    for (ObjectError error : bindingResult.getAllErrors()) {
+        System.out.println("Validation error: " + error.getDefaultMessage());
+    }
+
+    if (bindingResult.hasErrors()) {
+            modelAndView.addObject("error", "Invalid Details");
+            modelAndView.setViewName("updateProfile");
+            return modelAndView;
+        }
+
+        boolean result = libraryService.updateprofile(libraryDTO);
+
+        if (!result) {
+            modelAndView.addObject("error", "Profile update failed");
+            modelAndView.setViewName("updateProfile");
+            return modelAndView;
+        }
+
+        modelAndView.addObject("message", "Profile updated successfully");
+        modelAndView.setViewName("success");
+        return modelAndView;
+    }
+
 }
-
-
-//
-//    public ModelAndView updateProfile(@Valid LibraryDTO libraryDTO, BindingResult bindingResult, ModelAndView modelAndView) {
-//
-//        if (bindingResult.hasErrors()) {
-//            modelAndView.addObject("error", "Please correct the errors in the form");
-//            modelAndView.setViewName("updateProfile");
-//            return modelAndView;
-//        }
-//
-//        boolean result = libraryService.updateprofile(libraryDTO);
-//
-//        if (!result) {
-//            modelAndView.addObject("error", "Profile update failed");
-//            modelAndView.setViewName("updateProfile");
-//            return modelAndView;
-//        }
-//
-//        modelAndView.addObject("message", "Profile updated successfully");
-//        modelAndView.setViewName("success");
-//        return modelAndView;
-//    }
-//
-//}
