@@ -34,7 +34,8 @@
     <div class="p-5 shadow-lg mb-5 rounded bg-light">
         <h3 class="fw-bold display-4 text-center text-dark mb-3">Sign In</h3>
 
-        <span style="color:red">${error}</span>
+        <div class="form-text text-danger py-2">${error}</div>
+        <div style="color:green">${success}</div>
 
         <form action="signin" class="p-4" method="get">
             <div class="mb-3">
@@ -46,11 +47,11 @@
                 <label for="passwordId" class="form-label fw-semibold">Password</label>
                 <div class="position-relative">
                     <input type="password" class="form-control" name="password" id="passwordId" required>
-                    <button type="button" class="position-absolute top-50 end-0 translate-middle-y text-secondary border-0 bg-transparent" onclick="viewPassword()">
-                        <i class="bi bi-eye" id="toggleIcon"></i>
-                    </button>
+<!--                   <button type="button" class="position-absolute top-50 end-0 translate-middle-y text-secondary border-0 bg-transparent" onclick="viewPassword()">-->
+<!--                        <i class="bi bi-eye" id="toggleIcon"></i>-->
+<!--                    </button>-->
                 </div>
-                <span id="passwordErrorId" class="text-danger"></span>
+<!--                <span id="passwordErrorId" class="text-danger"></span>-->
             </div>
 
             <div class="mb-3">
@@ -58,7 +59,7 @@
             </div>
 
             <div class="text-center mt-2">
-                <a href="ForgotPassword.jsp" class="text-decoration-none">Forgot Password?</a>
+                <a href="forgotPassword.jsp" class="text-decoration-none">Forgot Password</a>
             </div>
         </form>
     </div>
