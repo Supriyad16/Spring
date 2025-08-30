@@ -72,7 +72,7 @@ LibraryDTO libraryDTO = new LibraryDTO();
     public boolean forgotPassword(String email, String password, String confirmPassword) {
         return libraryRepository.forgotPassword(email,password,confirmPassword);
     }
-}
+
 
 
 
@@ -140,17 +140,17 @@ LibraryDTO libraryDTO = new LibraryDTO();
 //        return libraryRepository.findByName(name);
 //    }
 //
-//    @Override
-//    public boolean updateprofile(LibraryDTO libraryDTO) {
-//
-//        LibraryEntity libraryEntity=new LibraryEntity();
-//        libraryEntity.setName(libraryDTO.getName());
-//        libraryEntity.setAge(libraryDTO.getAge());
-//        libraryEntity.setAddress(libraryDTO.getAddress());
-//        libraryEntity.setLibraryId(libraryDTO.getLibraryId());
-//        libraryEntity.setGender(libraryDTO.getGender());
-//        libraryEntity.setPhoneNumber(libraryDTO.getPhone());
-//
-//        return false;
-//    }
-//}
+    @Override
+    public boolean updateprofile(LibraryDTO libraryDTO) {
+
+        LibraryEntity libraryEntity=new LibraryEntity();
+        libraryEntity.setName(libraryDTO.getName());
+        libraryEntity.setAge(libraryDTO.getAge());
+        libraryEntity.setAddress(libraryDTO.getAddress());
+        libraryEntity.setLibraryId(libraryDTO.getLibraryId());
+        libraryEntity.setGender(libraryDTO.getGender());
+        libraryEntity.setPhoneNumber(libraryDTO.getPhone());
+
+        return false;
+    }
+}
