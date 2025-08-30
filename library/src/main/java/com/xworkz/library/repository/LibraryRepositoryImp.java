@@ -169,35 +169,35 @@ public class LibraryRepositoryImp implements LibraryRepository{
 //            if (em != null) em.close();
 //        }
 //    }
-//
-//    @Override
-//    public boolean updateprofile(LibraryEntity libraryEntity) {
-//
-//        EntityManager em = null;
-//        EntityTransaction et = null;
-//        try {
-//            em = emf.createEntityManager();
-//            et = em.getTransaction();
-//            et.begin();
-//
-//            Query query = em.createNamedQuery("updateProfile");
-//            query.setParameter("name", libraryEntity.getName());
-//            query.setParameter("age",libraryEntity.getAge());
-//            query.setParameter("address",libraryEntity.getAddress());
-//            query.setParameter("libraryId",libraryEntity.getLibraryId());
-//            query.setParameter("gender",libraryEntity.getGender());
-//            query.setParameter("phoneNumber",libraryEntity.getPhoneNumber());
-//            query.executeUpdate();
-//            et.commit();
-//        } catch (Exception e) {
-//            if (et.isActive()) et.rollback();
-//            e.printStackTrace();
-//        } finally {
-//            if (em != null) em.close();
-//        }
-//
-//        return false;
-//    }
+
+    @Override
+    public boolean updateprofile(LibraryEntity libraryEntity) {
+
+        EntityManager em = null;
+        EntityTransaction et = null;
+        try {
+            em = emf.createEntityManager();
+            et = em.getTransaction();
+            et.begin();
+
+            Query query = em.createNamedQuery("updateProfile");
+            query.setParameter("name", libraryEntity.getName());
+            query.setParameter("age",libraryEntity.getAge());
+            query.setParameter("address",libraryEntity.getAddress());
+            query.setParameter("libraryId",libraryEntity.getLibraryId());
+            query.setParameter("gender",libraryEntity.getGender());
+            query.setParameter("phoneNumber",libraryEntity.getPhoneNumber());
+            query.executeUpdate();
+            et.commit();
+        } catch (Exception e) {
+            if (et.isActive()) et.rollback();
+            e.printStackTrace();
+        } finally {
+            if (em != null) em.close();
+        }
+
+        return false;
+    }
 
 }
 
