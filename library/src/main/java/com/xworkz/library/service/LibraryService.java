@@ -11,12 +11,13 @@ public interface LibraryService {
 
     boolean forgotPassword(String email, String password, String confirmPassword);
 
+    LibraryDTO find(String name, String password);
 
-//    void increaseFailedAttempts(LibraryEntity libraryEntity);
-//
-//    void resetFailedAttempts(LibraryEntity libraryEntity);
-//
-//    LibraryEntity findByName(String name);
-//
-   boolean updateprofile(LibraryDTO libraryDTO);
+    void increaseFailedAttempts(LibraryDTO libraryDTO);
+
+   void resetFailedAttempts(LibraryDTO libraryDTO);
+
+    LibraryEntity findByName(String name);
+
+  // boolean updateprofile(LibraryDTO libraryDTO);
 }
