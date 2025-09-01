@@ -54,5 +54,7 @@ public class LibraryDTO {
     @NotNull(message = "Confirm Password cannot be empty")
     private String confirmPassword;
 
+    private int failedAttempts;
+    private boolean accountLocked;
 
 }

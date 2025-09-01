@@ -71,28 +71,39 @@ public class LibraryController {
         return modelAndView;
     }
 
+
     @RequestMapping("/signin")
-    public ModelAndView signIn(@RequestParam String name, @RequestParam String password, ModelAndView modelAndView, HttpSession httpSession) {
+    public ModelAndView signIn(@RequestParam String name,
+                               @RequestParam String password,
+                               ModelAndView modelAndView,
+                               HttpSession session) {
 
-        LibraryDTO libraryDTO = new LibraryDTO();
+        LibraryDTO dto = libraryService.find(name, password);
 
-        if (libraryDTO == null) {
-            System.out.println("Not Matched");
-            modelAndView.addObject("error", "User not found");
+        if (dto == null) {
+            modelAndView.addObject("result", "notfound"); // username/password incorrect
             modelAndView.setViewName("signin");
-            return modelAndView;
+        } else if ("Locked".equals(dto.getName())) {
+            modelAndView.addObject("result", "fail"); // account locked
+            modelAndView.setViewName("signin");
+        } else if ("TimeOut".equals(dto.getName())) {
+            modelAndView.addObject("result", "reset"); // locked, needs password reset
+            modelAndView.setViewName("signin");
+        } else {
+            // successful login
+            session.setAttribute("loginName", dto.getName());
+            session.setAttribute("loginEmail", dto.getEmail());
+            modelAndView.setViewName("Home");
         }
-        LibraryDTO dto = new LibraryDTO();
-        BeanUtils.copyProperties(libraryDTO, dto);
-        httpSession.setAttribute("userData", dto);
-        modelAndView.addObject("logInSuccess", "Hello " + name + ", Welcome to X-Workz");
-        modelAndView.setViewName("profile");
-        return modelAndView;
 
+        return modelAndView;
     }
 
+
+
     @RequestMapping("/forgotPassword")
-    private ModelAndView forgotPassword(@Valid LibraryDTO libraryDTO, BindingResult bindingResult, ModelAndView modelAndView) {
+    private ModelAndView forgotPassword(@Valid LibraryDTO libraryDTO, BindingResult bindingResult, ModelAndView
+            modelAndView) {
 
         if (bindingResult.hasErrors()) {
             List<ObjectError> objectErrors = bindingResult.getAllErrors();
@@ -119,30 +130,31 @@ public class LibraryController {
 
 
 
-@RequestMapping("/updateProfile")
-    public ModelAndView updateProfile(@Valid LibraryDTO libraryDTO, BindingResult bindingResult, ModelAndView modelAndView) {
+//        @RequestMapping("/updateProfile")
+//        public ModelAndView updateProfile (@Valid LibraryDTO libraryDTO, BindingResult bindingResult, ModelAndView
+//        modelAndView){
+//
+//            for (ObjectError error : bindingResult.getAllErrors()) {
+//                System.out.println("Validation error: " + error.getDefaultMessage());
+//            }
+//
+//            if (bindingResult.hasErrors()) {
+//                modelAndView.addObject("error", "Invalid Details");
+//                modelAndView.setViewName("updateProfile");
+//                return modelAndView;
+//            }
+//
+//            boolean result = libraryService.updateprofile(libraryDTO);
+//
+//            if (!result) {
+//                modelAndView.addObject("error", "Profile update failed");
+//                modelAndView.setViewName("updateProfile");
+//                return modelAndView;
+//            }
+//
+//            modelAndView.addObject("message", "Profile updated successfully");
+//            modelAndView.setViewName("success");
+//            return modelAndView;
+//        }
 
-    for (ObjectError error : bindingResult.getAllErrors()) {
-        System.out.println("Validation error: " + error.getDefaultMessage());
     }
-
-    if (bindingResult.hasErrors()) {
-            modelAndView.addObject("error", "Invalid Details");
-            modelAndView.setViewName("updateProfile");
-            return modelAndView;
-        }
-
-        boolean result = libraryService.updateprofile(libraryDTO);
-
-        if (!result) {
-            modelAndView.addObject("error", "Profile update failed");
-            modelAndView.setViewName("updateProfile");
-            return modelAndView;
-        }
-
-        modelAndView.addObject("message", "Profile updated successfully");
-        modelAndView.setViewName("success");
-        return modelAndView;
-    }
-
-}
