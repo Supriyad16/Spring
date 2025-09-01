@@ -1,5 +1,6 @@
 package com.xworkz.library.repository;
 
+import com.xworkz.library.dto.LibraryDTO;
 import com.xworkz.library.entity.LibraryEntity;
 
 public interface LibraryRepository {
@@ -10,10 +11,12 @@ public interface LibraryRepository {
 
     Boolean forgotPassword(String email, String password, String confirmPassword);
 
-//    void lock(LibraryEntity entity);
-//
-//    LibraryEntity findByName(String name);
-//
-  boolean updateprofile(LibraryEntity libraryEntity);
+    void lock(LibraryEntity entity);
+
+    LibraryEntity findByName(String name);
+
+    void update(LibraryDTO libraryDTO);
+
+  //boolean updateprofile(LibraryEntity libraryEntity);
 
 }
