@@ -1,6 +1,8 @@
 package com.xworkz.library.repository;
 
+import com.xworkz.library.dto.LibraryDTO;
 import com.xworkz.library.entity.LibraryEntity;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -121,58 +123,35 @@ public class LibraryRepositoryImp implements LibraryRepository{
     }
 
 
-//    @Override
-//    public LibraryEntity findByName(String name) {
-//
-//        EntityManager em = null;
-//        EntityTransaction et = null;
-//        LibraryEntity libraryEntity ;
-//        try {
-//            em = emf.createEntityManager();
-//            et = em.getTransaction();
-//            et.begin();
-//
-//            Query query = em.createNamedQuery("getByName");
-//            query.setParameter("name",name);
-//
-//           libraryEntity =(LibraryEntity) query.getSingleResult();
-//
-//        } catch (Exception e) {
-//            if (et.isActive()) et.rollback();
-//            e.printStackTrace();
-//        } finally {
-//            if (em != null)
-//                em.close();
-//        }
-//
-//
-//
-//        return null;
-//    }
-//
-//
-//
-//    @Override
-//    public void lock(LibraryEntity entity) {
-//        EntityManager em = null;
-//        EntityTransaction et = null;
-//        try {
-//            em = emf.createEntityManager();
-//            et = em.getTransaction();
-//            et.begin();
-//            em.merge(entity);
-//            et.commit();
-//        } catch (Exception e) {
-//            if (et.isActive()) et.rollback();
-//            e.printStackTrace();
-//        } finally {
-//            if (em != null) em.close();
-//        }
-//    }
+    @Override
+    public LibraryEntity findByName(String name) {
+
+        EntityManager em = null;
+        EntityTransaction et = null;
+        LibraryEntity libraryEntity ;
+        try {
+            em = emf.createEntityManager();
+            et = em.getTransaction();
+            et.begin();
+
+            Query query = em.createNamedQuery("getByName");
+            query.setParameter("name",name);
+
+           libraryEntity =(LibraryEntity) query.getSingleResult();
+
+        } catch (Exception e) {
+            if (et.isActive()) et.rollback();
+            e.printStackTrace();
+        } finally {
+            if (em != null)
+                em.close();
+        }
+
+        return null;
+    }
 
     @Override
-    public boolean updateprofile(LibraryEntity libraryEntity) {
-
+    public void update(LibraryDTO libraryDTO) {
         EntityManager em = null;
         EntityTransaction et = null;
         try {
@@ -180,14 +159,29 @@ public class LibraryRepositoryImp implements LibraryRepository{
             et = em.getTransaction();
             et.begin();
 
-            Query query = em.createNamedQuery("updateProfile");
-            query.setParameter("name", libraryEntity.getName());
-            query.setParameter("age",libraryEntity.getAge());
-            query.setParameter("address",libraryEntity.getAddress());
-            query.setParameter("libraryId",libraryEntity.getLibraryId());
-            query.setParameter("gender",libraryEntity.getGender());
-            query.setParameter("phoneNumber",libraryEntity.getPhoneNumber());
-            query.executeUpdate();
+            LibraryEntity entity = new LibraryEntity();
+            BeanUtils.copyProperties(libraryDTO, entity);
+
+            em.merge(entity);
+            et.commit();
+        } catch (Exception e) {
+            if (et != null && et.isActive()) et.rollback();
+            e.printStackTrace();
+        } finally {
+            if (em != null) em.close();
+        }
+    }
+
+
+    @Override
+    public void lock(LibraryEntity entity) {
+        EntityManager em = null;
+        EntityTransaction et = null;
+        try {
+            em = emf.createEntityManager();
+            et = em.getTransaction();
+            et.begin();
+            em.merge(entity);
             et.commit();
         } catch (Exception e) {
             if (et.isActive()) et.rollback();
@@ -195,9 +189,36 @@ public class LibraryRepositoryImp implements LibraryRepository{
         } finally {
             if (em != null) em.close();
         }
-
-        return false;
     }
+
+//    @Override
+//    public boolean updateprofile(LibraryEntity libraryEntity) {
+//
+//        EntityManager em = null;
+//        EntityTransaction et = null;
+//        try {
+//            em = emf.createEntityManager();
+//            et = em.getTransaction();
+//            et.begin();
+//
+//            Query query = em.createNamedQuery("updateProfile");
+//            query.setParameter("name", libraryEntity.getName());
+//            query.setParameter("age",libraryEntity.getAge());
+//            query.setParameter("address",libraryEntity.getAddress());
+//            query.setParameter("libraryId",libraryEntity.getLibraryId());
+//            query.setParameter("gender",libraryEntity.getGender());
+//            query.setParameter("phoneNumber",libraryEntity.getPhoneNumber());
+//            query.executeUpdate();
+//            et.commit();
+//        } catch (Exception e) {
+//            if (et.isActive()) et.rollback();
+//            e.printStackTrace();
+//        } finally {
+//            if (em != null) em.close();
+//        }
+//
+//        return false;
+//    }
 
 }
 
