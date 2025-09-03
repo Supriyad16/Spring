@@ -11,12 +11,14 @@ public interface LibraryRepository {
 
     Boolean forgotPassword(String email, String password, String confirmPassword);
 
-    void lock(LibraryEntity entity);
+   // void lock(LibraryEntity entity);
 
     LibraryEntity findByName(String name);
 
-    void update(LibraryDTO libraryDTO);
+    void update(LibraryEntity libraryEntity);
 
-  //boolean updateprofile(LibraryEntity libraryEntity);
+
+    //boolean updateprofile(LibraryEntity libraryEntity);
+
 
 }

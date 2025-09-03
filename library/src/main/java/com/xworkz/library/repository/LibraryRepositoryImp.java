@@ -102,7 +102,7 @@ public class LibraryRepositoryImp implements LibraryRepository{
                 libraryEntity.setPassword(password);
                 libraryEntity.setConfirmPassword(confirmPassword);
                 libraryEntity.setFailedAttempts(0);
-                libraryEntity.setAccountLocked(false);
+                libraryEntity.setLocalDateTime(null);
                 em.merge(libraryEntity);
                 et.commit();
                 return true;
@@ -151,7 +151,7 @@ public class LibraryRepositoryImp implements LibraryRepository{
     }
 
     @Override
-    public void update(LibraryDTO libraryDTO) {
+    public void update(LibraryEntity libraryEntity) {
         EntityManager em = null;
         EntityTransaction et = null;
         try {
@@ -159,10 +159,8 @@ public class LibraryRepositoryImp implements LibraryRepository{
             et = em.getTransaction();
             et.begin();
 
-            LibraryEntity entity = new LibraryEntity();
-            BeanUtils.copyProperties(libraryDTO, entity);
+            em.merge(libraryEntity);
 
-            em.merge(entity);
             et.commit();
         } catch (Exception e) {
             if (et != null && et.isActive()) et.rollback();
@@ -173,23 +171,6 @@ public class LibraryRepositoryImp implements LibraryRepository{
     }
 
 
-    @Override
-    public void lock(LibraryEntity entity) {
-        EntityManager em = null;
-        EntityTransaction et = null;
-        try {
-            em = emf.createEntityManager();
-            et = em.getTransaction();
-            et.begin();
-            em.merge(entity);
-            et.commit();
-        } catch (Exception e) {
-            if (et.isActive()) et.rollback();
-            e.printStackTrace();
-        } finally {
-            if (em != null) em.close();
-        }
-    }
 
 //    @Override
 //    public boolean updateprofile(LibraryEntity libraryEntity) {
