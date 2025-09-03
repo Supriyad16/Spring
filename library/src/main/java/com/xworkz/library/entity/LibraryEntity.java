@@ -4,6 +4,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import javax.persistence.Entity;
+import java.time.LocalDateTime;
 
 
 @NoArgsConstructor
@@ -17,8 +18,7 @@ import javax.persistence.Entity;
 
 @NamedQuery(name = "getByName", query = "select entity from LibraryEntity entity where entity.name = :name")
 @NamedQuery(name = "getEntityByEmail" ,query = "select entity from LibraryEntity entity where entity.email =:email")
-@NamedQuery(name = "updateProfile", query = "UPDATE LibraryEntity le SET le.name = :name, le.age = :age, le.address = :address, le.libraryId = :libraryId, le.gender = :gender, le.phoneNumber = :phoneNumber WHERE le.email = :email"
-)
+@NamedQuery(name = "updateProfile", query = "UPDATE LibraryEntity le SET le.name = :name, le.age = :age, le.address = :address, le.libraryId = :libraryId, le.gender = :gender, le.phoneNumber = :phoneNumber WHERE le.email = :email")
 
 public class LibraryEntity {
 
@@ -53,6 +53,8 @@ public class LibraryEntity {
 
     private int failedAttempts = 0;
 
-    private boolean accountLocked = false;
+
+    @Column(name = "local_dateTime")
+    private LocalDateTime localDateTime;
 
 }

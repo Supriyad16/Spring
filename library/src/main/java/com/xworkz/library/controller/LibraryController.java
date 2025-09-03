@@ -78,26 +78,48 @@ public class LibraryController {
                                ModelAndView modelAndView,
                                HttpSession session) {
 
-        LibraryDTO dto = libraryService.find(name, password);
-
-        if (dto == null) {
-            modelAndView.addObject("result", "notfound"); // username/password incorrect
+        if (name.isEmpty() || password.isEmpty()) {
+            modelAndView.addObject("error", "Username and password cannot be empty");
             modelAndView.setViewName("signin");
-        } else if ("Locked".equals(dto.getName())) {
-            modelAndView.addObject("result", "fail"); // account locked
-            modelAndView.setViewName("signin");
-        } else if ("TimeOut".equals(dto.getName())) {
-            modelAndView.addObject("result", "reset"); // locked, needs password reset
-            modelAndView.setViewName("signin");
-        } else {
-            // successful login
-            session.setAttribute("loginName", dto.getName());
-            session.setAttribute("loginEmail", dto.getEmail());
-            modelAndView.setViewName("Home");
+            return modelAndView;
         }
 
+        LibraryDTO libraryDTO = libraryService.signIn(name, password);
+
+        if (libraryDTO == null) {
+            // Wrong password case
+            modelAndView.addObject("result", "fail");
+            modelAndView.setViewName("signin");
+            return modelAndView;
+        }
+
+        // Handle special responses from service
+        if ("Locked".equalsIgnoreCase(libraryDTO.getName())) {
+            modelAndView.addObject("result", "locked");
+            modelAndView.setViewName("signin");
+            return modelAndView;
+        }
+
+        if ("Unlocked, try again".equalsIgnoreCase(libraryDTO.getName())) {
+            modelAndView.addObject("result", "timeout");
+            modelAndView.setViewName("signin");
+            return modelAndView;
+        }
+
+        if ("not found".equalsIgnoreCase(libraryDTO.getName())) {
+            modelAndView.addObject("result", "not found");
+            modelAndView.setViewName("signin");
+            return modelAndView;
+        }
+
+        // ✅ Successful login
+        session.setAttribute("userSignData", libraryDTO);
+        modelAndView.addObject("logInSuccess",
+                "Hi " + name + ", successfully logged in... Welcome to Xworkz!");
+        modelAndView.setViewName("profile");
         return modelAndView;
     }
+
 
 
 

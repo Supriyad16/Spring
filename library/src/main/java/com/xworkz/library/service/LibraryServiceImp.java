@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+import java.time.LocalDateTime;
 import java.util.Properties;
 
 @Service
@@ -39,17 +40,46 @@ public class LibraryServiceImp implements LibraryService {
 
     @Override
     public LibraryDTO signIn(String name, String password) {
+
+        LibraryDTO libraryDTO = new LibraryDTO();
+        LocalDateTime localDateTime =LocalDateTime.now();
+
         LibraryEntity libraryEntity = libraryRepository.signIn(name);
         if (libraryEntity == null) {
-            return null; // user not found
+            libraryDTO.setName("user not found");
+            return libraryDTO;
         }
 
-        if (bCryptPasswordEncoder.matches(password, libraryEntity.getPassword())) {
-            LibraryDTO dto = new LibraryDTO();
-            BeanUtils.copyProperties(libraryEntity, dto);
-            return dto;
+        else {
+            if (libraryEntity.getFailedAttempts() == 3) {
+
+                if (localDateTime.isAfter(libraryEntity.getLocalDateTime())) {
+                    LibraryDTO libraryDTO1 = new LibraryDTO();
+                    libraryDTO1.setName("TimeOut");
+                    return libraryDTO1;
+                } else {
+                    LibraryDTO libraryDTO1 = new LibraryDTO();
+                    libraryDTO1.setName("Locked");
+                    return libraryDTO1;
+                }
+            } else {
+                if (bCryptPasswordEncoder.matches(password, libraryEntity.getPassword())) {
+                    BeanUtils.copyProperties(libraryEntity, libraryDTO);
+                    libraryEntity.setFailedAttempts(0);
+                    libraryEntity.setLocalDateTime(null);
+                    return libraryDTO;
+                } else {
+                    int trial = libraryEntity.getFailedAttempts() + 1;
+                    libraryEntity.setLocalDateTime(localDateTime);
+                    libraryEntity.setFailedAttempts(trial);
+                    if (libraryEntity.getFailedAttempts() == 3) {
+                        libraryEntity.setLocalDateTime(libraryEntity.getLocalDateTime().plusMinutes(5));
+                    }
+                }
+            }
+            libraryRepository.update(libraryEntity);
+            return null;
         }
-        return null; // wrong password
     }
 
     @Override
@@ -67,56 +97,6 @@ public class LibraryServiceImp implements LibraryService {
     public boolean forgotPassword(String email, String password, String confirmPassword) {
         return libraryRepository.forgotPassword(email, password, confirmPassword);
     }
-
-    @Override
-    public LibraryDTO find(String name, String password) {
-        final int MAX_ATTEMPTS = 3;
-
-        LibraryDTO dto = find(name, password);
-        if (dto == null) {
-            return null; // user not found
-        }
-
-        if (dto.isAccountLocked()) {
-            return dto;
-        }
-
-        if (!bCryptPasswordEncoder.matches(password, dto.getPassword())) {
-            dto.setFailedAttempts(dto.getFailedAttempts() + 1);
-
-            if (dto.getFailedAttempts() >= MAX_ATTEMPTS) {
-                dto.setAccountLocked(true);
-            }
-
-            libraryRepository.update(dto); // persist changes
-            return null;
-        }
-
-        // correct password → reset attempts
-        dto.setFailedAttempts(0);
-        libraryRepository.update(dto);
-
-        return dto;
-    }
-
-    @Override
-    public void increaseFailedAttempts(LibraryDTO libraryDTO) {
-        libraryDTO.setFailedAttempts(libraryDTO.getFailedAttempts() + 1);
-        if (libraryDTO.getFailedAttempts() >= 3) {
-            libraryDTO.setAccountLocked(true);
-        }
-        libraryRepository.update(libraryDTO);
-
-    }
-
-    @Override
-    public void resetFailedAttempts(LibraryDTO libraryDTO) {
-        libraryDTO.setFailedAttempts(0);
-        libraryDTO.setAccountLocked(false);
-        libraryRepository.update(libraryDTO);
-
-    }
-
 
 
 //    @Override

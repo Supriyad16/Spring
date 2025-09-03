@@ -8,7 +8,7 @@ import javax.validation.constraints.*;
 @AllArgsConstructor
 @Getter
 @Setter
-@ToString
+
 
 
 public class LibraryDTO {
@@ -56,5 +56,14 @@ public class LibraryDTO {
 
     private int failedAttempts;
     private boolean accountLocked;
+
+    public boolean isAccountLocked() {
+        return this.accountLocked;
+    }
+
+    public void setAccountLocked(boolean accountLocked) {
+        this.accountLocked = accountLocked;
+    }
+
 
 }
