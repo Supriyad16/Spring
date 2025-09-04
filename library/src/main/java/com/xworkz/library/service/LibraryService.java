@@ -7,17 +7,18 @@ public interface LibraryService {
 
     boolean signUp(LibraryDTO libraryDTO);
 
-    LibraryDTO signIn(String name, String password);
+    String signIn(String email, String password);
 
     boolean forgotPassword(String email, String password, String confirmPassword);
 
+    //long getEmailCount(String email);
    // LibraryDTO find(String name, String password);
 
 //    void increaseFailedAttempts(LibraryDTO libraryDTO);
 //
 //    void resetFailedAttempts(LibraryDTO libraryDTO);
 
-    LibraryEntity findByName(String name);
+ //   LibraryEntity findByName(String name);
 
     //boolean updateprofile(LibraryDTO libraryDTO);
 

@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.*;
+import javax.transaction.Transactional;
+import java.util.List;
 
 @Repository
 public class LibraryRepositoryImp implements LibraryRepository{
@@ -16,8 +18,9 @@ public class LibraryRepositoryImp implements LibraryRepository{
 
     @Override
     public boolean signUp(LibraryEntity entity) {
+       // System.err.println(entity);
         EntityManager em = null;
-        EntityTransaction et = null;
+       EntityTransaction et = null;
 
         try{
             em = emf.createEntityManager();
@@ -42,41 +45,50 @@ public class LibraryRepositoryImp implements LibraryRepository{
         return false;
     }
 
-
     @Override
-    public LibraryEntity signIn(String name) {
+    public LibraryEntity findByName(String name) {
+
         EntityManager em = null;
         EntityTransaction et = null;
-        LibraryEntity libraryEntity = null;
-
+        LibraryEntity libraryEntity ;
         try {
             em = emf.createEntityManager();
             et = em.getTransaction();
             et.begin();
 
             Query query = em.createNamedQuery("getByName");
-            query.setParameter("name", name);
+            query.setParameter("name",name);
 
-            try {
-                libraryEntity = (LibraryEntity) query.getSingleResult();
-            } catch (NoResultException e) {
-                System.out.println("User not found with name: " + name);
-                return null;
-            }
-
-            System.out.println("User Found");
-            et.commit();
-            return libraryEntity;
+            return (LibraryEntity) query.getSingleResult();
 
         } catch (Exception e) {
-            if(et.isActive()){
-                et.rollback();
-            }
+            if (et.isActive()) et.rollback();
+            e.printStackTrace();
+        } finally {
+            if (em != null)
+                em.close();
+        }
+
+        return null;
+    }
+
+    @Override
+    public void save(LibraryEntity entity) {
+
+        EntityManager em = null;
+        EntityTransaction et = null;
+        LibraryEntity libraryEntity ;
+
+        try {
+            et.begin();
+            em.merge(entity);
+            et.commit();
+        } catch (Exception e) {
+            if (et.isActive()) et.rollback();
             e.printStackTrace();
         } finally {
             em.close();
         }
-        return null;
     }
 
 
@@ -85,24 +97,24 @@ public class LibraryRepositoryImp implements LibraryRepository{
 
         EntityManager em = null;
         EntityTransaction et = null;
-        LibraryEntity libraryEntity = new LibraryEntity();
 
         try {
             em = emf.createEntityManager();
             et = em.getTransaction();
             et.begin();
 
-            Query query = em.createNamedQuery("getEntityByEmail");
+            Query query = em.createNamedQuery("getByEmail");
             query.setParameter("email", email);
 
-            libraryEntity = (LibraryEntity) query.getSingleResult();
+            LibraryEntity libraryEntity = (LibraryEntity) query.getSingleResult();
 
 
             if (libraryEntity != null) {
                 libraryEntity.setPassword(password);
                 libraryEntity.setConfirmPassword(confirmPassword);
                 libraryEntity.setFailedAttempts(0);
-                libraryEntity.setLocalDateTime(null);
+                libraryEntity.setAccountLocked(false);
+//                libraryEntity.setLocalDateTime(null);
                 em.merge(libraryEntity);
                 et.commit();
                 return true;
@@ -122,9 +134,8 @@ public class LibraryRepositoryImp implements LibraryRepository{
         return false;
     }
 
-
     @Override
-    public LibraryEntity findByName(String name) {
+    public LibraryEntity findByEmail(String email) {
 
         EntityManager em = null;
         EntityTransaction et = null;
@@ -134,10 +145,14 @@ public class LibraryRepositoryImp implements LibraryRepository{
             et = em.getTransaction();
             et.begin();
 
-            Query query = em.createNamedQuery("getByName");
-            query.setParameter("name",name);
+            Query query = em.createNamedQuery("getByEmail");
+            query.setParameter("email",email);
 
-           libraryEntity =(LibraryEntity) query.getSingleResult();
+            List<LibraryEntity> results = query.getResultList();
+            if (results.isEmpty()) {
+                return null; // no user found
+            }
+            return results.get(0);
 
         } catch (Exception e) {
             if (et.isActive()) et.rollback();
@@ -150,26 +165,87 @@ public class LibraryRepositoryImp implements LibraryRepository{
         return null;
     }
 
+
     @Override
-    public void update(LibraryEntity libraryEntity) {
+    @Transactional
+    public void update(LibraryEntity entity) {
         EntityManager em = null;
         EntityTransaction et = null;
+
         try {
             em = emf.createEntityManager();
             et = em.getTransaction();
             et.begin();
-
-            em.merge(libraryEntity);
-
+            em.merge(entity);
             et.commit();
         } catch (Exception e) {
-            if (et != null && et.isActive()) et.rollback();
+            if (et != null && et.isActive()) {
+                et.rollback();
+            }
             e.printStackTrace();
         } finally {
-            if (em != null) em.close();
+            if (em != null) {
+                em.close();
+            }
         }
     }
 
+
+//    @Override
+//    public void update(LibraryEntity libraryEntity) {
+//        EntityManager em = null;
+//        EntityTransaction et = null;
+//        try {
+//            em = emf.createEntityManager();
+//            et = em.getTransaction();
+//            et.begin();
+//
+//            em.merge(libraryEntity);
+//
+//            et.commit();
+//        } catch (Exception e) {
+//            if (et != null && et.isActive()) et.rollback();
+//            e.printStackTrace();
+//        } finally {
+//            if (em != null) em.close();
+//        }
+//    }
+
+//    @Override
+//    public LibraryEntity signIn(String name) {
+//        EntityManager em = null;
+//        EntityTransaction et = null;
+//        LibraryEntity libraryEntity = null;
+//
+//        try {
+//            em = emf.createEntityManager();
+//            et = em.getTransaction();
+//            et.begin();
+//
+//            Query query = em.createNamedQuery("getByName");
+//            query.setParameter("name", name);
+//
+//            try {
+//                libraryEntity = (LibraryEntity) query.getSingleResult();
+//            } catch (NoResultException e) {
+//                System.out.println("User not found with name: " + name);
+//                return null;
+//            }
+//
+//            System.out.println("User Found");
+//            et.commit();
+//            return libraryEntity;
+//
+//        } catch (Exception e) {
+//            if(et.isActive()){
+//                et.rollback();
+//            }
+//            e.printStackTrace();
+//        } finally {
+//            em.close();
+//        }
+//        return null;
+//    }
 
 
 //    @Override
