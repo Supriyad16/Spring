@@ -17,8 +17,8 @@ import java.time.LocalDateTime;
 @Table(name="library_db")
 
 @NamedQuery(name = "getByName", query = "select entity from LibraryEntity entity where entity.name = :name")
-@NamedQuery(name = "getEntityByEmail" ,query = "select entity from LibraryEntity entity where entity.email =:email")
-@NamedQuery(name = "updateProfile", query = "UPDATE LibraryEntity le SET le.name = :name, le.age = :age, le.address = :address, le.libraryId = :libraryId, le.gender = :gender, le.phoneNumber = :phoneNumber WHERE le.email = :email")
+@NamedQuery(name = "getByEmail" ,query = "select entity from LibraryEntity entity where entity.email =:email")
+@NamedQuery(name = "updateProfile", query = "UPDATE LibraryEntity le SET le.name = :name, le.age = :age, le.address = :address, le.libraryId = :libraryId, le.gender = :gender, le.phone = :phoneNumber WHERE le.email = :email")
 
 public class LibraryEntity {
 
@@ -38,7 +38,7 @@ public class LibraryEntity {
     private String email;
 
     @Column(name = "phone")
-    private long phoneNumber;
+    private long phone;
 
     private String address;
 
@@ -48,11 +48,11 @@ public class LibraryEntity {
     private String password;
 
     @Transient
-    @Column(name = "confirm_password")
     private String confirmPassword;
 
     private int failedAttempts = 0;
 
+    private boolean accountLocked;
 
     @Column(name = "local_dateTime")
     private LocalDateTime localDateTime;

@@ -1,24 +1,27 @@
 package com.xworkz.library.repository;
 
-import com.xworkz.library.dto.LibraryDTO;
 import com.xworkz.library.entity.LibraryEntity;
 
 public interface LibraryRepository {
 
     boolean signUp(LibraryEntity entity);
 
-    LibraryEntity signIn(String name);
+    LibraryEntity findByName(String name);
+
+    void save(LibraryEntity entity);
 
     Boolean forgotPassword(String email, String password, String confirmPassword);
 
-   // void lock(LibraryEntity entity);
+    LibraryEntity findByEmail(String email);
 
-    LibraryEntity findByName(String name);
+    void update(LibraryEntity entity);
 
-    void update(LibraryEntity libraryEntity);
+    // void lock(LibraryEntity entity);
 
+    //LibraryEntity signIn(String name);
+
+    //void update(LibraryEntity libraryEntity);
 
     //boolean updateprofile(LibraryEntity libraryEntity);
-
 
 }
