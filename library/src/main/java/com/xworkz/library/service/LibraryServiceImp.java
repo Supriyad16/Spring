@@ -6,6 +6,7 @@ import com.xworkz.library.repository.LibraryRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.mail.*;
@@ -20,83 +21,133 @@ public class LibraryServiceImp implements LibraryService {
     @Autowired
     private LibraryRepository libraryRepository;
 
-    BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+    private final BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+
 
     @Override
     public boolean signUp(LibraryDTO libraryDTO) {
         LibraryEntity libraryEntity = new LibraryEntity();
         BeanUtils.copyProperties(libraryDTO, libraryEntity);
 
-        // encrypt password
-        String password = libraryEntity.getPassword();
-        String encrypt = bCryptPasswordEncoder.encode(password);
-        libraryEntity.setPassword(encrypt);
-
+        libraryEntity.setPassword(bCryptPasswordEncoder.encode(libraryDTO.getPassword()));
         sendEmail(libraryEntity.getEmail());
         libraryRepository.signUp(libraryEntity);
 
         return true;
     }
 
+    private static final int MAX_FAILED_ATTEMPTS = 3;
+
     @Override
-    public LibraryDTO signIn(String name, String password) {
+    public String signIn(String email, String password) {
 
-        LibraryDTO libraryDTO = new LibraryDTO();
-        LocalDateTime localDateTime =LocalDateTime.now();
 
-        LibraryEntity libraryEntity = libraryRepository.signIn(name);
-        if (libraryEntity == null) {
-            libraryDTO.setName("user not found");
-            return libraryDTO;
+        LibraryEntity entity = libraryRepository.findByEmail(email);
+
+        if (entity == null) {
+            return "Invalid userName";
         }
+        if (entity.isAccountLocked()) {
 
-        else {
-            if (libraryEntity.getFailedAttempts() == 3) {
-
-                if (localDateTime.isAfter(libraryEntity.getLocalDateTime())) {
-                    LibraryDTO libraryDTO1 = new LibraryDTO();
-                    libraryDTO1.setName("TimeOut");
-                    return libraryDTO1;
-                } else {
-                    LibraryDTO libraryDTO1 = new LibraryDTO();
-                    libraryDTO1.setName("Locked");
-                    return libraryDTO1;
+            LocalDateTime localDateTime = entity.getLocalDateTime();
+            if(localDateTime!=null){
+                LocalDateTime unlockTime = localDateTime.plusMinutes(5);
+                if(LocalDateTime.now().isBefore(unlockTime)){
+                    return "Your account is locked. Try again after 5 minutes.";
                 }
-            } else {
-                if (bCryptPasswordEncoder.matches(password, libraryEntity.getPassword())) {
-                    BeanUtils.copyProperties(libraryEntity, libraryDTO);
-                    libraryEntity.setFailedAttempts(0);
-                    libraryEntity.setLocalDateTime(null);
-                    return libraryDTO;
-                } else {
-                    int trial = libraryEntity.getFailedAttempts() + 1;
-                    libraryEntity.setLocalDateTime(localDateTime);
-                    libraryEntity.setFailedAttempts(trial);
-                    if (libraryEntity.getFailedAttempts() == 3) {
-                        libraryEntity.setLocalDateTime(libraryEntity.getLocalDateTime().plusMinutes(5));
-                    }
+                else{
+                    entity.setAccountLocked(false);
+                    entity.setFailedAttempts(0);
+                    entity.setLocalDateTime(null);
+                    libraryRepository.update(entity);
                 }
             }
-            libraryRepository.update(libraryEntity);
-            return null;
+        }
+
+        if (bCryptPasswordEncoder.matches(password, entity.getPassword())) {
+            entity.setFailedAttempts(0);
+            libraryRepository.update(entity);
+            return "Login Successful";
+
+        } else {
+            int newFails = entity.getFailedAttempts() + 1;
+            entity.setFailedAttempts(newFails);
+
+            if (newFails >= MAX_FAILED_ATTEMPTS) {
+                entity.setAccountLocked(true);
+                entity.setLocalDateTime(LocalDateTime.now());
+                libraryRepository.update(entity);
+                return "Your account is locked for 5 minutes due to 3 failed attempts.";            }
+
+            libraryRepository.update(entity);
+            return "Invalid password. Attempt " + newFails + " of " + MAX_FAILED_ATTEMPTS;
         }
     }
 
-    @Override
-    public LibraryEntity findByName(String name) {
-        LibraryEntity entity = libraryRepository.findByName(name);
-        if (entity == null) {
-            return null;
-        }
-        LibraryDTO dto = new LibraryDTO();
-        BeanUtils.copyProperties(entity, dto);
-        return entity;
-    }
 
     @Override
     public boolean forgotPassword(String email, String password, String confirmPassword) {
-        return libraryRepository.forgotPassword(email, password, confirmPassword);
+
+        String encodedPassword = bCryptPasswordEncoder.encode(password);
+        String encodedConfirm = bCryptPasswordEncoder.encode(confirmPassword);
+        return libraryRepository.forgotPassword(email, encodedPassword, encodedConfirm);
     }
+
+//    @Override
+//    public LibraryDTO signIn(String name) {
+//
+//        LibraryDTO libraryDTO = new LibraryDTO();
+//        LocalDateTime localDateTime =LocalDateTime.now();
+//
+//        LibraryEntity libraryEntity = libraryRepository.signIn(name);
+//        if (libraryEntity == null) {
+//            libraryDTO.setName("user not found");
+//            return libraryDTO;
+//        }
+//
+//        else {
+//            if (libraryEntity.getFailedAttempts() == 3) {
+//
+//                if (localDateTime.isAfter(libraryEntity.getLocalDateTime())) {
+//                    LibraryDTO libraryDTO1 = new LibraryDTO();
+//                    libraryDTO1.setName("TimeOut");
+//                    return libraryDTO1;
+//                } else {
+//                    LibraryDTO libraryDTO1 = new LibraryDTO();
+//                    libraryDTO1.setName("Locked");
+//                    return libraryDTO1;
+//                }
+//            } else {
+//                if (bCryptPasswordEncoder.matches( libraryEntity.getPassword())) {
+//                    BeanUtils.copyProperties(libraryEntity, libraryDTO);
+//                    libraryEntity.setFailedAttempts(0);
+//                    libraryEntity.setLocalDateTime(null);
+//                    return libraryDTO;
+//                } else {
+//                    int trial = libraryEntity.getFailedAttempts() + 1;
+//                    libraryEntity.setLocalDateTime(localDateTime);
+//                    libraryEntity.setFailedAttempts(trial);
+//                    if (libraryEntity.getFailedAttempts() == 3) {
+//                        libraryEntity.setLocalDateTime(libraryEntity.getLocalDateTime().plusMinutes(5));
+//                    }
+//                }
+//            }
+//            libraryRepository.update(libraryEntity);
+//            return null;
+//        }
+//    }
+
+
+
+
+
+//    @Override
+//    public long getEmailCount(String email) {
+//
+//       long count = libraryRepository.getEmailCount(email);
+//        System.out.println(count);
+//        return count;
+//    }
 
 
 //    @Override
@@ -132,7 +183,7 @@ public class LibraryServiceImp implements LibraryService {
                     InternetAddress.parse(email)
             );
             message.setSubject("Successfully Registered");
-            message.setText("Dear User,\n\nWelcome to Library!");
+            message.setText("Dear User,\n \nWelcome to Library!");
 
             Transport.send(message);
 
