@@ -1,9 +1,7 @@
 package com.xworkz.library.controller;
 
 import com.xworkz.library.dto.LibraryDTO;
-import com.xworkz.library.entity.LibraryEntity;
 import com.xworkz.library.service.LibraryService;
-import com.xworkz.library.service.LibraryServiceImp;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -12,7 +10,6 @@ import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
-
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.util.List;
@@ -34,8 +31,6 @@ public class LibraryController {
         ModelAndView modelAndView = new ModelAndView();
 
         if (bindingResult.hasErrors()) {
-
-            System.out.println("Signup page");
             List<ObjectError> allErrors = bindingResult.getAllErrors();
             for (ObjectError error : allErrors) {
                 System.out.println(error.getDefaultMessage());
@@ -48,9 +43,6 @@ public class LibraryController {
         }
 
         if (!libraryDTO.getPassword().equals(libraryDTO.getConfirmPassword())) {
-
-            System.out.println("confirm password");
-
             modelAndView.addObject("error", "Password and Confirm Password do not match");
             modelAndView.addObject("value", libraryDTO);
             modelAndView.setViewName("signup");
@@ -72,85 +64,93 @@ public class LibraryController {
     }
 
 
+    // ✅ Sign In Controller using String return type
     @RequestMapping("/signin")
-    public ModelAndView signIn(@RequestParam String name,
+    public ModelAndView signIn(@RequestParam String email,
                                @RequestParam String password,
                                ModelAndView modelAndView,
                                HttpSession session) {
 
-        if (name.isEmpty() || password.isEmpty()) {
-            modelAndView.addObject("error", "Username and password cannot be empty");
+        String result = libraryService.signIn(email, password);
+
+        if ("Login Successful".equals(result)) {
+            session.setAttribute("user", email); // save session
+            modelAndView.addObject("logInSuccess", "Hello " + email + ", welcome to X-workz");
+            modelAndView.setViewName("profile");
+        } else {
+            modelAndView.addObject("error", result);
+            modelAndView.addObject("email", email);
             modelAndView.setViewName("signin");
-            return modelAndView;
         }
 
-        LibraryDTO libraryDTO = libraryService.signIn(name, password);
-
-        if (libraryDTO == null) {
-            // Wrong password case
-            modelAndView.addObject("result", "fail");
-            modelAndView.setViewName("signin");
-            return modelAndView;
-        }
-
-        // Handle special responses from service
-        if ("Locked".equalsIgnoreCase(libraryDTO.getName())) {
-            modelAndView.addObject("result", "locked");
-            modelAndView.setViewName("signin");
-            return modelAndView;
-        }
-
-        if ("Unlocked, try again".equalsIgnoreCase(libraryDTO.getName())) {
-            modelAndView.addObject("result", "timeout");
-            modelAndView.setViewName("signin");
-            return modelAndView;
-        }
-
-        if ("not found".equalsIgnoreCase(libraryDTO.getName())) {
-            modelAndView.addObject("result", "not found");
-            modelAndView.setViewName("signin");
-            return modelAndView;
-        }
-
-        // ✅ Successful login
-        session.setAttribute("userSignData", libraryDTO);
-        modelAndView.addObject("logInSuccess",
-                "Hi " + name + ", successfully logged in... Welcome to Xworkz!");
-        modelAndView.setViewName("profile");
         return modelAndView;
     }
 
 
-
+//    @RequestMapping("/signin")
+//    public ModelAndView signIn(@RequestParam String name,
+//                               @RequestParam String password,
+//                               ModelAndView modelAndView,
+//                               HttpSession session) {
+//
+//        if (name.isEmpty() || password.isEmpty()) {
+//            modelAndView.addObject("error", "Username and password cannot be empty");
+//            modelAndView.setViewName("signin");
+//            return modelAndView;
+//        }
+//
+//        LibraryDTO libraryDTO = libraryService.signIn(name, password);
+//
+//        if (libraryDTO == null) {
+//
+//            modelAndView.addObject("result", "fail");
+//            modelAndView.setViewName("signin");
+//            return modelAndView;
+//        }
+//
+//
+//        if ("Locked".equalsIgnoreCase(libraryDTO.getName())) {
+//            modelAndView.addObject("result", "locked");
+//            modelAndView.setViewName("signin");
+//            return modelAndView;
+//        }
+//
+//        if ("Unlocked, try again".equalsIgnoreCase(libraryDTO.getName())) {
+//            modelAndView.addObject("result", "timeout");
+//            modelAndView.setViewName("signin");
+//            return modelAndView;
+//        }
+//
+//        if ("not found".equalsIgnoreCase(libraryDTO.getName())) {
+//            modelAndView.addObject("result", "not found");
+//            modelAndView.setViewName("signin");
+//            return modelAndView;
+//        }
+//
+//
+//        session.setAttribute("userSignData", libraryDTO);
+//        modelAndView.addObject("logInSuccess",
+//                "Hi " + name + ", successfully logged in... Welcome to Xworkz!");
+//        modelAndView.setViewName("profile");
+//        return modelAndView;
+//    }
 
     @RequestMapping("/forgotPassword")
-    private ModelAndView forgotPassword(@Valid LibraryDTO libraryDTO, BindingResult bindingResult, ModelAndView
+    private ModelAndView forgotPassword(@RequestParam String email, @RequestParam String password, @RequestParam String confirmPassword, ModelAndView
             modelAndView) {
 
-        if (bindingResult.hasErrors()) {
-            List<ObjectError> objectErrors = bindingResult.getAllErrors();
-            for (ObjectError error : objectErrors) {
-                if (error.getDefaultMessage().equals("Password must be between 4 and 20 characters \n It must contain 1 Caps, 1 Small letter, 1 number, 1 special char ")) {
-                    modelAndView.addObject("error", "Password must be between 4 and 20 characters \n It must contain 1 Caps, 1 Small letter, 1 number, 1 special char");
-                    modelAndView.setViewName("forgotPassword");
-                    return modelAndView;
-                }
-            }
-        }
-        boolean result = libraryService.forgotPassword(libraryDTO.getEmail(), libraryDTO.getPassword(), libraryDTO.getConfirmPassword());
-        if (!result) {
-            modelAndView.addObject("error", "Email not found");
-            modelAndView.setViewName("forgotPassword");
-            return modelAndView;
-        }
-
-        modelAndView.addObject("updatedPassword", "Password Changed successfully");
-        modelAndView.setViewName("signin");
+       boolean isReset  = libraryService.forgotPassword(email, password, confirmPassword);
+       if(isReset){
+           modelAndView.addObject("success", "Password reset successful! Please login again.");
+           modelAndView.setViewName("signin");
+       }
+       else{
+           modelAndView.addObject("error", "Password reset failed! Please try again.");
+           modelAndView.setViewName("forgotPassword");
+       }
         return modelAndView;
 
     }
-
-
 
 //        @RequestMapping("/updateProfile")
 //        public ModelAndView updateProfile (@Valid LibraryDTO libraryDTO, BindingResult bindingResult, ModelAndView
@@ -178,5 +178,4 @@ public class LibraryController {
 //            modelAndView.setViewName("success");
 //            return modelAndView;
 //        }
-
     }

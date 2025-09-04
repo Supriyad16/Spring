@@ -8,8 +8,7 @@ import javax.validation.constraints.*;
 @AllArgsConstructor
 @Getter
 @Setter
-
-
+@Data
 
 public class LibraryDTO {
 
@@ -43,7 +42,7 @@ public class LibraryDTO {
 
     @Min(value = 0, message = "booksTaken number must be 0 digits")
     @Max(value = 5, message = "booksTaken number must be 5 digits")
-    private Integer booksTaken;
+    private Integer noOfBooksTaken;
 
     @NotNull
     @Size(min = 4, max = 20, message = "Password must be between 4 and 20 characters")
