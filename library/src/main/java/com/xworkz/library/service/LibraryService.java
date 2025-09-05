@@ -11,15 +11,8 @@ public interface LibraryService {
 
     boolean forgotPassword(String email, String password, String confirmPassword);
 
-    //long getEmailCount(String email);
-   // LibraryDTO find(String name, String password);
-
-//    void increaseFailedAttempts(LibraryDTO libraryDTO);
-//
-//    void resetFailedAttempts(LibraryDTO libraryDTO);
-
- //   LibraryEntity findByName(String name);
-
     //boolean updateprofile(LibraryDTO libraryDTO);
+
+    int getEmailCount(String email);
 
 }
