@@ -2,6 +2,7 @@ package com.xworkz.library.controller;
 
 import com.xworkz.library.dto.LibraryDTO;
 import com.xworkz.library.service.LibraryService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -16,13 +17,14 @@ import java.util.List;
 
 @Controller
 @RequestMapping("/")
+@Slf4j
 public class LibraryController {
 
     @Autowired
     LibraryService libraryService;
 
     public LibraryController() {
-        System.out.println("No-arg const of LibraryController");
+        log.info("Library Controller");
     }
 
     @RequestMapping("/signup")
@@ -64,7 +66,6 @@ public class LibraryController {
     }
 
 
-    // ✅ Sign In Controller using String return type
     @RequestMapping("/signin")
     public ModelAndView signIn(@RequestParam String email,
                                @RequestParam String password,
@@ -86,54 +87,6 @@ public class LibraryController {
         return modelAndView;
     }
 
-
-//    @RequestMapping("/signin")
-//    public ModelAndView signIn(@RequestParam String name,
-//                               @RequestParam String password,
-//                               ModelAndView modelAndView,
-//                               HttpSession session) {
-//
-//        if (name.isEmpty() || password.isEmpty()) {
-//            modelAndView.addObject("error", "Username and password cannot be empty");
-//            modelAndView.setViewName("signin");
-//            return modelAndView;
-//        }
-//
-//        LibraryDTO libraryDTO = libraryService.signIn(name, password);
-//
-//        if (libraryDTO == null) {
-//
-//            modelAndView.addObject("result", "fail");
-//            modelAndView.setViewName("signin");
-//            return modelAndView;
-//        }
-//
-//
-//        if ("Locked".equalsIgnoreCase(libraryDTO.getName())) {
-//            modelAndView.addObject("result", "locked");
-//            modelAndView.setViewName("signin");
-//            return modelAndView;
-//        }
-//
-//        if ("Unlocked, try again".equalsIgnoreCase(libraryDTO.getName())) {
-//            modelAndView.addObject("result", "timeout");
-//            modelAndView.setViewName("signin");
-//            return modelAndView;
-//        }
-//
-//        if ("not found".equalsIgnoreCase(libraryDTO.getName())) {
-//            modelAndView.addObject("result", "not found");
-//            modelAndView.setViewName("signin");
-//            return modelAndView;
-//        }
-//
-//
-//        session.setAttribute("userSignData", libraryDTO);
-//        modelAndView.addObject("logInSuccess",
-//                "Hi " + name + ", successfully logged in... Welcome to Xworkz!");
-//        modelAndView.setViewName("profile");
-//        return modelAndView;
-//    }
 
     @RequestMapping("/forgotPassword")
     private ModelAndView forgotPassword(@RequestParam String email, @RequestParam String password, @RequestParam String confirmPassword, ModelAndView
