@@ -16,11 +16,8 @@ public interface LibraryRepository {
 
     void update(LibraryEntity entity);
 
-    // void lock(LibraryEntity entity);
+    int getEmailCount(String email);
 
-    //LibraryEntity signIn(String name);
-
-    //void update(LibraryEntity libraryEntity);
 
     //boolean updateprofile(LibraryEntity libraryEntity);
 

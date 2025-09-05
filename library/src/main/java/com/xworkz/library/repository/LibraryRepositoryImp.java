@@ -114,11 +114,10 @@ public class LibraryRepositoryImp implements LibraryRepository{
                 libraryEntity.setConfirmPassword(confirmPassword);
                 libraryEntity.setFailedAttempts(0);
                 libraryEntity.setAccountLocked(false);
-//                libraryEntity.setLocalDateTime(null);
+                libraryEntity.setLocalDateTime(null);
                 em.merge(libraryEntity);
                 et.commit();
                 return true;
-
             }
         }
         catch (Exception e){
@@ -130,9 +129,9 @@ public class LibraryRepositoryImp implements LibraryRepository{
         finally {
             em.close();
         }
-
         return false;
     }
+
 
     @Override
     public LibraryEntity findByEmail(String email) {
@@ -190,62 +189,41 @@ public class LibraryRepositoryImp implements LibraryRepository{
         }
     }
 
+    @Override
+    public int getEmailCount(String email) {
+        EntityManager em = null;
+        EntityTransaction et = null;
+        Integer count = 0;
 
-//    @Override
-//    public void update(LibraryEntity libraryEntity) {
-//        EntityManager em = null;
-//        EntityTransaction et = null;
-//        try {
-//            em = emf.createEntityManager();
-//            et = em.getTransaction();
-//            et.begin();
-//
-//            em.merge(libraryEntity);
-//
-//            et.commit();
-//        } catch (Exception e) {
-//            if (et != null && et.isActive()) et.rollback();
-//            e.printStackTrace();
-//        } finally {
-//            if (em != null) em.close();
-//        }
-//    }
+        try {
+            em = emf.createEntityManager();
+            et = em.getTransaction();
+            et.begin();
 
-//    @Override
-//    public LibraryEntity signIn(String name) {
-//        EntityManager em = null;
-//        EntityTransaction et = null;
-//        LibraryEntity libraryEntity = null;
-//
-//        try {
-//            em = emf.createEntityManager();
-//            et = em.getTransaction();
-//            et.begin();
-//
-//            Query query = em.createNamedQuery("getByName");
-//            query.setParameter("name", name);
-//
-//            try {
-//                libraryEntity = (LibraryEntity) query.getSingleResult();
-//            } catch (NoResultException e) {
-//                System.out.println("User not found with name: " + name);
-//                return null;
-//            }
-//
-//            System.out.println("User Found");
-//            et.commit();
-//            return libraryEntity;
-//
-//        } catch (Exception e) {
-//            if(et.isActive()){
-//                et.rollback();
-//            }
-//            e.printStackTrace();
-//        } finally {
-//            em.close();
-//        }
-//        return null;
-//    }
+            Query query = em.createNamedQuery("getEmailCount");
+            query.setParameter("email", email);
+            Object object = query.getSingleResult();
+            Long result = (Long) query.getSingleResult();
+            count = result.intValue();
+            System.out.println("Count is " + count);
+            System.out.println(object.toString());
+            et.commit();
+
+        } catch (Exception e) {
+            if (et != null && et.isActive()) {
+                et.rollback();
+            }
+            e.printStackTrace();
+
+        } finally {
+            if (em != null) {
+                em.close();
+            }
+
+            return count;
+        }
+    }
+
 
 
 //    @Override
