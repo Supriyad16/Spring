@@ -93,62 +93,13 @@ public class LibraryServiceImp implements LibraryService {
         return libraryRepository.forgotPassword(email, encodedPassword, encodedConfirm);
     }
 
-//    @Override
-//    public LibraryDTO signIn(String name) {
-//
-//        LibraryDTO libraryDTO = new LibraryDTO();
-//        LocalDateTime localDateTime =LocalDateTime.now();
-//
-//        LibraryEntity libraryEntity = libraryRepository.signIn(name);
-//        if (libraryEntity == null) {
-//            libraryDTO.setName("user not found");
-//            return libraryDTO;
-//        }
-//
-//        else {
-//            if (libraryEntity.getFailedAttempts() == 3) {
-//
-//                if (localDateTime.isAfter(libraryEntity.getLocalDateTime())) {
-//                    LibraryDTO libraryDTO1 = new LibraryDTO();
-//                    libraryDTO1.setName("TimeOut");
-//                    return libraryDTO1;
-//                } else {
-//                    LibraryDTO libraryDTO1 = new LibraryDTO();
-//                    libraryDTO1.setName("Locked");
-//                    return libraryDTO1;
-//                }
-//            } else {
-//                if (bCryptPasswordEncoder.matches( libraryEntity.getPassword())) {
-//                    BeanUtils.copyProperties(libraryEntity, libraryDTO);
-//                    libraryEntity.setFailedAttempts(0);
-//                    libraryEntity.setLocalDateTime(null);
-//                    return libraryDTO;
-//                } else {
-//                    int trial = libraryEntity.getFailedAttempts() + 1;
-//                    libraryEntity.setLocalDateTime(localDateTime);
-//                    libraryEntity.setFailedAttempts(trial);
-//                    if (libraryEntity.getFailedAttempts() == 3) {
-//                        libraryEntity.setLocalDateTime(libraryEntity.getLocalDateTime().plusMinutes(5));
-//                    }
-//                }
-//            }
-//            libraryRepository.update(libraryEntity);
-//            return null;
-//        }
-//    }
+    @Override
+    public int getEmailCount(String email) {
 
-
-
-
-
-//    @Override
-//    public long getEmailCount(String email) {
-//
-//       long count = libraryRepository.getEmailCount(email);
-//        System.out.println(count);
-//        return count;
-//    }
-
+        int count = libraryRepository.getEmailCount(email);
+        System.out.println(count);
+        return count;
+    }
 
 //    @Override
 //    public boolean updateProfile(LibraryDTO libraryDTO) {
