@@ -1,19 +1,16 @@
 <%@ page isELIgnored="false" %>
-<html lang="en" xmlns:c="http://www.w3.org/1999/XSL/Transform">
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+
+<html lang="en">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Applications</title>
+    <title>Register</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q"
-        crossorigin="anonymous"></script>
-<script src="index.js"></script>
-
 
 <nav class="navbar navbar-expand-lg bg-info-subtle">
     <div class="container-fluid">
@@ -26,104 +23,120 @@
 
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-
                 <li class="nav-item">
-                <a class="btn btn-dark fw-bold" aria-current="page" href="index.jsp">Home</a>
-            </li>
-
-                <li class="nav-item">
-                    <a class="btn btn-dark fw-bold" aria-current="page" href="#">SignUp</a>
+                    <a class="btn btn-dark fw-bold" href="index.jsp">Home</a>
                 </li>
-
-
+                <li class="nav-item">
+                    <a class="btn btn-dark fw-bold" href="signin.jsp">Sign In</a>
+                </li>
             </ul>
         </div>
     </div>
 </nav>
+
 <div class="container d-flex justify-content-center mt-4 align-items-center min-vh-100">
-    <div class="p-5 shadow-lg mb-5 rounded bg-light">
-        <h3 class="fw-bold display-4 text-center text-dark mb-3">Register Form</h3>
+    <div class="p-5 shadow-lg mb-5 rounded bg-light w-100" style="max-width: 600px;">
+        <h3 class="fw-bold display-6 text-center text-dark mb-3">Register Form</h3>
 
 
+        <c:if test="${not empty error}">
+            <div class="alert alert-danger text-center">${error}</div>
+        </c:if>
+        <c:if test="${not empty errors}">
+            <div class="alert alert-danger">
+                <ul class="mb-0">
+                    <c:forEach var="err" items="${errors}">
+                        <li>${err.defaultMessage}</li>
+                    </c:forEach>
+                </ul>
+            </div>
+        </c:if>
+        <c:if test="${not empty success}">
+            <div class="alert alert-success text-center">${success}</div>
+        </c:if>
 
-        <form action="signup" class="bg-light p-4 border rounded" method="post">
 
-            <span style="color:red">${error}</span>
-            <span style="color:green">${success}</span>
-        <div class="mb-3">
+        <form action="signup" method="post" class="bg-light p-3 border rounded">
+
+            <div class="mb-3">
                 <label for="nameId" class="form-label">Name</label>
-                <input type="text" oninput="validateName()" class="form-control" id="nameId" name="name" required>
-                <span id="nameErrorId" class="text-danger"></span>
+                <input type="text" class="form-control" id="nameId" name="name" required>
             </div>
 
             <div class="mb-3">
-            <label for="ageId" class="form-label">Age</label>
-            <input type="text" class="form-control" oninput="validateAge()" id="ageId" name="age" required>
-            <span class="text-danger" id="ageErrorId"></span>
-        </div>
+                <label for="ageId" class="form-label">Age</label>
+                <input type="number" class="form-control" id="ageId" name="age" required>
+            </div>
 
             <div class="mb-3">
                 <label for="lib_id" class="form-label">Library Id</label>
-                <input type="text" class="form-control" oninput="validateId()" id="lib_id" name="lib_id" required>
-                <span class="text-danger" id="lib_idErrorId"></span>
+                <input type="text" class="form-control" id="lib_id" name="libraryId" required>
             </div>
 
             <div class="mb-3">
-            <label for="genderId" class="form-label">Gender</label>
-            <select class="form-select" aria-label="Default select example" onchange="validateGender()" name="gender" id="genderId" required>
-                <option selected>Select Gender</option>
-                <option value="m">Male</option>
-                <option value="f">Female</option>
-                <option value="o">other</option>
-            </select>
-            <span class="text-danger" id="genderErrorId"></span>
-        </div>
+                <label for="genderId" class="form-label">Gender</label>
+                <select class="form-select" name="gender" id="genderId" required>
+                    <option value="" selected disabled>Select Gender</option>
+                    <option value="m">Male</option>
+                    <option value="f">Female</option>
+                    <option value="o">Other</option>
+                </select>
+            </div>
+
             <div class="mb-3">
                 <label for="emailId" class="form-label">Email</label>
-                <input type="email" oninput="validateEmail()" class="form-control" id="emailId" name="email" required>
-                <span id="emailErrorId" class="text-danger"></span>
+                <input type="email" class="form-control" id="emailId" name="email" required oninput="userEmail()">
+                <span id="displayEmail" class="text-danger"></span>
             </div>
+
+
             <div class="mb-3">
                 <label for="phoneId" class="form-label">Phone No</label>
-                <input type="number" class="form-control" oninput="validatePhone()" id="phoneId" name="phone" required>
-                <span class="text-danger" id="phoneErrorId"></span>
+                <input type="number" class="form-control" id="phoneId" name="phone" required>
             </div>
 
-
-            <div class="form-floating">
+            <div class="form-floating mb-3">
                 <textarea class="form-control" name="address" id="addressId" style="height: 100px" required></textarea>
                 <label for="addressId">Address</label>
             </div>
 
             <div class="mb-3">
                 <label for="books_taken" class="form-label">Books Taken</label>
-                <input type="text" class="form-control" oninput="validateId()" id="books_taken" name="booksTaken" required>
-                <span class="text-danger" id="BooksErrorId"></span>
-            </div>
-
-            <div class="mb-3 ">
-                <label for="passwordId" class="form-label" >Password</label>
-                <div class="position-relative">
-                    <input type="password" class="form-control" oninput="validatePassword()" name="password" id="passwordId" required>
-                    <button type="button" class="position-absolute top-50 end-0 translate-middle-y text-danger  border-0 bg-transparent" onclick="viewPassword()">
-                        <i class="bi bi-eye" id="toggleIcon"></i>
-                    </button>
-                </div>
-                <span id="passwordErrorId" class="text-danger"></span>
-            </div>
-            <div class="mb-3">
-                <label for="confirmPassword" class="form-label" >Confirm Password</label>
-                <input type="password" class="form-control" oninput="validateConfirmPassword()" id="confirmPassword" name="confirmPassword" required>
-                <span id="cpasswordErrorId" class="text-danger"></span>
+                <input type="text" class="form-control" id="books_taken" name="noOfBooksTaken" required>
             </div>
 
             <div class="mb-3">
-                <button class="btn btn-info text-white fw-bold w-100">Submit</button>
-
+                <label for="passwordId" class="form-label">Password</label>
+                <input type="password" class="form-control" name="password" id="passwordId" required>
             </div>
+
+            <div class="mb-3">
+                <label for="confirmPassword" class="form-label">Confirm Password</label>
+                <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" required>
+            </div>
+
+            <button class="btn btn-info text-white fw-bold w-100">Submit</button>
         </form>
     </div>
 </div>
+
+<script>
+function userEmail() {
+console.log("HELLO"); // check console
+
+let name = document.getElementById("emailId");
+let nameValue = name.value;
+
+const xhttp = new XMLHttpRequest();
+xhttp.open("GET", "http://localhost:8080/library/userEmail/" + nameValue, true);
+xhttp.send();
+
+xhttp.onload = function () {
+document.getElementById("displayEmail").innerHTML = this.responseText;
+}
+}
+
+</script>
 
 </body>
 </html>
