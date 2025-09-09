@@ -4,6 +4,7 @@ package com.xworkz.hospital.entity;
 import lombok.*;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -15,6 +16,7 @@ import javax.persistence.*;
 @Table(name = "hospital_db")
 
 @NamedQuery(name = "getEmailCount", query = "select count(e) from HospitalEntity e where e.email = :email")
+@NamedQuery(name = "getByEmail" ,query = "select entity from HospitalEntity entity where entity.email =:email")
 
 public class HospitalEntity {
 
@@ -26,5 +28,8 @@ public class HospitalEntity {
 
     @Column(name = "otp")
     private String OTP;
+
+    @Column()
+    private LocalDateTime localDateTime;
 
 }
