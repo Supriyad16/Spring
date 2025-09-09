@@ -1,6 +1,7 @@
 package com.xworkz.hospital.repository;
 
 
+import com.xworkz.hospital.entity.HospitalEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -50,4 +51,55 @@ public class HospitalRepositoryImp implements HospitalRepository {
             return count;
         }
     }
+
+    @Override
+    public HospitalEntity findByEmail(String email) {
+        EntityManager em = null;
+       // EntityTransaction et = null;
+        HospitalEntity entity = null;
+
+
+        try {
+            em = emf.createEntityManager();
+            Query query = em.createNamedQuery("getByEmail");
+            query.setParameter("email", email);
+            entity = (HospitalEntity) query.getSingleResult();
+
+        } catch (Exception e) {
+            System.out.println("No entity found for email: " + email);
+        } finally {
+            if (em != null) {
+                em.close();
+            }
+        }
+        return entity;
+    }
+
+    @Override
+    public void save(HospitalEntity entity) {
+        EntityManager em = null;
+        EntityTransaction et = null;
+
+        try {
+            em = emf.createEntityManager();
+            et = em.getTransaction();
+            et.begin();
+
+            em.merge(entity);
+            et.commit();
+
+            System.out.println("Entity saved successfully: " + entity);
+
+        } catch (Exception e) {
+            if (et != null && et.isActive()) {
+                et.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            if (em != null) {
+                em.close();
+            }
+        }
+    }
 }
+
