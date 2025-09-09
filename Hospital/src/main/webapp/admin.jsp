@@ -49,7 +49,6 @@
                     <button type="button" class="btn btn-primary" onclick="sendOtp()">Send OTP</button>
 
 
-
                 <p id="displayEmail" style="color:red;"></p>
 
                 <div class="mb-3">
