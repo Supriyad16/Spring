@@ -85,7 +85,6 @@ public class HospitalServiceImp implements HospitalService{
         if (entity == null)
             return false;
 
-
         return entity.getOTP().equals(otp)
                 && entity.getLocalDateTime().plusMinutes(5).isAfter(LocalDateTime.now());
     }
