@@ -1,13 +1,12 @@
-<!doctype html>
+<%@ page isELIgnored="false" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
 <html lang="en">
 <head>
-
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
-
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
     <title>Hospital Website</title>
 
     <nav class="navbar navbar-dark bg-dark">
@@ -36,42 +35,69 @@
              style="min-width: 400px; background: rgba(255, 255, 255, 0.3); backdrop-filter: blur(8px);">
             <h3 class="fw-bold display-6 text-center text-dark mb-3">Admin Page</h3>
 
+            <c:if test="${not empty message}">
+                <div class="alert alert-info">${message}</div>
+            </c:if>
+
             <form action="admin" method="post">
                 <div class="mb-3">
                     <label for="emailId" class="form-label fw-semibold">Email</label>
-                    <input type="email" class="form-control" id="emailId" name="email" required>
+                    <div class="input-group">
+                        <input type="email" class="form-control" id="emailId" name="email" required>
+                    </div>
                 </div>
+                    <button type="button" class="btn btn-primary" onclick="sendOtp()">Send OTP</button>
+
+
+
+                <p id="displayEmail" style="color:red;"></p>
 
                 <div class="mb-3">
                     <label for="otp" class="form-label fw-semibold">OTP</label>
                     <input type="text" class="form-control" id="otp" name="otp" required>
                 </div>
 
-                <span class="badge bg-secondary p-2">
-        <a class="btn btn-secondary text-white fw-bold" href="admin.jsp">Submit</a>
-      </span>
+                <button type="submit" class="btn btn-primary">Submit</button>
             </form>
+
         </div>
     </div>
 
 </div>
 
 <script>
+
     function userEmail() {
     console.log("HELLO");
+        let email = document.getElementById("emailId");
+       let emailValue = email.value;
 
-    let name = document.getElementById("emailId");
-    let nameValue = name.value;
+        const xhttp = new XMLHttpRequest();
+        xhttp.open("GET", "http://localhost:8080/Hospital/userEmail/" + emailValue, true);
+        xhttp.send();
 
-    const xhttp = new XMLHttpRequest();
-    xhttp.open("GET", "http://localhost:8080/Hospital/userEmail/" + nameValue, true);
-    xhttp.send();
-
-    xhttp.onload = function () {
-    document.getElementById("displayEmail").innerHTML = this.responseText;
+        xhttp.onload = function () {
+            document.getElementById("displayEmail").innerHTML = this.responseText;
+        }
     }
-    }
 
+
+    function sendOtp() {
+        let email = document.getElementById("emailId").value;
+        if (!email) {
+            alert("Please enter email first");
+            return;
+        }
+
+        const xhttp = new XMLHttpRequest();
+        xhttp.open("GET", "http://localhost:8080/Hospital/sendOtp/" + email, true);
+
+        xhttp.send();
+
+        xhttp.onload = function () {
+            alert(this.responseText);
+        }
+    }
 </script>
 
 </body>
