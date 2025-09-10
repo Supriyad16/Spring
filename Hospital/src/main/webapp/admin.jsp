@@ -43,7 +43,7 @@
                 <div class="mb-3">
                     <label for="emailId" class="form-label fw-semibold">Email</label>
                     <div class="input-group">
-                        <input type="email" class="form-control" id="emailId" name="email" required>
+                        <input type="email" class="form-control" id="emailId" name="email" onchange="userEmail()" required>
                     </div>
                 </div>
                     <button type="button" class="btn btn-primary" onclick="sendOtp()">Send OTP</button>
@@ -97,7 +97,10 @@
             alert(this.responseText);
         }
     }
+
 </script>
 
 </body>
 </html>
+
+

@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @ToString
 
 @Entity
-@Table(name = "hospital_db")
+@Table(name = "hospital_data")
 
 @NamedQuery(name = "getEmailCount", query = "select count(e) from HospitalEntity e where e.email = :email")
 @NamedQuery(name = "getByEmail" ,query = "select entity from HospitalEntity entity where entity.email =:email")
@@ -21,7 +21,7 @@ import java.time.LocalDateTime;
 public class HospitalEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+   @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     private String email;
