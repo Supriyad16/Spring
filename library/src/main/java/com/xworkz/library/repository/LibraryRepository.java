@@ -18,7 +18,6 @@ public interface LibraryRepository {
 
     int getEmailCount(String email);
 
-
-    //boolean updateprofile(LibraryEntity libraryEntity);
+    public boolean updateProfile(LibraryEntity libraryEntity);
 
 }

@@ -1,13 +1,14 @@
 package com.xworkz.library.controller;
 
 import com.xworkz.library.dto.LibraryDTO;
+import com.xworkz.library.dto.UpdateProfileDTO;
 import com.xworkz.library.service.LibraryService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
@@ -105,30 +106,19 @@ public class LibraryController {
 
     }
 
-//        @RequestMapping("/updateProfile")
-//        public ModelAndView updateProfile (@Valid LibraryDTO libraryDTO, BindingResult bindingResult, ModelAndView
-//        modelAndView){
-//
-//            for (ObjectError error : bindingResult.getAllErrors()) {
-//                System.out.println("Validation error: " + error.getDefaultMessage());
-//            }
-//
-//            if (bindingResult.hasErrors()) {
-//                modelAndView.addObject("error", "Invalid Details");
-//                modelAndView.setViewName("updateProfile");
-//                return modelAndView;
-//            }
-//
-//            boolean result = libraryService.updateprofile(libraryDTO);
-//
-//            if (!result) {
-//                modelAndView.addObject("error", "Profile update failed");
-//                modelAndView.setViewName("updateProfile");
-//                return modelAndView;
-//            }
-//
-//            modelAndView.addObject("message", "Profile updated successfully");
-//            modelAndView.setViewName("success");
-//            return modelAndView;
-//        }
+        @RequestMapping("/updateProfile")
+        public ModelAndView updateProfile (@ModelAttribute UpdateProfileDTO updateProfileDTO, ModelAndView modelAndView){
+
+            boolean result = libraryService.updateProfile(updateProfileDTO);
+
+            if (result) {
+                modelAndView.addObject("message", "Profile updated successfully");
+                modelAndView.setViewName("success");
+            } else {
+                modelAndView.addObject("error", "Profile update failed");
+                modelAndView.setViewName("updateProfile");
+            }
+            return modelAndView;
+
+        }
     }

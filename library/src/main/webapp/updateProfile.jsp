@@ -46,6 +46,11 @@
             </div>
 
             <div class="mb-3">
+                <label for="emailId" class="form-label">Email</label>
+                <input type="email" class="form-control" id="emailId" name="email" value="${value.email}" required >
+            </div>
+
+            <div class="mb-3">
                 <label for="ageId" class="form-label">Age</label>
                 <input type="number" class="form-control" id="ageId" name="age" value="${value.age}" required>
             </div>
@@ -55,15 +60,6 @@
                 <input type="number" class="form-control" id="libraryId" name="libraryId" value="${value.libraryId}" required>
             </div>
 
-            <div class="mb-3">
-                <label for="genderId" class="form-label">Gender</label>
-                <select class="form-select" aria-label="Default select example" onchange="validateGender()" name="gender" id="genderId" required>
-                    <option selected>Select Gender</option>
-                    <option value="m">Male</option>
-                    <option value="f">Female</option>
-                    <option value="o">other</option>
-                </select>
-            </div>
 
             <div class="mb-3">
                 <label for="phoneId" class="form-label">Phone No</label>

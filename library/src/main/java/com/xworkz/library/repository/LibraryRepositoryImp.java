@@ -2,7 +2,6 @@ package com.xworkz.library.repository;
 
 import com.xworkz.library.dto.LibraryDTO;
 import com.xworkz.library.entity.LibraryEntity;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -224,36 +223,48 @@ public class LibraryRepositoryImp implements LibraryRepository{
         }
     }
 
+    @Override
+    public boolean updateProfile(LibraryEntity libraryEntity) {
+
+        EntityManager em = null;
+        EntityTransaction et = null;
+
+        try {
+            em = emf.createEntityManager();
+            et = em.getTransaction();
+            et.begin();
+
+            Query query = em.createNamedQuery("updateProfile");
+            query.setParameter("name", libraryEntity.getName());
+            query.setParameter("age", libraryEntity.getAge());
+            query.setParameter("address", libraryEntity.getAddress());
+            query.setParameter("libraryId", libraryEntity.getLibraryId());
+            query.setParameter("phoneNumber", libraryEntity.getPhoneNumber());
+            query.setParameter("email", libraryEntity.getEmail());
+
+            int updatedRows = query.executeUpdate();
+            et.commit();
+
+            System.out.println("Updating profile with email: " + libraryEntity.getEmail());
+            System.out.println("Phone: " + libraryEntity.getPhoneNumber());
+            System.out.println("Name: " + libraryEntity.getName());
+            System.out.println("Email: "+libraryEntity.getEmail());
 
 
-//    @Override
-//    public boolean updateprofile(LibraryEntity libraryEntity) {
-//
-//        EntityManager em = null;
-//        EntityTransaction et = null;
-//        try {
-//            em = emf.createEntityManager();
-//            et = em.getTransaction();
-//            et.begin();
-//
-//            Query query = em.createNamedQuery("updateProfile");
-//            query.setParameter("name", libraryEntity.getName());
-//            query.setParameter("age",libraryEntity.getAge());
-//            query.setParameter("address",libraryEntity.getAddress());
-//            query.setParameter("libraryId",libraryEntity.getLibraryId());
-//            query.setParameter("gender",libraryEntity.getGender());
-//            query.setParameter("phoneNumber",libraryEntity.getPhoneNumber());
-//            query.executeUpdate();
-//            et.commit();
-//        } catch (Exception e) {
-//            if (et.isActive()) et.rollback();
-//            e.printStackTrace();
-//        } finally {
-//            if (em != null) em.close();
-//        }
-//
-//        return false;
-//    }
+            return updatedRows > 0;
+
+        } catch (Exception e) {
+            if (et != null && et.isActive()) {
+                et.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            if (em != null) em.close();
+        }
+        return false;
+    }
 
 }
+
+
 

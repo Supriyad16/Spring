@@ -35,7 +35,7 @@ public class LibraryDTO {
     @NotNull(message = "Phone number is required")
     @Min(value = 1000000000L, message = "Phone number must be 10 digits")
     @Max(value = 9999999999L, message = "Phone number must be 10 digits")
-    private long phone;
+    private long phoneNumber;
 
     @NotNull(message = "Fill the Address ")
     private String address;

@@ -1,12 +1,12 @@
 package com.xworkz.library.service;
 
 import com.xworkz.library.dto.LibraryDTO;
+import com.xworkz.library.dto.UpdateProfileDTO;
 import com.xworkz.library.entity.LibraryEntity;
 import com.xworkz.library.repository.LibraryRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.mail.*;
@@ -101,13 +101,14 @@ public class LibraryServiceImp implements LibraryService {
         return count;
     }
 
-//    @Override
-//    public boolean updateProfile(LibraryDTO libraryDTO) {
-//        // copy into entity only if repository requires entity
-//        LibraryEntity libraryEntity = new LibraryEntity();
-//        BeanUtils.copyProperties(libraryDTO, libraryEntity);
-//        return libraryRepository.update(libraryDTO);
-//    }
+    @Override
+    public boolean updateProfile(UpdateProfileDTO updateProfileDTO) {
+
+        LibraryEntity libraryEntity = new LibraryEntity();
+        BeanUtils.copyProperties(updateProfileDTO,libraryEntity);
+        return libraryRepository.updateProfile(libraryEntity);
+    }
+
 
     private void sendEmail(String email) {
         final String username = "dinakaranctsupriya@gmail.com";

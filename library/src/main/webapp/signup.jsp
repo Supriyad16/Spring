@@ -122,7 +122,7 @@
 
 <script>
 function userEmail() {
-console.log("HELLO"); // check console
+console.log("HELLO");
 
 let name = document.getElementById("emailId");
 let nameValue = name.value;

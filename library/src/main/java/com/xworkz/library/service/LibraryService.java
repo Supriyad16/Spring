@@ -1,7 +1,7 @@
 package com.xworkz.library.service;
 
 import com.xworkz.library.dto.LibraryDTO;
-import com.xworkz.library.entity.LibraryEntity;
+import com.xworkz.library.dto.UpdateProfileDTO;
 
 public interface LibraryService {
 
@@ -11,8 +11,7 @@ public interface LibraryService {
 
     boolean forgotPassword(String email, String password, String confirmPassword);
 
-    //boolean updateprofile(LibraryDTO libraryDTO);
-
     int getEmailCount(String email);
 
+    public boolean updateProfile(UpdateProfileDTO updateProfileDTO);
 }
