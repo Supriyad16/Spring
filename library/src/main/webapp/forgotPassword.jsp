@@ -1,5 +1,5 @@
 <%@ page isELIgnored="false" %>
-<!--<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>-->
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
 <html lang="en">
 <head>
@@ -38,27 +38,38 @@
             <div class="card shadow p-4">
                 <h4 class="text-center mb-4">Reset Your Password</h4>
 
+                <!-- ✅ Show error -->
+                <c:if test="${not empty error}">
+                    <div class="alert alert-danger text-center">${error}</div>
+                </c:if>
 
-                <span style="color:red">${error}</span>
+                <!-- ✅ Show success -->
+                <c:if test="${not empty success}">
+                    <div class="alert alert-success text-center">${success}</div>
+                </c:if>
+
                 <form action="forgotPassword" method="post">
                     <div class="mb-3">
-                        <label for="email" class="form-label">Email</label>
+                        <label for="email" class="form-label fw-semibold">Email</label>
                         <input type="email" id="email" name="email" class="form-control" required>
                     </div>
 
                     <div class="mb-3">
-                        <label for="password" class="form-label">New Password</label>
+                        <label for="password" class="form-label fw-semibold">New Password</label>
                         <input type="password" id="password" name="password" class="form-control" required>
-                        <div id="passwordError" class="form-text text-danger"></div>
                     </div>
 
                     <div class="mb-3">
-                        <label for="confirmPassword" class="form-label">Confirm Password</label>
+                        <label for="confirmPassword" class="form-label fw-semibold">Confirm Password</label>
                         <input type="password" id="confirmPassword" name="confirmPassword" class="form-control" required>
                     </div>
 
                     <button type="submit" class="btn btn-primary w-100">Change Password</button>
                 </form>
+
+                <div class="text-center mt-3">
+                    <a href="signin.jsp" class="text-decoration-none">Back to Sign In</a>
+                </div>
             </div>
         </div>
     </div>
@@ -66,5 +77,3 @@
 
 </body>
 </html>
-
-

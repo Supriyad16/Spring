@@ -17,5 +17,4 @@ public class LibraryInitializer extends AbstractAnnotationConfigDispatcherServle
     protected String[] getServletMappings() {
         return new String[]{"/"};
     }
-
 }
