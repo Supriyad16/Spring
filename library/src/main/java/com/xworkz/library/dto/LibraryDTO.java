@@ -54,7 +54,10 @@ public class LibraryDTO {
     private String confirmPassword;
 
     private int failedAttempts;
+
     private boolean accountLocked;
+
+    private String imagePath;
 
     public boolean isAccountLocked() {
         return this.accountLocked;

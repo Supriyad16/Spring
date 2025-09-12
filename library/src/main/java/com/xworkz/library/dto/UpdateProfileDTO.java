@@ -35,4 +35,6 @@ public class UpdateProfileDTO {
     @NotNull
     @Pattern(regexp = "^[A-Za-z0-9]+@gmail\\.com$", message = "Invalid format")
     private String email;
+
+
 }

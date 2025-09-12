@@ -38,7 +38,6 @@
     <div class="p-5 shadow-lg mb-5 rounded bg-light w-100" style="max-width: 600px;">
         <h3 class="fw-bold display-6 text-center text-dark mb-3">Register Form</h3>
 
-
         <c:if test="${not empty error}">
             <div class="alert alert-danger text-center">${error}</div>
         </c:if>
@@ -55,8 +54,8 @@
             <div class="alert alert-success text-center">${success}</div>
         </c:if>
 
-
-        <form action="signup" method="post" class="bg-light p-3 border rounded">
+        <!-- ✅ multipart added -->
+        <form action="signup" method="post" enctype="multipart/form-data" class="bg-light p-3 border rounded">
 
             <div class="mb-3">
                 <label for="nameId" class="form-label">Name</label>
@@ -89,10 +88,9 @@
                 <span id="displayEmail" class="text-danger"></span>
             </div>
 
-
             <div class="mb-3">
                 <label for="phoneId" class="form-label">Phone No</label>
-                <input type="number" class="form-control" id="phoneId" name="phone" required>
+                <input type="number" class="form-control" id="phoneId" name="phoneNumber" required>
             </div>
 
             <div class="form-floating mb-3">
@@ -115,27 +113,44 @@
                 <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" required>
             </div>
 
+            <!-- ✅ File upload + Preview -->
+            <div class="mb-3">
+                <label for="image" class="form-label">Upload Profile Picture</label>
+                <input type="file" class="form-control" id="image" name="image" accept="image/*" required onchange="previewImage(event)">
+                <small id="profilePictureError" class="text-danger"></small>
+            </div>
+
+            <!-- ✅ Image Preview -->
+            <div class="mb-3 text-center">
+                <img id="preview" src="#" alt="Profile Preview" class="img-thumbnail d-none" style="max-width: 200px; max-height: 200px;">
+            </div>
+
             <button class="btn btn-info text-white fw-bold w-100">Submit</button>
         </form>
     </div>
 </div>
 
 <script>
-function userEmail() {
-console.log("HELLO");
+    function userEmail() {
+        let nameValue = document.getElementById("emailId").value;
+        const xhttp = new XMLHttpRequest();
+        xhttp.open("GET", "http://localhost:8080/library/userEmail/" + nameValue, true);
+        xhttp.send();
+        xhttp.onload = function () {
+            document.getElementById("displayEmail").innerHTML = this.responseText;
+        }
+    }
 
-let name = document.getElementById("emailId");
-let nameValue = name.value;
-
-const xhttp = new XMLHttpRequest();
-xhttp.open("GET", "http://localhost:8080/library/userEmail/" + nameValue, true);
-xhttp.send();
-
-xhttp.onload = function () {
-document.getElementById("displayEmail").innerHTML = this.responseText;
-}
-}
-
+    // ✅ JavaScript for instant preview
+    function previewImage(event) {
+        let reader = new FileReader();
+        reader.onload = function(){
+            let output = document.getElementById('preview');
+            output.src = reader.result;
+            output.classList.remove("d-none");
+        };
+        reader.readAsDataURL(event.target.files[0]);
+    }
 </script>
 
 </body>

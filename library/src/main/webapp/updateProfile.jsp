@@ -10,7 +10,6 @@
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"></script>
 
-
 <nav class="navbar navbar-expand-lg bg-info-subtle">
     <div class="container-fluid">
         <a class="navbar-brand fw-bold" href="#">Supriya X_workz</a>
@@ -30,24 +29,26 @@
     </div>
 </nav>
 
-
 <div class="container d-flex justify-content-center mt-4 align-items-center min-vh-100">
-    <div class="p-5 shadow-lg mb-5 rounded bg-light">
-        <h3 class="fw-bold display-4 text-center text-dark mb-3">Update Profile</h3>
+    <div class="p-5 shadow-lg mb-5 rounded bg-light w-50">
+        <h3 class="fw-bold display-6 text-center text-dark mb-4">Update Profile</h3>
 
-        <form action="updateProfile" method="post" class="bg-light p-4 border rounded">
+
+        <form action="updateProfile" method="post" class="bg-light p-4 border rounded" enctype="multipart/form-data">
 
             <span style="color:red">${error}</span>
-            <span style="color:green">${success}</span>
+            <span style="color:green">${message}</span>
 
             <div class="mb-3">
                 <label for="nameId" class="form-label">Name</label>
                 <input type="text" class="form-control" id="nameId" name="name" value="${value.name}" required>
             </div>
 
+            <img src="download?fileName=${data.imagepath}" width="100" height="100">
+
             <div class="mb-3">
                 <label for="emailId" class="form-label">Email</label>
-                <input type="email" class="form-control" id="emailId" name="email" value="${value.email}" required >
+                <input type="email" class="form-control" id="emailId" name="email" value="${value.email}" required>
             </div>
 
             <div class="mb-3">
@@ -60,7 +61,6 @@
                 <input type="number" class="form-control" id="libraryId" name="libraryId" value="${value.libraryId}" required>
             </div>
 
-
             <div class="mb-3">
                 <label for="phoneId" class="form-label">Phone No</label>
                 <input type="number" class="form-control" id="phoneId" name="phoneNumber" value="${value.phoneNumber}" required>
@@ -71,12 +71,16 @@
                 <label for="addressId">Address</label>
             </div>
 
+
+
             <div class="mb-3">
                 <button class="btn btn-info text-white fw-bold w-100">Update</button>
             </div>
         </form>
     </div>
 </div>
+
+
 
 </body>
 </html>

@@ -19,7 +19,7 @@ import java.time.LocalDateTime;
 @NamedQuery(name = "getByName", query = "select entity from LibraryEntity entity where entity.name = :name")
 @NamedQuery(name = "getByEmail" ,query = "select entity from LibraryEntity entity where entity.email =:email")
 @NamedQuery(name = "updateProfile", query = "UPDATE LibraryEntity le SET le.name = :name, le.age = :age, le.address = :address, " + "le.libraryId = :libraryId, le.phoneNumber = :phoneNumber " + "WHERE le.email = :email")
-@NamedQuery(name = "getEmailCount", query = "select count(entity) from LibraryEntity entity where entity.email =: email")
+@NamedQuery(name = "getEmailCount", query = "select count(entity) from LibraryEntity entity where entity.email =:email")
 
 
 public class LibraryEntity {
@@ -58,5 +58,8 @@ public class LibraryEntity {
 
     @Column(name = "local_dateTime")
     private LocalDateTime localDateTime;
+
+    @Column(name = "image")
+    private String imagePath;
 
 }
