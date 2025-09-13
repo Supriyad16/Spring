@@ -171,11 +171,14 @@ public class LibraryController {
 //        return modelAndView;
 //    }
 
+
+
     @GetMapping("/download")
     public void download(HttpServletResponse httpServletResponse, @RequestParam String fileName) throws IOException {
 
         httpServletResponse.setContentType("image/jpg");
         File file  = new File("E:\\images\\"+fileName);
+
         InputStream inputStream = new BufferedInputStream(new FileInputStream(file));
         ServletOutputStream servletOutputStream = httpServletResponse.getOutputStream();
         IOUtils.copy(inputStream, servletOutputStream);
