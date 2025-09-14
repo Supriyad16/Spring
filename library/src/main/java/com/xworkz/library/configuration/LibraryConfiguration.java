@@ -43,6 +43,7 @@ public class LibraryConfiguration implements WebMvcConfigurer {
         return factoryBean;
     }
 
+
     public Properties jpaProperties(){
         Properties properties=new Properties();
         properties.setProperty("hibernate.hbm2ddl.auto","update");
@@ -64,6 +65,7 @@ public class LibraryConfiguration implements WebMvcConfigurer {
         commonsMultipartResolver.setMaxUploadSize(1025231);
         commonsMultipartResolver.setMaxInMemorySize(1025231);
         return commonsMultipartResolver;
+
     }
 }
 
