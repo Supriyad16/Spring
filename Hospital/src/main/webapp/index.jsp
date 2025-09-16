@@ -10,14 +10,16 @@
 
     <title>Hospital Website</title>
 
-    <nav class="navbar navbar-dark bg-dark">
+    <nav class="navbar navbar-dark bg-dark py-3">
         <div class="container-fluid">
-            <a class="navbar-brand" href="#">
-                <img src="doctor.jpg" alt="" width="30" height="24" class="d-inline-block align-text-top">
+            <a class="navbar-brand fs-4" href="#">
+                <img src="doctor.jpg" alt="" width="40" height="40" class="d-inline-block align-text-top me-2">
                 Sushrutha Chikitsalaya
             </a>
         </div>
     </nav>
+
+
 </head>
 <body>
 
@@ -39,6 +41,8 @@
             <form action="admin" method="post">
                  <span class="badge bg-secondary p-2">
         <a class="btn btn-secondary text-white fw-bold" href="admin.jsp">Login</a>
+
+                     <a class="btn btn-secondary text-white fw-bold" href="doctor.jsp">Doctor</a>
       </span>
             </form>
         </div>

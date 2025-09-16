@@ -1,5 +1,6 @@
 package com.xworkz.hospital.service;
 
+import com.xworkz.hospital.dto.DoctorDTO;
 import com.xworkz.hospital.entity.HospitalEntity;
 
 public interface HospitalService {
@@ -15,5 +16,7 @@ public interface HospitalService {
     boolean validateOtp(String email, String otp);
 
     HospitalEntity findByEmail(String email);
+
+    boolean doctorSave(DoctorDTO doctorDTO);
 
 }

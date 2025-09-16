@@ -1,8 +1,11 @@
 package com.xworkz.hospital.service;
 
 
+import com.xworkz.hospital.dto.DoctorDTO;
+import com.xworkz.hospital.entity.DoctorEntity;
 import com.xworkz.hospital.entity.HospitalEntity;
 import com.xworkz.hospital.repository.HospitalRepository;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -92,6 +95,15 @@ public class HospitalServiceImp implements HospitalService{
     @Override
     public HospitalEntity findByEmail(String email) {
         return hospitalRepository.findByEmail(email);
+    }
+
+    @Override
+    public boolean doctorSave(DoctorDTO doctorDTO) {
+        DoctorEntity doctorEntity = new DoctorEntity();
+        BeanUtils.copyProperties(doctorDTO,doctorEntity);
+        hospitalRepository.doctorSave(doctorEntity);
+
+        return true;
     }
 
 }
