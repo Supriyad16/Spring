@@ -9,10 +9,10 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
     <title>Hospital Website</title>
 
-    <nav class="navbar navbar-dark bg-dark">
+    <nav class="navbar navbar-dark bg-dark py-3">
         <div class="container-fluid">
-            <a class="navbar-brand" href="#">
-                <img src="doctor.jpg" alt="" width="30" height="24" class="d-inline-block align-text-top">
+            <a class="navbar-brand fs-4" href="#">
+                <img src="doctor.jpg" alt="" width="40" height="40" class="d-inline-block align-text-top me-2">
                 Sushrutha Chikitsalaya
             </a>
         </div>

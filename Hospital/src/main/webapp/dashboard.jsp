@@ -9,17 +9,18 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
     <title>Admin Dashboard - Hospital</title>
 
-    <nav class="navbar navbar-dark bg-dark">
+    <nav class="navbar navbar-dark bg-dark py-3">
         <div class="container-fluid">
-            <a class="navbar-brand" href="#">
-                <img src="doctor.jpg" alt="" width="30" height="24" class="d-inline-block align-text-top">
-                Sushrutha Chikitsalaya - Admin Dashboard
+            <a class="navbar-brand fs-4" href="#">
+                <img src="doctor.jpg" alt="" width="40" height="40" class="d-inline-block align-text-top me-2">
+                Sushrutha Chikitsalaya
             </a>
             <form class="d-flex">
-                <a href="admin.jsp" class="btn btn-outline-light">Logout</a>
+                <a href="admin.jsp" class="btn btn-outline-light btn-lg">Logout</a>
             </form>
         </div>
     </nav>
+
 </head>
 <body class="bg-light">
 
