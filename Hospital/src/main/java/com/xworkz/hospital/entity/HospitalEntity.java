@@ -21,7 +21,7 @@ import java.time.LocalDateTime;
 public class HospitalEntity {
 
     @Id
-   @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     private String email;
