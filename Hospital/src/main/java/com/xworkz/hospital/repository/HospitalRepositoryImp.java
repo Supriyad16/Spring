@@ -1,6 +1,7 @@
 package com.xworkz.hospital.repository;
 
 
+import com.xworkz.hospital.entity.DoctorEntity;
 import com.xworkz.hospital.entity.HospitalEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -100,6 +101,34 @@ public class HospitalRepositoryImp implements HospitalRepository {
                 em.close();
             }
         }
+    }
+
+    @Override
+    public boolean doctorSave(DoctorEntity doctorEntity) {
+        EntityManager em = null;
+        EntityTransaction et = null;
+
+        try{
+            em = emf.createEntityManager();
+            et = em.getTransaction();
+
+            et.begin();
+            em.persist(doctorEntity);
+            et.commit();
+            System.out.println("Doctor's Data Saved");
+
+            return true;
+        }
+        catch (Exception e){
+            if(et.isActive()){
+                et.rollback();
+            }
+            e.printStackTrace();
+        }
+        finally {
+            em.close();
+        }
+        return false;
     }
 }
 

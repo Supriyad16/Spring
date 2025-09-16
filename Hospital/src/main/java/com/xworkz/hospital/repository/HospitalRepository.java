@@ -1,5 +1,6 @@
 package com.xworkz.hospital.repository;
 
+import com.xworkz.hospital.entity.DoctorEntity;
 import com.xworkz.hospital.entity.HospitalEntity;
 
 public interface HospitalRepository {
@@ -10,5 +11,7 @@ public interface HospitalRepository {
     int getEmailCount(String email);
 
     void save(HospitalEntity entity);
+
+    boolean doctorSave(DoctorEntity doctorEntity);
 
 }
