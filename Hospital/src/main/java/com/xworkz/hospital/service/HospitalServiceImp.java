@@ -2,8 +2,10 @@ package com.xworkz.hospital.service;
 
 
 import com.xworkz.hospital.dto.DoctorDTO;
+import com.xworkz.hospital.dto.SlotDTO;
 import com.xworkz.hospital.entity.DoctorEntity;
 import com.xworkz.hospital.entity.HospitalEntity;
+import com.xworkz.hospital.entity.SlotEntity;
 import com.xworkz.hospital.repository.HospitalRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,8 +15,7 @@ import javax.mail.*;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import java.time.LocalDateTime;
-import java.util.Properties;
-import java.util.Random;
+import java.util.*;
 
 @Service
 public class HospitalServiceImp implements HospitalService{
@@ -47,8 +48,8 @@ public class HospitalServiceImp implements HospitalService{
     }
 
     public void sendOtpEmail(String email, String otp) {
-        final String username = "";
-        final String password = "";
+        final String username = "dinakaranctsupriya@gmail.com";
+        final String password = "axct yvqw aick doac";
 
         Properties prop = new Properties();
         prop.put("mail.smtp.host", "smtp.gmail.com");
@@ -71,7 +72,7 @@ public class HospitalServiceImp implements HospitalService{
                     InternetAddress.parse(email)
             );
             message.setSubject("Hospital Website - OTP Verification");
-            message.setText("Dear User,\n\nYour OTP is: " + otp + "\nIt is valid for 5 minutes.\n\nRegards,\nHospital Team");
+            message.setText("Dear " +email+ ",\n\nWe received your request for a OTP to use with your account \n\nYour OTP is: " + otp + "\nIt is valid for 5 minutes.\n\nDon't share it with anyone. Ignore if this is not you. \n\nRegards,\nSushrutha Chikitsalaya");
 
             Transport.send(message);
 
@@ -104,6 +105,26 @@ public class HospitalServiceImp implements HospitalService{
         hospitalRepository.doctorSave(doctorEntity);
 
         return true;
+    }
+
+    @Override
+    public boolean slot(SlotDTO slotDTO) {
+
+        SlotEntity slotEntity = new SlotEntity();
+        BeanUtils.copyProperties(slotDTO, slotEntity);
+        hospitalRepository.Slot(slotEntity);
+        return true;
+    }
+
+    // HospitalServiceImp.java
+    @Override
+    public List<DoctorEntity> getAllDoctors() {
+        return hospitalRepository.getAllDoctors();
+    }
+
+    @Override
+    public List<SlotEntity> getAllSlots() {
+        return hospitalRepository.getAllSlots();
     }
 
 }

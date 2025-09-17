@@ -13,6 +13,13 @@ import javax.persistence.*;
 @Entity
 @Table(name="doctor_data")
 
+@NamedQueries({
+        @NamedQuery(name = "DoctorEntity.getAllDoctors",
+                query = "SELECT d FROM DoctorEntity d"),
+        @NamedQuery(name = "DoctorEntity.getById",
+                query = "SELECT d FROM DoctorEntity d WHERE d.id = :id")
+})
+
 public class DoctorEntity {
 
     @Id
@@ -38,6 +45,7 @@ public class DoctorEntity {
     private String availableDays;
 
     private String availableTime;
+
 
 
 

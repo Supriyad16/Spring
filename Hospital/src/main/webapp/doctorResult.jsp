@@ -10,33 +10,56 @@
 </head>
 <body class="bg-light">
 
-<!-- Navbar -->
-<nav class="navbar navbar-dark bg-dark mb-4 py-3">
+<nav class="navbar navbar-dark bg-dark py-3">
     <div class="container-fluid">
         <a class="navbar-brand fs-4" href="#">
             <img src="doctor.jpg" alt="" width="40" height="40" class="d-inline-block align-text-top me-2">
-            Sushrutha Chikitsalaya - Admin Dashboard
+            Sushrutha Chikitsalaya
         </a>
-        <form class="d-flex">
-            <a href="admin.jsp" class="btn btn-outline-light btn-lg">Logout</a>
-        </form>
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar">
+            <span class="navbar-toggler-icon"></span>
+        </button>
     </div>
 </nav>
+
+<div class="offcanvas offcanvas-end bg-dark text-white" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
+    <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="offcanvasNavbarLabel">Menu</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body">
+        <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
+            <li class="nav-item">
+                <a class="nav-link text-white" href="index.jsp"><b>Home</b></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-white" href="doctor.jsp"><b>Doctor</b></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-white" href="slot.jsp"><b>Slots</b></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-white" href="addSlots.jsp"><b>Add Slots</b></a>
+            </li>
+            <li class="nav-item mt-3">
+                <a href="admin.jsp" class="btn btn-outline-light btn-lg w-100">Logout</a>
+            </li>
+        </ul>
+    </div>
+</div>
 
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8">
 
-            <!-- Result Card -->
             <div class="card shadow-lg rounded-3">
                 <div class="card-body">
 
-                    <!-- Success / Failure Message -->
                     <h4 class="card-title text-center mb-4 text-primary">
                         ${message}
                     </h4>
 
-                    <!-- Show doctor details only if saved successfully -->
                     <c:if test="${not empty doctor}">
                         <table class="table table-bordered table-striped">
                             <tr>
@@ -84,8 +107,8 @@
                     </c:if>
 
                     <div class="text-center mt-4">
-                        <a href="doctorForm.jsp" class="btn btn-success px-4">Add Another Doctor</a>
-                        <a href="adminDashboard.jsp" class="btn btn-secondary px-4">Back to Dashboard</a>
+                        <a href="doctor.jsp" class="btn btn-success px-4">Add Another Doctor</a>
+                        <a href="dashboard.jsp" class="btn btn-secondary px-4">Back to Dashboard</a>
                     </div>
 
                 </div>

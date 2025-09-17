@@ -2,6 +2,7 @@ package com.xworkz.hospital.controller;
 
 
 import com.xworkz.hospital.dto.DoctorDTO;
+import com.xworkz.hospital.dto.SlotDTO;
 import com.xworkz.hospital.entity.HospitalEntity;
 import com.xworkz.hospital.service.HospitalService;
 import lombok.extern.slf4j.Slf4j;
@@ -11,6 +12,9 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 @Controller
 @RequestMapping("/")
@@ -24,18 +28,16 @@ public class HospitalController {
 
 
     @RequestMapping("/admin")
-    public ModelAndView admin(@RequestParam String email, @RequestParam String otp){
+    public ModelAndView admin(@RequestParam String email, @RequestParam String otp) {
         ModelAndView modelAndView = new ModelAndView();
 
         HospitalEntity hospitalEntity = hospitalService.findByEmail(email);
 
-        if(hospitalEntity!= null && hospitalEntity.getOTP() != null && hospitalEntity.getOTP().equals(otp)){
+        if (hospitalEntity != null && hospitalEntity.getOTP() != null && hospitalEntity.getOTP().equals(otp)) {
 
             modelAndView.addObject("message", "Login Successful");
             modelAndView.setViewName("dashboard");
-        }
-
-        else{
+        } else {
             modelAndView.addObject("message", "Invalid OTP, Please try again.");
             modelAndView.setViewName("admin");
         }
@@ -45,7 +47,7 @@ public class HospitalController {
 
     @RequestMapping("/doctor")
     public ModelAndView saveDoctor(@ModelAttribute DoctorDTO doctorDTO) {
-        System.out.println("Doctor Data received from Form: " + doctorDTO);
+        log.info("Doctor Data received from Form: " + doctorDTO);
 
         boolean isSaved = hospitalService.doctorSave(doctorDTO);
 
@@ -60,5 +62,45 @@ public class HospitalController {
 
         return mv;
     }
-    
+
+
+    @RequestMapping("/slot")
+    public ModelAndView slot(HttpServletRequest request) {
+        String fromHour = request.getParameter("fromHour");
+        String fromMinute = request.getParameter("fromMinute");
+        String fromAmPm = request.getParameter("fromAmPm");
+
+        String toHour = request.getParameter("toHour");
+        String toMinute = request.getParameter("toMinute");
+        String toAmPm = request.getParameter("toAmPm");
+
+
+        String fromTime = fromHour + ":" + String.format("%02d", Integer.parseInt(fromMinute)) + " " + fromAmPm;
+        String toTime = toHour + ":" + String.format("%02d", Integer.parseInt(toMinute)) + " " + toAmPm;
+
+        SlotDTO slotDTO = new SlotDTO();
+        slotDTO.setFromTime(fromTime);
+        slotDTO.setToTime(toTime);
+
+        boolean result = hospitalService.slot(slotDTO);
+
+        ModelAndView modelAndView = new ModelAndView("slot");
+        if (result) {
+            modelAndView.addObject("message", "Slot details saved successfully");
+            modelAndView.addObject("slot", slotDTO);
+        }
+        else {
+            modelAndView.addObject("message", "Failed to save the data");
+        }
+
+        return modelAndView;
+
+    }
+
+        @RequestMapping("/addSlots")
+        public String addSlots(@ModelAttribute SlotDTO slotDTO) {
+            hospitalService.slot(slotDTO);
+            return "redirect:/slotPage";
+    }
+
 }

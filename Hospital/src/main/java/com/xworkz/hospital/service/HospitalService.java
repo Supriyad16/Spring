@@ -1,7 +1,12 @@
 package com.xworkz.hospital.service;
 
 import com.xworkz.hospital.dto.DoctorDTO;
+import com.xworkz.hospital.dto.SlotDTO;
+import com.xworkz.hospital.entity.DoctorEntity;
 import com.xworkz.hospital.entity.HospitalEntity;
+import com.xworkz.hospital.entity.SlotEntity;
+
+import java.util.List;
 
 public interface HospitalService {
 
@@ -18,5 +23,12 @@ public interface HospitalService {
     HospitalEntity findByEmail(String email);
 
     boolean doctorSave(DoctorDTO doctorDTO);
+
+    boolean slot(SlotDTO slotDTO);
+
+   // public List<SlotDTO> getAllSlots();
+
+    List<DoctorEntity> getAllDoctors();
+    List<SlotEntity> getAllSlots();
 
 }
