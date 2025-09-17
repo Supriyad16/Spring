@@ -42,7 +42,6 @@
                  <span class="badge bg-secondary p-2">
         <a class="btn btn-secondary text-white fw-bold" href="admin.jsp">Login</a>
 
-                     <a class="btn btn-secondary text-white fw-bold" href="doctor.jsp">Doctor</a>
       </span>
             </form>
         </div>
