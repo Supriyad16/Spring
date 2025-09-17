@@ -11,17 +11,45 @@
 </head>
 <body class="bg-light">
 
+
 <nav class="navbar navbar-dark bg-dark py-3">
     <div class="container-fluid">
         <a class="navbar-brand fs-4" href="#">
             <img src="doctor.jpg" alt="" width="40" height="40" class="d-inline-block align-text-top me-2">
             Sushrutha Chikitsalaya
         </a>
-        <form class="d-flex">
-            <a href="admin.jsp" class="btn btn-outline-light btn-lg">Logout</a>
-        </form>
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar">
+            <span class="navbar-toggler-icon"></span>
+        </button>
     </div>
 </nav>
+
+<div class="offcanvas offcanvas-end bg-dark text-white" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
+    <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="offcanvasNavbarLabel">Menu</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body">
+        <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
+            <li class="nav-item">
+                <a class="nav-link text-white" href="index.jsp"><b>Home</b></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-white" href="doctor.jsp"><b>Doctor</b></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-white" href="slot.jsp"><b>Slots</b></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-white" href="addSlots.jsp"><b>Add Slots</b></a>
+            </li>
+            <li class="nav-item mt-3">
+                <a href="admin.jsp" class="btn btn-outline-light btn-lg w-100">Logout</a>
+            </li>
+        </ul>
+    </div>
+</div>
 
 
 <div class="container">
@@ -31,32 +59,32 @@
 
         <div class="col-md-6">
             <label for="doctorName" class="form-label">Doctor Name</label>
-            <input type="text" class="form-control" id="doctorName" name="doctorName">
+            <input type="text" class="form-control" id="doctorName" name="doctorName" required>
         </div>
 
         <div class="col-md-6">
             <label for="specialisation" class="form-label">Specialisation</label>
-            <input type="text" class="form-control" id="specialisation" name="specialisation">
+            <input type="text" class="form-control" id="specialisation" name="specialisation" required>
         </div>
 
         <div class="col-md-6">
             <label for="qualification" class="form-label">Qualification</label>
-            <input type="text" class="form-control" id="qualification" name="qualification">
+            <input type="text" class="form-control" id="qualification" name="qualification" required>
         </div>
 
         <div class="col-md-6">
             <label for="experience" class="form-label">Experience</label>
-            <input type="text" class="form-control" id="experience" name="experience" placeholder="in years">
+            <input type="text" class="form-control" id="experience" name="experience" placeholder="in years" required>
         </div>
 
         <div class="col-md-6">
             <label for="email" class="form-label">Email</label>
-            <input type="email" class="form-control" id="email" name="email">
+            <input type="email" class="form-control" id="email" name="email" required>
         </div>
 
         <div class="col-md-6">
             <label for="phoneNumber" class="form-label">Phone Number</label>
-            <input type="text" class="form-control" id="phoneNumber" name="phoneNumber">
+            <input type="text" class="form-control" id="phoneNumber" name="phoneNumber" required>
         </div>
 
         <div class="col-md-6">
@@ -71,12 +99,12 @@
 
         <div class="col-md-6">
             <label for="age" class="form-label">Age</label>
-            <input type="number" class="form-control" id="age" name="age">
+            <input type="number" class="form-control" id="age" name="age" required>
         </div>
 
         <div class="mb-3">
             <label class="form-label">Available Days</label><br>
-            <div class="form-check form-check-inline">
+            <div class="form-check form-check-inline" >
                 <input class="form-check-input" type="checkbox" name="availableDays" value="Monday">
                 <label class="form-check-label">Monday</label>
             </div>
@@ -106,42 +134,10 @@
             </div>
         </div>
 
-
-        <div class="col-md-12">
-            <label class="form-label">Available Timings</label>
-            <div class="d-flex flex-wrap">
-                <div class="form-check form-switch me-3">
-                    <input class="form-check-input" type="checkbox" name="availableTime" value="8am-12pm" id="time1">
-                    <label class="form-check-label" for="time1">8am - 12pm</label>
-                </div>
-                <div class="form-check form-switch me-3">
-                    <input class="form-check-input" type="checkbox" name="availableTime" value="12pm-4pm" id="time2">
-                    <label class="form-check-label" for="time2">12pm - 4pm</label>
-                </div>
-                <div class="form-check form-switch me-3">
-                    <input class="form-check-input" type="checkbox" name="availableTime" value="4pm-8pm" id="time3">
-                    <label class="form-check-label" for="time3">4pm - 8pm</label>
-                </div>
-                <div class="form-check form-switch me-3">
-                    <input class="form-check-input" type="checkbox" name="availableTime" value="8pm-12am" id="time4">
-                    <label class="form-check-label" for="time4">8pm - 12am</label>
-                </div>
-                <div class="form-check form-switch me-3">
-                    <input class="form-check-input" type="checkbox" name="availableTime" value="12am-4am" id="time5">
-                    <label class="form-check-label" for="time5">12am - 4am</label>
-                </div>
-                <div class="form-check form-switch me-3">
-                    <input class="form-check-input" type="checkbox" name="availableTime" value="4am-8am" id="time6">
-                    <label class="form-check-label" for="time6">4am - 8am</label>
-                </div>
-            </div>
-        </div>
-
         <div class="col-12 text-center mt-4">
             <button type="submit" class="btn btn-primary px-5">Save</button>
         </div>
     </form>
-
 
 </div>
 
