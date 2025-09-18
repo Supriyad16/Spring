@@ -3,14 +3,14 @@ package com.xworkz.hospital.controller;
 
 import com.xworkz.hospital.dto.DoctorDTO;
 import com.xworkz.hospital.dto.SlotDTO;
+import com.xworkz.hospital.entity.DoctorEntity;
 import com.xworkz.hospital.entity.HospitalEntity;
+import com.xworkz.hospital.entity.SlotEntity;
 import com.xworkz.hospital.service.HospitalService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
@@ -35,7 +35,7 @@ public class HospitalController {
 
         if (hospitalEntity != null && hospitalEntity.getOTP() != null && hospitalEntity.getOTP().equals(otp)) {
 
-            modelAndView.addObject("message", "Login Successful");
+            modelAndView.addObject("message", " ");
             modelAndView.setViewName("dashboard");
         } else {
             modelAndView.addObject("message", "Invalid OTP, Please try again.");
@@ -88,8 +88,7 @@ public class HospitalController {
         if (result) {
             modelAndView.addObject("message", "Slot details saved successfully");
             modelAndView.addObject("slot", slotDTO);
-        }
-        else {
+        } else {
             modelAndView.addObject("message", "Failed to save the data");
         }
 
@@ -97,10 +96,37 @@ public class HospitalController {
 
     }
 
-        @RequestMapping("/addSlots")
-        public String addSlots(@ModelAttribute SlotDTO slotDTO) {
-            hospitalService.slot(slotDTO);
-            return "redirect:/slotPage";
+    @GetMapping("/addSlots")
+    public ModelAndView showAddSlotsForm() {
+        List<DoctorEntity> doctors = hospitalService.getAllDoctors();
+        List<SlotEntity> slots = hospitalService.getAllSlots();
+
+        ModelAndView mv = new ModelAndView("addSlots");
+        mv.addObject("doctors", doctors);
+        mv.addObject("slots", slots);
+        return mv;
     }
 
+    @PostMapping("/addSlots")
+    public ModelAndView assignSlot(@RequestParam("doctorName") int doctorId,
+                                   @RequestParam("slot") int slotId) {
+        log.info("Inside assignSlot controller - doctorId: {}, slotId: {}", doctorId, slotId);
+
+        boolean assigned = hospitalService.assignSlotToDoctor(doctorId, slotId);
+
+        List<DoctorEntity> doctors = hospitalService.getAllDoctors();
+        List<SlotEntity> slots = hospitalService.getAllSlots();
+
+        ModelAndView mv = new ModelAndView("addSlots");
+        mv.addObject("doctors", doctors);
+        mv.addObject("slots", slots);
+
+        if (assigned) {
+            mv.addObject("message", "Slot assigned successfully!");
+        } else {
+            mv.addObject("error", "Failed to assign slot.");
+        }
+
+        return mv;
+    }
 }

@@ -14,10 +14,8 @@ import javax.persistence.*;
 @Table(name="doctor_data")
 
 @NamedQueries({
-        @NamedQuery(name = "DoctorEntity.getAllDoctors",
-                query = "SELECT d FROM DoctorEntity d"),
-        @NamedQuery(name = "DoctorEntity.getById",
-                query = "SELECT d FROM DoctorEntity d WHERE d.id = :id")
+        @NamedQuery(name = "DoctorEntity.getAllDoctors", query = "SELECT d FROM DoctorEntity d"),
+        @NamedQuery(name = "DoctorEntity.getById", query = "SELECT d FROM DoctorEntity d WHERE d.id = :id")
 })
 
 public class DoctorEntity {
@@ -34,6 +32,7 @@ public class DoctorEntity {
 
     private String experience;
 
+
     private String email;
 
     private long phoneNumber;
@@ -46,7 +45,9 @@ public class DoctorEntity {
 
     private String availableTime;
 
-
+    @ManyToOne
+    @JoinColumn(name = "slot_id")
+    private SlotEntity slot;
 
 
 
