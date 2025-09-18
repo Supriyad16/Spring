@@ -29,6 +29,11 @@ public interface HospitalService {
    // public List<SlotDTO> getAllSlots();
 
     List<DoctorEntity> getAllDoctors();
+
     List<SlotEntity> getAllSlots();
+
+    boolean assignSlotToDoctor(int doctorId, int slotId);
+
+
 
 }

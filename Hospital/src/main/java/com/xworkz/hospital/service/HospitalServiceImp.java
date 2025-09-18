@@ -127,4 +127,25 @@ public class HospitalServiceImp implements HospitalService{
         return hospitalRepository.getAllSlots();
     }
 
+    @Override
+    public boolean assignSlotToDoctor(int doctorId, int slotId) {
+        DoctorEntity doctor = hospitalRepository.findDoctorById(doctorId);
+        SlotEntity slot = hospitalRepository.findSlotById(slotId);
+
+        if (doctor != null && slot != null) {
+            doctor.setSlot(slot);
+
+            String availableTime = slot.getFromTime() + " - " + slot.getToTime();
+            doctor.setAvailableTime(availableTime);
+
+            hospitalRepository.updateDoctor(doctor);
+            return true;
+        }
+        return false;
+    }
+
+
+
+
+
 }
