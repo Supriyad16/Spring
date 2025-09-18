@@ -7,8 +7,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
-    <title>Slot Allotment</title>
+    <title>Admin Dashboard - Hospital</title>
 </head>
+
 <body class="bg-light">
 
 <nav class="navbar navbar-dark bg-dark py-3">
@@ -32,7 +33,7 @@
     <div class="offcanvas-body">
         <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
             <li class="nav-item">
-                <a class="nav-link text-white" href="index.jsp"><b>Home</b></a>
+                <a class="nav-link text-white" href="dashboard.jsp"><b>Home</b></a>
             </li>
             <li class="nav-item">
                 <a class="nav-link text-white" href="doctor.jsp"><b>Doctor</b></a>
@@ -41,7 +42,7 @@
                 <a class="nav-link text-white" href="slot.jsp"><b>Slots</b></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link text-white" href="addSlots.jsp"><b>Add Slots</b></a>
+                <a class="nav-link text-white" href="#"><b>Add Slots</b></a>
             </li>
             <li class="nav-item mt-3">
                 <a href="admin.jsp" class="btn btn-outline-light btn-lg w-100">Logout</a>
@@ -50,33 +51,33 @@
     </div>
 </div>
 
+
 <div class="container mt-4">
     <h2 class="text-center mb-4">Slot Allotment</h2>
-</div>
 
-<form action="addSlots" method="post">
-    <div class="mb-3">
-        <label for="doctorName" class="form-label fw-semibold">Doctor Name</label>
+    <form action="addSlots" method="post">
         <select class="form-select" id="doctorName" name="doctorName" required>
             <option value="">-- Select Doctor --</option>
             <c:forEach var="doc" items="${doctors}">
-                <option value="${doc.id}">${doc.name}</option>
+                <option value="${doc.id}">${doc.doctorName}</option>
             </c:forEach>
         </select>
-    </div>
 
-    <div class="mb-3">
-        <label for="slot" class="form-label fw-semibold">Slot</label>
         <select class="form-select" id="slot" name="slot" required>
             <option value="">-- Select Slot --</option>
             <c:forEach var="s" items="${slots}">
-                <option value="${s.id}">${s.slot}</option>
+                <option value="${s.id}">${s.fromTime} - ${s.toTime}</option>
             </c:forEach>
         </select>
-    </div>
 
-    <button type="submit" class="btn btn-primary">Submit</button>
-</form>
+
+        <c:if test="${not empty message}">
+            <div class="alert alert-success">${message}</div>
+        </c:if>
+
+        <button type="submit" class="btn btn-primary">Assign Slot</button>
+    </form>
+</div>
 
 </body>
 </html>
