@@ -190,6 +190,43 @@ public class HospitalRepositoryImp implements HospitalRepository {
         }
     }
 
+    @Override
+    public DoctorEntity findDoctorById(int id) {
+        EntityManager em = emf.createEntityManager();
+        try {
+            return em.find(DoctorEntity.class, id);
+        } finally {
+            em.close();
+        }
+    }
+
+    @Override
+    public SlotEntity findSlotById(int id) {
+        EntityManager em = emf.createEntityManager();
+        try {
+            return em.find(SlotEntity.class, id);
+        } finally {
+            em.close();
+        }
+    }
+
+    public void updateDoctor(DoctorEntity doctor) {
+        EntityManager em = emf.createEntityManager();
+        EntityTransaction et = em.getTransaction();
+
+        try {
+            et.begin();
+            em.merge(doctor);
+            et.commit();
+        } catch (Exception e) {
+            if (et.isActive()) {
+                et.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            em.close();
+        }
+    }
+
 
 }
-
