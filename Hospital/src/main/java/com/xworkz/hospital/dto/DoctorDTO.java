@@ -20,7 +20,7 @@ public class DoctorDTO {
         private int id;
 
         @NotNull
-        @Size(min = 3, max = 12, message = "Name Should Be Between 3 and 12")
+        @Size(min = 3, max = 20, message = "Name Should Be Between 3 and 20")
         private String doctorName;
 
         private String specialisation;
