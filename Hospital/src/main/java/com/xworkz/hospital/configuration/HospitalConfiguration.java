@@ -47,7 +47,8 @@ public class HospitalConfiguration implements WebMvcConfigurer {
         properties.setProperty("hibernate.hbm2ddl.auto","update");
         return properties;
     }
-
+    //application.properties
+    //hikari
     public DataSource dataSource(){
         DriverManagerDataSource driverManagerDataSource = new DriverManagerDataSource();
         driverManagerDataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
