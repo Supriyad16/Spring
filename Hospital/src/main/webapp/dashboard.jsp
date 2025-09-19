@@ -52,6 +52,10 @@
     </div>
 </nav>
 
+<c:if test="${not empty message}">
+    <div class="alert alert-info">${message}</div>
+</c:if>
+
 <!-- Offcanvas Menu -->
 <div class="offcanvas offcanvas-end bg-dark text-white" tabindex="-1" id="offcanvasNavbar"
      aria-labelledby="offcanvasNavbarLabel">

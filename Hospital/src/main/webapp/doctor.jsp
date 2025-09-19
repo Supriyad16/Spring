@@ -9,14 +9,14 @@
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
-
+    <script src="validation.js"></script>
     <style>
         body {
             margin: 0;
             min-height: 100vh;
             background: url('images/sthethoscope.png') no-repeat center center fixed;
             background-size: cover;
-            padding-top: 80px; /* space for navbar */
+            padding-top: 80px;
             color: #fff;
         }
 
@@ -31,11 +31,11 @@
         .navbar-brand img {
             border-radius: 50%;
         }
+
     </style>
 </head>
 <body>
 
-<!-- Fixed Navbar -->
 <nav class="navbar navbar-dark bg-dark fixed-top py-3">
     <div class="container-fluid">
         <a class="navbar-brand fs-4" href="#">
@@ -49,7 +49,6 @@
     </div>
 </nav>
 
-<!-- Offcanvas Menu -->
 <div class="offcanvas offcanvas-end bg-dark text-white" tabindex="-1" id="offcanvasNavbar"
      aria-labelledby="offcanvasNavbarLabel">
     <div class="offcanvas-header">
@@ -76,25 +75,45 @@
         <form class="row g-4" action="doctor" method="post">
 
             <div class="col-md-6">
-                <label for="doctorName" class="form-label">Doctor Name</label>
-                <input type="text" class="form-control" id="doctorName" name="doctorName"
-                       onkeypress="return onlyLetters(event)" oninput="validateName()" required>
-                <span id="doctorNameError" style="color:red;"></span>
+            <label for="doctorName" class="form-label">Doctor Name</label>
+            <input type="text" class="form-control" id="doctorName" name="doctorName"
+                    oninput="validateName()" onkeypress="return onlyLetters(event)" required>
+            <span id="doctorNameError" style="color:red;"></span>
             </div>
 
             <div class="col-md-6">
                 <label for="specialisation" class="form-label">Specialisation</label>
-                <input type="text" class="form-control" id="specialisation" name="specialisation" required>
+                <select id="specialisation" name="specialisation" class="form-select" required >
+
+                    <option selected disabled>Choose...</option>
+                    <option value="Dermatologist">Dermatologist</option>
+                    <option value="Cardiologist">Cardiologist</option>
+                    <option value="Ophthalmologist">Ophthalmologist</option>
+                    <option value="Pediatrics">Pediatrics</option>
+                    <option value="Orthopedics">Orthopedics</option>
+                    <option value=" Neurologist"> Neurologist</option>
+                </select>
             </div>
 
             <div class="col-md-6">
                 <label for="qualification" class="form-label">Qualification</label>
-                <input type="text" class="form-control" id="qualification" name="qualification" required>
+                <select id="qualification" name="qualification" class="form-select" required >
+
+                    <option selected disabled>Choose...</option>
+                    <option value="Medicine">General Medicine</option>
+                    <option value="Pediatrics">Pediatrics</option>
+                    <option value="Radiology">Radiology</option>
+                    <option value="Dermatology">Dermatology</option>
+                    <option value="Psychiatry">Psychiatry</option>
+                    <option value=" Pathology"> Pathology</option>
+                </select>
             </div>
 
             <div class="col-md-6">
                 <label for="experience" class="form-label">Experience</label>
-                <input type="text" class="form-control" id="experience" name="experience" placeholder="in years" required>
+                <input type="number" class="form-control" id="experience" name="experience"
+                       oninput="validateExperience()" onkeypress="return onlyNumbers(event)" placeholder="in years" required>
+                <span id="experienceError" style="color:red;"></span>
             </div>
 
             <div class="col-md-6">
@@ -105,7 +124,7 @@
 
             <div class="col-md-6">
                 <label for="phoneNumber" class="form-label">Phone Number</label>
-                <input type="text" class="form-control" id="phoneNumber" name="phoneNumber" required oninput="validatePhoneNo()">
+                <input type="text" class="form-control" id="phoneNumber" name="phoneNumber" onkeypress="return onlyNumbers(event)" required oninput="validatePhoneNo()">
                 <span id="phoneError" style="color:red;"></span>
             </div>
 
@@ -127,44 +146,13 @@
                 <span id="ageError" style="color:red;"></span>
             </div>
 
-            <div class="col-12" >
-                <label class="form-label">Available Days</label><br>
-                <div class="form-check form-check-inline" >
-                    <input class="form-check-input" type="checkbox" name="availableDays" value="Monday">
-                    <label class="form-check-label">Monday</label>
-                </div>
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="checkbox" name="availableDays" value="Tuesday">
-                    <label class="form-check-label">Tuesday</label>
-                </div>
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="checkbox" name="availableDays" value="Wednesday">
-                    <label class="form-check-label">Wednesday</label>
-                </div>
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="checkbox" name="availableDays" value="Thursday">
-                    <label class="form-check-label">Thursday</label>
-                </div>
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="checkbox" name="availableDays" value="Friday">
-                    <label class="form-check-label">Friday</label>
-                </div>
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="checkbox" name="availableDays" value="Saturday">
-                    <label class="form-check-label">Saturday</label>
-                </div>
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="checkbox" name="availableDays" value="Sunday">
-                    <label class="form-check-label">Sunday</label>
-                </div>
-            </div>
-
             <div class="col-12 text-center mt-4">
                 <button type="submit" class="btn btn-primary px-5">Save</button>
             </div>
         </form>
     </div>
 </div>
-<script src="validate.js"></script>
+
 </body>
 </html>
+
