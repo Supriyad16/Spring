@@ -34,6 +34,7 @@ public interface HospitalService {
 
     boolean assignSlotToDoctor(int doctorId, int slotId);
 
+    boolean schedule(DoctorDTO doctorDTO);
 
-
+    boolean assignSchedule(int doctorId);
 }

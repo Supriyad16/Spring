@@ -19,8 +19,6 @@ import java.util.List;
 @Controller
 @RequestMapping("/")
 @Slf4j
-
-
 public class HospitalController {
 
     @Autowired
@@ -35,7 +33,7 @@ public class HospitalController {
 
         if (hospitalEntity != null && hospitalEntity.getOTP() != null && hospitalEntity.getOTP().equals(otp)) {
 
-            modelAndView.addObject("message", " ");
+            modelAndView.addObject("message", " Login successful");
             modelAndView.setViewName("dashboard");
         } else {
             modelAndView.addObject("message", "Invalid OTP, Please try again.");
@@ -83,6 +81,7 @@ public class HospitalController {
         slotDTO.setToTime(toTime);
 
         boolean result = hospitalService.slot(slotDTO);
+//      List<SlotEntity> slots = hospitalService.getAllSlots();
 
         ModelAndView modelAndView = new ModelAndView("slot");
         if (result) {
@@ -129,4 +128,32 @@ public class HospitalController {
 
         return mv;
     }
+
+    @GetMapping("/schedule")
+    public ModelAndView showSchedule(HttpServletRequest httpServlet){
+        List<DoctorEntity> doctor = hospitalService.getAllDoctors();
+        ModelAndView mv = new ModelAndView("schedule");
+        mv.addObject("doctors", doctor);
+        return mv;
+
+    }
+
+    @PostMapping("/schedule")
+    public ModelAndView assignSchedule(@RequestParam("doctorName") int doctorId){
+
+        boolean result = hospitalService.assignSchedule(doctorId);
+        List<DoctorEntity> doctor = hospitalService.getAllDoctors();
+
+        ModelAndView mv = new ModelAndView("schedule");
+        mv.addObject("doctors", doctor);
+
+        if (result) {
+            mv.addObject("message", "Slot assigned successfully!");
+        } else {
+            mv.addObject("error", "Failed to assign slot.");
+        }
+
+        return mv;
+    }
+
 }

@@ -28,7 +28,7 @@ public class HospitalRestController {
         if (count == 0) {
             return "Invalid Email ";
         } else {
-            return "Valid Email";
+            return " ";
         }
     }
 

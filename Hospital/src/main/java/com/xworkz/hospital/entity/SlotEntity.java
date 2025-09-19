@@ -25,9 +25,6 @@ public class SlotEntity {
 
     private String toTime;
 
-    @Transient
-    public String getSlotDisplay() {
-        return fromTime + " - " + toTime;
-    }
+
 
 }

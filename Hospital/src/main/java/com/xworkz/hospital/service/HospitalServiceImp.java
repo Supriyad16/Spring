@@ -18,7 +18,7 @@ import java.time.LocalDateTime;
 import java.util.*;
 
 @Service
-public class HospitalServiceImp implements HospitalService{
+public class HospitalServiceImp implements HospitalService {
 
     @Autowired
     private HospitalRepository hospitalRepository;
@@ -72,7 +72,7 @@ public class HospitalServiceImp implements HospitalService{
                     InternetAddress.parse(email)
             );
             message.setSubject("Hospital Website - OTP Verification");
-            message.setText("Dear " +email+ ",\n\nWe received your request for a OTP to use with your account \n\nYour OTP is: " + otp + "\nIt is valid for 5 minutes.\n\nDon't share it with anyone. Ignore if this is not you. \n\nRegards,\nSushrutha Chikitsalaya");
+            message.setText("Dear " + email + ",\n\nWe received your request for a OTP to use with your account \n\nYour OTP is: " + otp + "\nIt is valid for 5 minutes.\n\nDon't share it with anyone. Ignore if this is not you. \n\nRegards,\nSushrutha Chikitsalaya");
 
             Transport.send(message);
 
@@ -101,7 +101,7 @@ public class HospitalServiceImp implements HospitalService{
     @Override
     public boolean doctorSave(DoctorDTO doctorDTO) {
         DoctorEntity doctorEntity = new DoctorEntity();
-        BeanUtils.copyProperties(doctorDTO,doctorEntity);
+        BeanUtils.copyProperties(doctorDTO, doctorEntity);
         hospitalRepository.doctorSave(doctorEntity);
 
         return true;
@@ -144,8 +144,23 @@ public class HospitalServiceImp implements HospitalService{
         return false;
     }
 
+    @Override
+    public boolean schedule(DoctorDTO doctorDTO) {
+        DoctorEntity doctorEntity = new DoctorEntity();
+        BeanUtils.copyProperties(doctorDTO, doctorEntity);
+        return hospitalRepository.schedule(doctorEntity);
 
+    }
 
+    @Override
+    public boolean assignSchedule(int doctorId) {
 
+        DoctorEntity doctorEntity = hospitalRepository.findDoctorById(doctorId);
+        if (doctorEntity != null) {
+            doctorEntity.getSpecialisation();
 
+            return hospitalRepository.schedule(doctorEntity);
+        }
+        return false;
+    }
 }

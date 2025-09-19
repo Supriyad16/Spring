@@ -190,6 +190,20 @@ public class HospitalRepositoryImp implements HospitalRepository {
         }
     }
 
+    public List<DoctorEntity> getAllSpecialisation() {
+        EntityManager em = null;
+        try {
+            em = emf.createEntityManager();
+            Query query = em.createQuery("SELECT d FROM DoctorEntity d");
+            return query.getResultList();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Collections.emptyList();
+        } finally {
+            if (em != null) em.close();
+        }
+    }
+
     @Override
     public DoctorEntity findDoctorById(int id) {
         EntityManager em = emf.createEntityManager();
@@ -226,6 +240,34 @@ public class HospitalRepositoryImp implements HospitalRepository {
         } finally {
             em.close();
         }
+    }
+
+    @Override
+    public boolean schedule(DoctorEntity doctorEntity) {
+
+        EntityManager em = null;
+        EntityTransaction et = null;
+
+        try {
+            em = emf.createEntityManager();
+            et = em.getTransaction();
+
+            et.begin();
+            em.persist(doctorEntity);
+            et.commit();
+            System.out.println("Time Scheduled");
+
+            return true;
+
+        } catch (Exception e) {
+            if (et.isActive()) {
+                et.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            em.close();
+        }
+        return false;
     }
 
 

@@ -49,7 +49,7 @@
         <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
             <li class="nav-item"><a class="nav-link text-white" href="dashboard.jsp"><b>Home</b></a></li>
             <li class="nav-item"><a class="nav-link text-white" href="doctor.jsp"><b>Doctor</b></a></li>
-            <li class="nav-item"><a class="nav-link text-white" href="#"><b>Slots</b></a></li>
+            <li class="nav-item"><a class="nav-link text-white" href="#"><b>Schedule</b></a></li>
             <li class="nav-item"><a class="nav-link text-white" href="addSlots"><b>Add Slots</b></a></li>
             <li class="nav-item mt-3"><a href="admin.jsp" class="btn btn-outline-light btn-lg w-100">Logout</a></li>
         </ul>
@@ -62,63 +62,19 @@
 
     <div class="card shadow col-md-5 mx-auto">
         <div class="card-body">
-            <form action="slot" method="post">
-
-
-                <div class="mb-3">
-                    <label class="form-label" style="color:black;"><strong>From Time</strong></label>
-                    <div class="input-group">
-                        <select class="form-select" name="fromHour" required>
-                            <option value="">Hour</option>
-                            <c:forEach var="h" begin="1" end="12"><option>${h}</option></c:forEach>
-                        </select>
-                        <span class="input-group-text">:</span>
-                        <select class="form-select" name="fromMinute" required>
-                            <option value="">Min</option>
-                            <c:forEach var="m" begin="0" end="59">
-                                <option><c:out value="${m < 10 ? '0' + m : m}"/></option>
-                            </c:forEach>
-                        </select>
-                        <select class="form-select" name="fromAmPm">
-                            <option>AM</option>
-                            <option>PM</option>
-                        </select>
-                    </div>
-                </div>
-
-                <!-- To Time -->
-                <div class="mb-3">
-                    <label class="form-label" style="color:black;"><strong>To Time</strong></label>
-                    <div class="input-group">
-                        <select class="form-select" name="toHour" required>
-                            <option value="">Hour</option>
-                            <c:forEach var="h" begin="1" end="12"><option>${h}</option></c:forEach>
-                        </select>
-                        <span class="input-group-text">:</span>
-                        <select class="form-select" name="toMinute" required>
-                            <option value="">Min</option>
-                            <c:forEach var="m" begin="0" end="59">
-                                <option><c:out value="${m < 10 ? '0' + m : m}"/></option>
-                            </c:forEach>
-                        </select>
-                        <select class="form-select" name="toAmPm">
-                            <option>AM</option>
-                            <option>PM</option>
-                        </select>
-                    </div>
-                </div>
+            <form action="schedule" method="post">
 
                 <div class="mb-3">
-                    <label for="slot" class="form-label" style="color:black;">Select Slot</label>
-                    <select class="form-select" id="slot" name="slot" required>
-                        <option value="">-- Select Slot --</option>
-                        <c:forEach var="s" items="${slots}">
-                            <option value="${s.id}">${s.fromTime} - ${s.toTime}</option>
+                    <label for="specialisation" class="form-label">Select Specialisation</label>
+                    <select class="form-select" id="specialisation" name="specialisation" required>
+                        <option value="">-- Select Specialisation --</option>
+                        <c:forEach var="doc" items="${doctors}">
+                            <option value="${doc.id}">${doc.specialisation}</option>
                         </c:forEach>
                     </select>
                 </div>
 
-                <!-- Submit Button -->
+
                 <div class="text-center mt-4">
                     <button type="submit" class="btn btn-primary px-5">Save Slot</button>
                 </div>

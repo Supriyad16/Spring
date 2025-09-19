@@ -37,7 +37,7 @@
                 <a class="nav-link text-white" href="doctor.jsp"><b>Doctor</b></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link text-white" href="slot.jsp"><b>Slots</b></a>
+                <a class="nav-link text-white" href="schedule.jsp"><b>Schedule</b></a>
             </li>
             <li class="nav-item">
                 <a class="nav-link text-white" href="addSlots.jsp"><b>Add Slots</b></a>

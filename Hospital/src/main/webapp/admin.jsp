@@ -77,7 +77,6 @@
 
         <h3 class="fw-bold display-6 text-dark mb-4">Admin Login</h3>
 
-        <!-- Display backend messages -->
         <c:if test="${not empty message}">
             <div class="alert alert-info">${message}</div>
         </c:if>
@@ -94,11 +93,16 @@
             <!-- Send OTP -->
             <button type="button" class="btn btn-primary btn-custom" onclick="sendOtp()">Send OTP</button>
 
+            <!-- OTP Countdown -->
+            <div id="otpTimer" class="text-danger fw-bold mt-2 mb-3"></div>
+
             <!-- OTP Input -->
             <div class="mb-3 text-start mt-3">
                 <label for="otp" class="form-label fw-semibold">OTP</label>
                 <input type="text" class="form-control" id="otp" name="otp" placeholder="Enter OTP" required>
             </div>
+
+
 
             <!-- Submit -->
             <button type="submit" class="btn btn-success btn-custom">Login</button>
@@ -122,22 +126,43 @@
         }
     }
 
-    // Send OTP to email
-    function sendOtp() {
-        let email = document.getElementById("emailId").value;
-        if (!email) {
-            alert("Please enter email first");
+
+function startOtpTimer(duration = 300) {
+    clearInterval(otpCountdown);
+    let timer = duration;
+
+    otpCountdown = setInterval(() => {
+        if (timer < 0) {
+            clearInterval(otpCountdown);
+            document.getElementById('otpTimer').textContent = "OTP expired. Please resend.";
             return;
         }
+        const minutes = Math.floor(timer / 60).toString().padStart(2, '0');
+        const seconds = (timer % 60).toString().padStart(2, '0');
+        document.getElementById('otpTimer').textContent = `OTP valid for: ${minutes}:${seconds}`;
+        timer--;
+    }, 1000);
+}
 
-        const xhttp = new XMLHttpRequest();
-        xhttp.open("GET", "http://localhost:8080/Hospital/sendOtp/" + encodeURIComponent(email), true);
-        xhttp.send();
-
-        xhttp.onload = function () {
-            alert(this.responseText);
-        }
+// Send OTP function
+function sendOtp() {
+    let email = document.getElementById("emailId").value;
+    if (!email) {
+        alert("Please enter email first");
+        return;
     }
+
+    const xhttp = new XMLHttpRequest();
+    xhttp.open("GET", "http://localhost:8080/Hospital/sendOtp/" + encodeURIComponent(email), true);
+    xhttp.send();
+
+    xhttp.onload = function () {
+        alert(this.responseText);
+        startOtpTimer(); // start 5-minute countdown after OTP is sent
+    }
+}
+</script>
+
 </script>
 
 </body>
