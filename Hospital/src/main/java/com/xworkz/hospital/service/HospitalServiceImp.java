@@ -3,9 +3,11 @@ package com.xworkz.hospital.service;
 
 import com.xworkz.hospital.dto.DoctorDTO;
 import com.xworkz.hospital.dto.SlotDTO;
+import com.xworkz.hospital.dto.SpecialsationDTO;
 import com.xworkz.hospital.entity.DoctorEntity;
 import com.xworkz.hospital.entity.HospitalEntity;
 import com.xworkz.hospital.entity.SlotEntity;
+import com.xworkz.hospital.entity.SpecialisationEntity;
 import com.xworkz.hospital.repository.HospitalRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -145,22 +147,31 @@ public class HospitalServiceImp implements HospitalService {
     }
 
     @Override
-    public boolean schedule(DoctorDTO doctorDTO) {
-        DoctorEntity doctorEntity = new DoctorEntity();
-        BeanUtils.copyProperties(doctorDTO, doctorEntity);
-        return hospitalRepository.schedule(doctorEntity);
+    public boolean schedule(SpecialsationDTO specialsationDTO) {
+SpecialisationEntity specialisationEntity = new SpecialisationEntity();
+        BeanUtils.copyProperties(specialsationDTO, specialisationEntity);
+        return hospitalRepository.schedule(specialisationEntity);
 
     }
 
     @Override
     public boolean assignSchedule(int doctorId) {
 
-        DoctorEntity doctorEntity = hospitalRepository.findDoctorById(doctorId);
+SpecialisationEntity specialisationEntity = new SpecialisationEntity();
         if (doctorEntity != null) {
             doctorEntity.getSpecialisation();
 
             return hospitalRepository.schedule(doctorEntity);
         }
         return false;
+    }
+
+    @Override
+    public boolean specialisationSave(SpecialsationDTO specialsationDTO) {
+
+        SpecialisationEntity specialisationEntity = new SpecialisationEntity();
+        BeanUtils.copyProperties(specialsationDTO, specialisationEntity);
+        return  hospitalRepository.specialisationSave(specialisationEntity);
+
     }
 }
