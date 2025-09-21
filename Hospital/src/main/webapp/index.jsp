@@ -49,6 +49,8 @@
         <h3 class="fw-bold display-6 text-dark mb-3">Admin Click here to Login</h3>
 
         <a class="btn btn-primary text-white fw-bold" href="admin.jsp">Login</a>
+
+        <a class="btn btn-primary text-white fw-bold" href="Specialisation.jsp">Specialisation</a>
     </div>
 </div>
 
