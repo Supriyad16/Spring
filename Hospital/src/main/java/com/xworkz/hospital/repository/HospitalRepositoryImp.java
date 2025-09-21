@@ -4,6 +4,7 @@ package com.xworkz.hospital.repository;
 import com.xworkz.hospital.entity.DoctorEntity;
 import com.xworkz.hospital.entity.HospitalEntity;
 import com.xworkz.hospital.entity.SlotEntity;
+import com.xworkz.hospital.entity.SpecialisationEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -194,7 +195,7 @@ public class HospitalRepositoryImp implements HospitalRepository {
         EntityManager em = null;
         try {
             em = emf.createEntityManager();
-            Query query = em.createQuery("SELECT d FROM DoctorEntity d");
+            Query query = em.createQuery("SELECT d FROM SpecialisationEntity d");
             return query.getResultList();
         } catch (Exception e) {
             e.printStackTrace();
@@ -243,7 +244,7 @@ public class HospitalRepositoryImp implements HospitalRepository {
     }
 
     @Override
-    public boolean schedule(DoctorEntity doctorEntity) {
+    public boolean schedule(SpecialisationEntity specialisationEntity) {
 
         EntityManager em = null;
         EntityTransaction et = null;
@@ -253,7 +254,7 @@ public class HospitalRepositoryImp implements HospitalRepository {
             et = em.getTransaction();
 
             et.begin();
-            em.persist(doctorEntity);
+            em.persist(specialisationEntity);
             et.commit();
             System.out.println("Time Scheduled");
 
@@ -270,5 +271,33 @@ public class HospitalRepositoryImp implements HospitalRepository {
         return false;
     }
 
+    @Override
+    public boolean specialisationSave(SpecialisationEntity specialisationEntity) {
 
+        EntityManager em = null;
+        EntityTransaction et = null;
+
+        try {
+            em = emf.createEntityManager();
+            et = em.getTransaction();
+            et.begin();
+
+            em.merge(specialisationEntity);
+            et.commit();
+
+            System.out.println("Entity saved successfully: " + specialisationEntity);
+            return true;
+
+        } catch (Exception e) {
+            if (et != null && et.isActive()) {
+                et.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            if (em != null) {
+                em.close();
+            }
+        }
+        return false;
+    }
 }
