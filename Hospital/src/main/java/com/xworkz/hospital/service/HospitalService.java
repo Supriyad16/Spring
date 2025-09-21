@@ -2,6 +2,7 @@ package com.xworkz.hospital.service;
 
 import com.xworkz.hospital.dto.DoctorDTO;
 import com.xworkz.hospital.dto.SlotDTO;
+import com.xworkz.hospital.dto.SpecialsationDTO;
 import com.xworkz.hospital.entity.DoctorEntity;
 import com.xworkz.hospital.entity.HospitalEntity;
 import com.xworkz.hospital.entity.SlotEntity;
@@ -34,7 +35,9 @@ public interface HospitalService {
 
     boolean assignSlotToDoctor(int doctorId, int slotId);
 
-    boolean schedule(DoctorDTO doctorDTO);
+    boolean schedule(SpecialsationDTO specialsationDTO);
 
     boolean assignSchedule(int doctorId);
+
+    boolean specialisationSave(SpecialsationDTO specialsationDTO);
 }
