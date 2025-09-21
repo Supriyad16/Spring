@@ -3,6 +3,7 @@ package com.xworkz.hospital.controller;
 
 import com.xworkz.hospital.dto.DoctorDTO;
 import com.xworkz.hospital.dto.SlotDTO;
+import com.xworkz.hospital.dto.SpecialsationDTO;
 import com.xworkz.hospital.entity.DoctorEntity;
 import com.xworkz.hospital.entity.HospitalEntity;
 import com.xworkz.hospital.entity.SlotEntity;
@@ -151,6 +152,24 @@ public class HospitalController {
             mv.addObject("message", "Slot assigned successfully!");
         } else {
             mv.addObject("error", "Failed to assign slot.");
+        }
+
+        return mv;
+    }
+
+    @RequestMapping("/specialisation")
+    public  ModelAndView specialisation(@ModelAttribute SpecialsationDTO specialsationDTO){
+        log.info("Specialisation Data received from Form: " + specialsationDTO);
+
+        boolean isSaved = hospitalService.specialisationSave(specialsationDTO);
+
+        ModelAndView mv = new ModelAndView("Specialisation");
+
+        if (isSaved) {
+            mv.addObject("message", "Specialisation details saved successfully!");
+            mv.addObject("doctor", specialsationDTO);
+        } else {
+            mv.addObject("message", "Failed to save Specialisation details. Try again.");
         }
 
         return mv;
