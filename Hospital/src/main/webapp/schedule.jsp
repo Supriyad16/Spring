@@ -74,11 +74,6 @@
                     </select>
                 </div>
 
-
-                <div class="text-center mt-4">
-                    <button type="submit" class="btn btn-primary px-5">Save Slot</button>
-                </div>
-
             </form>
         </div>
     </div>
