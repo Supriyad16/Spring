@@ -83,16 +83,11 @@
 
             <div class="col-md-6">
                 <label for="specialisation" class="form-label">Specialisation</label>
-                <select id="specialisation" name="specialisation" class="form-select" required >
-
-                    <option selected disabled>Choose...</option>
-                    <option value="Dermatologist">Dermatologist</option>
-                    <option value="Cardiologist">Cardiologist</option>
-                    <option value="Ophthalmologist">Ophthalmologist</option>
-                    <option value="Pediatrics">Pediatrics</option>
-                    <option value="Orthopedics">Orthopedics</option>
-                    <option value=" Neurologist"> Neurologist</option>
-                </select>
+                <select class="form-select" id="specialisation" name="specialisation" required>
+                    <option value="">-- Select Specialisation --</option>
+                    <c:forEach var="doc" items="${doctors}">
+                        <option value="${doc.id}">${doc.specialisation}</option>
+                    </c:forEach>
             </div>
 
             <div class="col-md-6">
@@ -144,6 +139,12 @@
                 <label for="age" class="form-label">Age</label>
                 <input type="number" class="form-control" id="age" name="age" required oninput="validateAge()">
                 <span id="ageError" style="color:red;"></span>
+            </div>
+
+            <div class="mb-3">
+                <label for="image" class="form-label">Upload Profile Picture</label>
+                <input type="file" class="form-control" id="image" name="image" accept="image/*" required onchange="previewImage(event)">
+                <small id="profilePictureError" class="text-danger"></small>
             </div>
 
             <div class="col-12 text-center mt-4">
