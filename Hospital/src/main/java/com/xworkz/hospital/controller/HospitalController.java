@@ -7,6 +7,7 @@ import com.xworkz.hospital.dto.SpecialsationDTO;
 import com.xworkz.hospital.entity.DoctorEntity;
 import com.xworkz.hospital.entity.HospitalEntity;
 import com.xworkz.hospital.entity.SlotEntity;
+import com.xworkz.hospital.entity.SpecialisationEntity;
 import com.xworkz.hospital.service.HospitalService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -132,29 +133,23 @@ public class HospitalController {
 
     @GetMapping("/schedule")
     public ModelAndView showSchedule(HttpServletRequest httpServlet){
-        List<DoctorEntity> doctor = hospitalService.getAllDoctors();
+        List<SpecialisationEntity> specialisation = hospitalService.getAllSpecialisation();
         ModelAndView mv = new ModelAndView("schedule");
-        mv.addObject("doctors", doctor);
+        mv.addObject("doctors", specialisation);
         return mv;
 
     }
 
-    @PostMapping("/schedule")
-    public ModelAndView assignSchedule(@RequestParam("doctorName") int doctorId){
-
-        boolean result = hospitalService.assignSchedule(doctorId);
-        List<DoctorEntity> doctor = hospitalService.getAllDoctors();
-
+    @PostMapping("/schedule") public ModelAndView assignSchedule(@RequestParam("specialisation") int specialisationId){
+        boolean result = hospitalService.assignSchedule(specialisationId);
+        List<SpecialisationEntity> Specialisation = hospitalService.getAllSpecialisation();
         ModelAndView mv = new ModelAndView("schedule");
-        mv.addObject("doctors", doctor);
-
+        mv.addObject("doctors", Specialisation);
         if (result) {
             mv.addObject("message", "Slot assigned successfully!");
         } else {
             mv.addObject("error", "Failed to assign slot.");
-        }
-
-        return mv;
+        } return mv;
     }
 
     @RequestMapping("/specialisation")
