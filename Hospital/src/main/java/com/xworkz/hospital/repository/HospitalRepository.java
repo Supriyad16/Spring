@@ -20,13 +20,11 @@ public interface HospitalRepository {
 
     boolean Slot(SlotEntity slotEntity);
 
-
-
     List<DoctorEntity> getAllDoctors();
 
     List<SlotEntity> getAllSlots();
 
-    List<DoctorEntity> getAllSpecialisation();
+    List<SpecialisationEntity> getAllSpecialisation();
 
    // boolean assignSlotToDoctor(int doctorId, int slotId);
 
@@ -34,10 +32,13 @@ public interface HospitalRepository {
 
     SlotEntity findSlotById(int id);
 
+    SpecialisationEntity findSpecialisationById(int id);
+
     void updateDoctor(DoctorEntity doctorEntity);
 
     boolean schedule(SpecialisationEntity specialisationEntity);
 
     boolean specialisationSave(SpecialisationEntity specialisationEntity);
 
+    boolean updateSlot(SlotEntity slotEntity);
 }
