@@ -1,6 +1,5 @@
 package com.xworkz.hospital.dto;
 
-
 import lombok.*;
 
 @NoArgsConstructor
@@ -12,6 +11,8 @@ import lombok.*;
 public class SlotDTO {
 
     private int id;
+
+    private String specialisation;
 
     private String fromTime;
 
