@@ -144,9 +144,9 @@ public class HospitalRepositoryImp implements HospitalRepository {
             et = em.getTransaction();
 
             et.begin();
-            em.persist(slotEntity);
+            em.merge(slotEntity);
             et.commit();
-            System.out.println("Data Saved");
+            System.out.println("Slot Assigned");
 
             return true;
         } catch (Exception e) {
@@ -160,7 +160,6 @@ public class HospitalRepositoryImp implements HospitalRepository {
         return false;
     }
 
-    // HospitalRepositoryImp.java
     @Override
     public List<DoctorEntity> getAllDoctors() {
         EntityManager em = null;
@@ -191,7 +190,7 @@ public class HospitalRepositoryImp implements HospitalRepository {
         }
     }
 
-    public List<DoctorEntity> getAllSpecialisation() {
+    public List<SpecialisationEntity> getAllSpecialisation() {
         EntityManager em = null;
         try {
             em = emf.createEntityManager();
@@ -220,6 +219,16 @@ public class HospitalRepositoryImp implements HospitalRepository {
         EntityManager em = emf.createEntityManager();
         try {
             return em.find(SlotEntity.class, id);
+        } finally {
+            em.close();
+        }
+    }
+
+    @Override
+    public SpecialisationEntity findSpecialisationById(int id) {
+        EntityManager em = emf.createEntityManager();
+        try {
+            return em.find(SpecialisationEntity.class, id);
         } finally {
             em.close();
         }
@@ -270,6 +279,34 @@ public class HospitalRepositoryImp implements HospitalRepository {
         }
         return false;
     }
+
+
+    public boolean updateSlot(SlotEntity slotEntity) {
+        EntityManager em = null;
+        EntityTransaction et = null;
+
+        try {
+            em = emf.createEntityManager();
+            et = em.getTransaction();
+
+            et.begin();
+            em.merge(slotEntity); // Use merge to update the entity
+            et.commit();
+            return true;
+
+        } catch (Exception e) {
+            if (et.isActive()) {
+                et.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            if (em != null) {
+                em.close();
+            }
+        }
+        return false;
+    }
+
 
     @Override
     public boolean specialisationSave(SpecialisationEntity specialisationEntity) {
