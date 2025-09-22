@@ -6,6 +6,7 @@ import com.xworkz.hospital.dto.SpecialsationDTO;
 import com.xworkz.hospital.entity.DoctorEntity;
 import com.xworkz.hospital.entity.HospitalEntity;
 import com.xworkz.hospital.entity.SlotEntity;
+import com.xworkz.hospital.entity.SpecialisationEntity;
 
 import java.util.List;
 
@@ -33,11 +34,13 @@ public interface HospitalService {
 
     List<SlotEntity> getAllSlots();
 
+    List<SpecialisationEntity> getAllSpecialisation();
+
     boolean assignSlotToDoctor(int doctorId, int slotId);
 
     boolean schedule(SpecialsationDTO specialsationDTO);
 
-    boolean assignSchedule(int doctorId);
+    boolean assignSchedule(int specialisationId);
 
     boolean specialisationSave(SpecialsationDTO specialsationDTO);
 }
