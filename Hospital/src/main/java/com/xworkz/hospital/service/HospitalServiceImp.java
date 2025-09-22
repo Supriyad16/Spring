@@ -130,6 +130,17 @@ public class HospitalServiceImp implements HospitalService {
     }
 
     @Override
+    public List<SpecialisationEntity> getAllSpecialisation() {
+        return hospitalRepository.getAllSpecialisation();
+    }
+
+
+    public boolean schedule(SpecialsationDTO specialsationDTO) {
+        SpecialisationEntity specialisationEntity = new SpecialisationEntity();
+        BeanUtils.copyProperties(specialsationDTO, specialisationEntity);
+        return hospitalRepository.schedule(specialisationEntity);
+    }
+    @Override
     public boolean assignSlotToDoctor(int doctorId, int slotId) {
         DoctorEntity doctor = hospitalRepository.findDoctorById(doctorId);
         SlotEntity slot = hospitalRepository.findSlotById(slotId);
@@ -146,25 +157,16 @@ public class HospitalServiceImp implements HospitalService {
         return false;
     }
 
-    @Override
-    public boolean schedule(SpecialsationDTO specialsationDTO) {
-SpecialisationEntity specialisationEntity = new SpecialisationEntity();
-        BeanUtils.copyProperties(specialsationDTO, specialisationEntity);
-        return hospitalRepository.schedule(specialisationEntity);
-
-    }
-
-    @Override
-    public boolean assignSchedule(int doctorId) {
-
-SpecialisationEntity specialisationEntity = new SpecialisationEntity();
-        if (doctorEntity != null) {
-            doctorEntity.getSpecialisation();
-
-            return hospitalRepository.schedule(doctorEntity);
+    public boolean assignSchedule(int specialisationId) {
+        SpecialisationEntity specialisationEntity = hospitalRepository.findSpecialisationById(specialisationId);
+        if (specialisationEntity != null) {
+           specialisationEntity.getSpecialisation();
+           hospitalRepository.schedule(specialisationEntity);
+           return true;
         }
         return false;
     }
+
 
     @Override
     public boolean specialisationSave(SpecialsationDTO specialsationDTO) {
