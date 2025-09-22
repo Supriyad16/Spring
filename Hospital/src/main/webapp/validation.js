@@ -18,6 +18,26 @@ function validateName() {
     }
 }
 
+function validatePatientName() {
+    const nameField = document.getElementById("doctorName");
+    if (!nameField) {
+        console.error("doctorName input not found in DOM");
+        return;
+    }
+
+    let nameValue = nameField.value || "";
+    nameValue = nameValue.replace(/[^A-Za-z\s]/g, '').trim();
+
+    const nameError = document.getElementById("patientNameError");
+    if (!nameError) return;
+
+    if (nameValue.length < 3 || nameValue.length > 20) {
+        nameError.textContent = "Name must be 3 to 20 letters only ";
+    } else {
+        nameError.textContent = "";
+    }
+}
+
 
 
 function onlyLetters(event) {

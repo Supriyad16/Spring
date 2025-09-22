@@ -21,6 +21,8 @@ public class SlotEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
+    private String specialisation;
+
     private String fromTime;
 
     private String toTime;
