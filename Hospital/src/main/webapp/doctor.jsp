@@ -58,8 +58,9 @@
     <div class="offcanvas-body">
         <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
             <li class="nav-item"><a class="nav-link text-white" href="dashboard.jsp"><b>Home</b></a></li>
+            <li class="nav-item"><a class="nav-link text-white" href="Specialisation.jsp"><b>Specialisation</b></a></li>
             <li class="nav-item"><a class="nav-link text-white" href="#"><b>Doctor</b></a></li>
-            <li class="nav-item"><a class="nav-link text-white" href="schedule.jsp"><b>Schedule</b></a></li>
+            <li class="nav-item"><a class="nav-link text-white" href="slot"><b>Slots</b></a></li>
             <li class="nav-item"><a class="nav-link text-white" href="addSlots"><b>Add Slots</b></a></li>
             <li class="nav-item mt-3">
                 <a href="admin.jsp" class="btn btn-outline-light btn-lg w-100">Logout</a>
@@ -83,12 +84,14 @@
 
             <div class="col-md-6">
                 <label for="specialisation" class="form-label">Specialisation</label>
-                <select class="form-select" id="specialisation" name="specialisation" required>
+                <select class="form-select" id="specialisation" name="specialisation" >
                     <option value="">-- Select Specialisation --</option>
                     <c:forEach var="doc" items="${doctors}">
                         <option value="${doc.id}">${doc.specialisation}</option>
                     </c:forEach>
+                </select>
             </div>
+
 
             <div class="col-md-6">
                 <label for="qualification" class="form-label">Qualification</label>
@@ -150,11 +153,13 @@
             <div class="col-12 text-center mt-4">
                 <button type="submit" class="btn btn-primary px-5">Save</button>
             </div>
+
+            <a href="UpdateDoctor">Update</a>
         </form>
     </div>
 </div>
 
 
+
 </body>
 </html>
-
