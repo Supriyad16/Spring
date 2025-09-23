@@ -50,8 +50,6 @@
 
         <a class="btn btn-primary text-white fw-bold" href="admin.jsp">Login</a>
 
-        <a class="btn btn-primary text-white fw-bold" href="Specialisation.jsp">Specialisation</a>
-
         <a class="btn btn-primary text-white fw-bold" href="Patient.jsp">Patient</a>
 
     </div>
