@@ -48,6 +48,7 @@
     <div class="offcanvas-body">
         <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
             <li class="nav-item"><a class="nav-link text-white" href="dashboard.jsp"><b>Home</b></a></li>
+            <li class="nav-item"><a class="nav-link text-white" href="Specialisation.jsp"><b>Specialisation</b></a></li>
             <li class="nav-item"><a class="nav-link text-white" href="doctor.jsp"><b>Doctor</b></a></li>
             <li class="nav-item"><a class="nav-link text-white" href="#"><b>Slots</b></a></li>
             <li class="nav-item"><a class="nav-link text-white" href="addSlots"><b>Add Slots</b></a></li>
@@ -63,6 +64,14 @@
     <div class="card shadow col-md-5 mx-auto">
         <div class="card-body">
             <form action="slot" method="post">
+
+                <label class="form-label" style="color:black;"><strong>Specialisation</strong></label>
+                <select class="form-select" id="specialisation" name="specialisation" required>
+                    <option value="">-- Select Specialisation --</option>
+                    <c:forEach var="doc" items="${doctors}">
+                        <option value="${doc.id}">${doc.specialisation}</option>
+                    </c:forEach>
+                </select>
 
 
                 <div class="mb-3">
@@ -108,15 +117,7 @@
                     </div>
                 </div>
 
-                <div class="mb-3">
-                    <label for="slot" class="form-label" style="color:black;">Select Slot</label>
-                    <select class="form-select" id="slot" name="slot" required>
-                        <option value="">-- Select Slot --</option>
-                        <c:forEach var="s" items="${slots}">
-                            <option value="${s.id}">${s.fromTime} - ${s.toTime}</option>
-                        </c:forEach>
-                    </select>
-                </div>
+
 
                 <!-- Submit Button -->
                 <div class="text-center mt-4">

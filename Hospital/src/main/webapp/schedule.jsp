@@ -48,6 +48,7 @@
     <div class="offcanvas-body">
         <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
             <li class="nav-item"><a class="nav-link text-white" href="dashboard.jsp"><b>Home</b></a></li>
+            <li class="nav-item"><a class="nav-link text-white" href="Specialisation.jsp"><b>Specialisation</b></a></li>
             <li class="nav-item"><a class="nav-link text-white" href="doctor.jsp"><b>Doctor</b></a></li>
             <li class="nav-item"><a class="nav-link text-white" href="#"><b>Schedule</b></a></li>
             <li class="nav-item"><a class="nav-link text-white" href="addSlots"><b>Add Slots</b></a></li>
@@ -65,7 +66,7 @@
             <form action="schedule" method="post">
 
                 <div class="mb-3">
-                    <label for="specialisation" class="form-label">Select Specialisation</label>
+                    <label for="specialisation" class="form-label" style="color:black;">Select Specialisation</label>
                     <select class="form-select" id="specialisation" name="specialisation" required>
                         <option value="">-- Select Specialisation --</option>
                         <c:forEach var="doc" items="${doctors}">
@@ -77,6 +78,9 @@
             </form>
         </div>
     </div>
+
+
+
 
     <!-- Success message -->
     <c:if test="${not empty message}">
