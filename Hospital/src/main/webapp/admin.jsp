@@ -94,7 +94,9 @@
             <button type="button" class="btn btn-primary btn-custom" onclick="sendOtp()">Send OTP</button>
 
             <!-- OTP Countdown -->
-            <div id="otpTimer" class="text-danger fw-bold mt-2 mb-3"></div>
+            <<div id="otpTimer" class="text-danger fw-bold mt-2 mb-3">
+            <span class="badge bg-danger">OTP valid for: 02:00</span>
+        </div>
 
             <!-- OTP Input -->
             <div class="mb-3 text-start mt-3">
@@ -127,14 +129,24 @@
     }
 
 
-function startOtpTimer(duration = 300) {
+function startOtpTimer(duration = 120) {
     clearInterval(otpCountdown);
     let timer = duration;
+
+    document.getElementById('otp').disabled = false;
+    const submitBtn = document.querySelector('button[type="submit"]');
+    submitBtn.disabled = false;
+
+    const sendBtn = document.querySelector('button[onclick="sendOtp()"]');
+    sendBtn.disabled = true; // disable send button
 
     otpCountdown = setInterval(() => {
         if (timer < 0) {
             clearInterval(otpCountdown);
             document.getElementById('otpTimer').textContent = "OTP expired. Please resend.";
+            document.getElementById('otp').disabled = true;
+            submitBtn.disabled = true;
+            sendBtn.disabled = false; // re-enable send button
             return;
         }
         const minutes = Math.floor(timer / 60).toString().padStart(2, '0');
@@ -143,6 +155,7 @@ function startOtpTimer(duration = 300) {
         timer--;
     }, 1000);
 }
+
 
 // Send OTP function
 function sendOtp() {
@@ -157,13 +170,11 @@ function sendOtp() {
     xhttp.send();
 
     xhttp.onload = function () {
-        alert(this.responseText);
-        startOtpTimer(); // start 5-minute countdown after OTP is sent
+        alert(this.responseText); // show backend confirmation
+        startOtpTimer(120); // start 2-minute countdown
     }
 }
-</script>
 
 </script>
-
 </body>
 </html>
