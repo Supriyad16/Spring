@@ -73,7 +73,7 @@
     <div class="form-container col-lg-8">
         <h2 class="text-center mb-4">Doctor Registration</h2>
 
-        <form class="row g-4" action="doctor" method="post">
+        <form class="row g-4" action="doctor" method="post" enctype="multipart/form-data">
 
             <div class="col-md-6">
             <label for="doctorName" class="form-label">Doctor Name</label>
@@ -84,10 +84,13 @@
 
             <div class="col-md-6">
                 <label for="specialisation" class="form-label">Specialisation</label>
-                <select class="form-select" id="specialisation" name="specialisation" >
-                    <option value="">-- Select Specialisation --</option>
-                    <c:forEach var="doc" items="${doctors}">
-                        <option value="${doc.id}">${doc.specialisation}</option>
+                <select id="specialisation" name="specialisation" class="form-select" required>
+                    <option value="">Select Specialisation</option>
+                    <c:forEach var="spec" items="${slotSpecialisations}">
+                        <option value="${spec.specialisation}">
+                            <c:if test="${specialisation eq spec.specialisation}">selected</c:if>>
+                            ${spec.specialisation}
+                        </option>
                     </c:forEach>
                 </select>
             </div>
@@ -154,12 +157,10 @@
                 <button type="submit" class="btn btn-primary px-5">Save</button>
             </div>
 
-            <a href="UpdateDoctor">Update</a>
+            <a href="DoctorList">Update</a>
         </form>
     </div>
 </div>
-
-
 
 </body>
 </html>
