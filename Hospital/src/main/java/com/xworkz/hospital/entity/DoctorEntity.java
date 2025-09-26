@@ -1,5 +1,6 @@
 package com.xworkz.hospital.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -12,11 +13,14 @@ import javax.persistence.*;
 
 @Entity
 @Table(name="doctor_data")
-
 @NamedQueries({
         @NamedQuery(name = "DoctorEntity.getAllDoctors", query = "SELECT d FROM DoctorEntity d"),
         @NamedQuery(name = "DoctorEntity.getById", query = "SELECT d FROM DoctorEntity d WHERE d.id = :id"),
-        @NamedQuery(name="DoctorEntity.getAllSpecialisation", query = "SELECT d FROM DoctorEntity d" )
+        @NamedQuery(name="DoctorEntity.getAllSpecialisation", query = "SELECT d FROM DoctorEntity d" ),
+        @NamedQuery(name = "DoctorEntity.findDoctorByEmail", query = "SELECT d FROM DoctorEntity d WHERE d.email = :email"),
+        @NamedQuery(name = "DoctorEntity.getDoctorsBySpecialisation", query = "SELECT d FROM DoctorEntity d WHERE d.specialisation.specialisation = :specName"
+        )
+
 })
 
 public class DoctorEntity {
@@ -27,12 +31,12 @@ public class DoctorEntity {
 
     private String doctorName;
 
+
     private String specialisation;
 
     private String qualification;
 
     private String experience;
-
 
     private String email;
 
@@ -42,9 +46,10 @@ public class DoctorEntity {
 
     private int age;
 
-    private String availableDays;
-
     private String availableTime;
+
+    @Column(name = "imagePath")
+    private String imagePath;
 
     @ManyToOne
     @JoinColumn(name = "slot_id")

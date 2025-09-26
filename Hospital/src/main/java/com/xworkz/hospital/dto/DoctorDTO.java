@@ -1,15 +1,11 @@
 package com.xworkz.hospital.dto;
 
+import com.xworkz.hospital.entity.SpecialisationEntity;
 import lombok.*;
 
 import javax.validation.constraints.*;
 
-@NoArgsConstructor
-@AllArgsConstructor
-@Getter
-@Setter
-@ToString
-
+@Data
 public class DoctorDTO {
 
         private int id;
@@ -41,10 +37,11 @@ public class DoctorDTO {
         @Max(60)
         private int age;
 
-        private String availableDays;
-
         private String availableTime;
 
-    }
+        private String imagePath;
+
+
+}
 
 
