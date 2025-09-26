@@ -94,20 +94,22 @@
                                 <th>Age</th>
                                 <td>${doctor.age}</td>
                             </tr>
-                            <tr>
-                                <th>Available Days</th>
-                                <td>${doctor.availableDays}</td>
-                            </tr>
+
                             <tr>
                                 <th>Available Time</th>
                                 <td>${doctor.availableTime}</td>
+                            </tr>
+
+                            <tr>
+                                <th>Image Path</th>
+                                <td>${doctor.imagePath}</td>
                             </tr>
 
                         </table>
                     </c:if>
 
                     <div class="text-center mt-4">
-                        <a href="doctor.jsp" class="btn btn-success px-4">Add Another Doctor</a>
+                        <a href="check" class="btn btn-success px-4">Add Another Doctor</a>
                         <a href="dashboard.jsp" class="btn btn-secondary px-4">Back to Dashboard</a>
                     </div>
 
