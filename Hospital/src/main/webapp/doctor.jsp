@@ -87,13 +87,16 @@
                 <select id="specialisation" name="specialisation" class="form-select" required>
                     <option value="">Select Specialisation</option>
                     <c:forEach var="spec" items="${slotSpecialisations}">
-                        <option value="${spec.specialisation}">
+                        <option value="${spec.specialisation}"
                             <c:if test="${specialisation eq spec.specialisation}">selected</c:if>>
                             ${spec.specialisation}
                         </option>
                     </c:forEach>
                 </select>
             </div>
+
+
+
 
 
             <div class="col-md-6">

@@ -18,8 +18,7 @@ import javax.persistence.*;
         @NamedQuery(name = "DoctorEntity.getById", query = "SELECT d FROM DoctorEntity d WHERE d.id = :id"),
         @NamedQuery(name="DoctorEntity.getAllSpecialisation", query = "SELECT d FROM DoctorEntity d" ),
         @NamedQuery(name = "DoctorEntity.findDoctorByEmail", query = "SELECT d FROM DoctorEntity d WHERE d.email = :email"),
-        @NamedQuery(name = "DoctorEntity.getDoctorsBySpecialisation", query = "SELECT d FROM DoctorEntity d WHERE d.specialisation.specialisation = :specName"
-        )
+        @NamedQuery(name = "getDoctorsBySpecialisation", query = "select e from DoctorEntity e where specialisation=:specialisation")
 
 })
 
@@ -30,7 +29,6 @@ public class DoctorEntity {
     private int id;
 
     private String doctorName;
-
 
     private String specialisation;
 
