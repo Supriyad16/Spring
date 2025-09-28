@@ -1,9 +1,6 @@
 package com.xworkz.hospital.repository;
 
-import com.xworkz.hospital.entity.DoctorEntity;
-import com.xworkz.hospital.entity.HospitalEntity;
-import com.xworkz.hospital.entity.SlotEntity;
-import com.xworkz.hospital.entity.SpecialisationEntity;
+import com.xworkz.hospital.entity.*;
 
 import java.util.List;
 
@@ -18,27 +15,38 @@ public interface HospitalRepository {
 
     boolean doctorSave(DoctorEntity doctorEntity);
 
-    boolean Slot(SlotEntity slotEntity);
+    boolean saveSlot(SlotEntity slotEntity);
 
     List<DoctorEntity> getAllDoctors();
 
     List<SlotEntity> getAllSlots();
 
-    List<SpecialisationEntity> getAllSpecialisation();
+    List<SpecialisationEntity> getAllSpecialisations();
 
    // boolean assignSlotToDoctor(int doctorId, int slotId);
 
     DoctorEntity findDoctorById(int id);
 
+    DoctorEntity findDoctorByEmail(String email);
+
     SlotEntity findSlotById(int id);
 
-    SpecialisationEntity findSpecialisationById(int id);
+    SpecialisationEntity getById(int id);
 
-    void updateDoctor(DoctorEntity doctorEntity);
+  //  SpecialisationEntity findSpecialisationById(String specialisation);
 
-    boolean schedule(SpecialisationEntity specialisationEntity);
+    List<SlotEntity> getAllSlotSpecialisations(String specialisation);
+
+    boolean  updateDoctorByEmail(String email, DoctorEntity updatedDoctor);
 
     boolean specialisationSave(SpecialisationEntity specialisationEntity);
 
-    boolean updateSlot(SlotEntity slotEntity);
+    List<DoctorEntity> getUnassignedDoctors(String specialisation);
+
+    void updateDoctor(DoctorEntity doctor);
+
+    boolean assignSlotToDoctor(int doctorId, int slotId);
+
+    boolean deleteDoctorByEmail(String email);
+
 }

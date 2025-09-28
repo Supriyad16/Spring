@@ -11,7 +11,6 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @ToString
-
 @Entity
 @Table(name = "hospital_data")
 
