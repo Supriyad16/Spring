@@ -43,14 +43,13 @@
     </div>
 </nav>
 
-<!-- Centered Content -->
 <div class="container d-flex justify-content-center align-items-center min-vh-100">
     <div class="card-container text-center">
         <h3 class="fw-bold display-6 text-dark mb-3">Admin Click here to Login</h3>
 
         <a class="btn btn-primary text-white fw-bold" href="admin.jsp">Login</a>
 
-        <a class="btn btn-primary text-white fw-bold" href="Patient.jsp">Patient</a>
+        <a class="btn btn-primary text-white fw-bold" href="Patient">Patient</a>
 
     </div>
 </div>

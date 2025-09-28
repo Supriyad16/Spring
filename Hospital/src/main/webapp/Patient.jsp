@@ -5,11 +5,9 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Doctor Registration - Hospital</title>
-
+    <title>Patient Registration - Hospital</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="validation.js"></script>
     <style>
         body {
             margin: 0;
@@ -19,7 +17,6 @@
             padding-top: 80px;
             color: #fff;
         }
-
         .form-container {
             background: rgba(255, 255, 255, 0.85);
             padding: 30px;
@@ -27,152 +24,138 @@
             box-shadow: 0 8px 16px rgba(0,0,0,0.3);
             color: #000;
         }
-
-        .navbar-brand img {
-            border-radius: 50%;
-        }
-
     </style>
 </head>
 <body>
-
-<nav class="navbar navbar-dark bg-dark fixed-top py-3">
-    <div class="container-fluid">
-        <a class="navbar-brand fs-4" href="#">
-            <img src="doctor.jpg" alt="Logo" width="40" height="40" class="d-inline-block align-text-top me-2">
-            Sushrutha Chikitsalaya
-        </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar"
-                aria-controls="offcanvasNavbar">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-    </div>
-</nav>
-
-<div class="offcanvas offcanvas-end bg-dark text-white" tabindex="-1" id="offcanvasNavbar"
-     aria-labelledby="offcanvasNavbarLabel">
-    <div class="offcanvas-header">
-        <h5 class="offcanvas-title" id="offcanvasNavbarLabel">Menu</h5>
-        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-    </div>
-    <div class="offcanvas-body">
-        <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
-            <li class="nav-item"><a class="nav-link text-white" href="dashboard.jsp"><b>Home</b></a></li>
-            <li class="nav-item"><a class="nav-link text-white" href="#"><b>Doctor</b></a></li>
-            <li class="nav-item"><a class="nav-link text-white" href="schedule.jsp"><b>Schedule</b></a></li>
-            <li class="nav-item"><a class="nav-link text-white" href="addSlots"><b>Add Slots</b></a></li>
-            <li class="nav-item mt-3">
-                <a href="admin.jsp" class="btn btn-outline-light btn-lg w-100">Logout</a>
-            </li>
-        </ul>
-    </div>
-</div>
 
 <div class="container mt-5 d-flex justify-content-center">
     <div class="form-container col-lg-8">
         <h2 class="text-center mb-4">Patient Registration</h2>
 
-        <form class="row g-4" action="doctor" method="post">
+        <!-- Success/Error Messages -->
+        <c:if test="${not empty message}">
+            <div class="alert alert-success text-center">${message}</div>
+        </c:if>
+        <c:if test="${not empty error}">
+            <div class="alert alert-danger text-center">${error}</div>
+        </c:if>
 
-            <div class="col-md-6">
-                <label for="patientName" class="form-label">Patient Name</label>
-                <input type="text" class="form-control" id="patientName" name="patientName"
-                       oninput="validatePatientName()" onkeypress="return onlyLetters(event)" required>
-                <span id="patientNameError" style="color:red;"></span>
-            </div>
+        <!-- Patient Registration Form -->
+        <form action="Patient" method="post">
+            <div class="row g-4">
+                <div class="col-md-6">
+                    <label for="patientName" class="form-label">Patient Name</label>
+                    <input type="text" class="form-control" id="patientName" name="patientName"
+                           value="${patient.patientName}" required>
+                </div>
 
-            <div class="col-md-6">
-                <label for="gender" class="form-label">Gender</label>
+                <div class="col-md-6">
+                    <label for="gender" class="form-label">Gender</label>
+                    <select class="form-select" id="gender" name="gender" required>
+                        <option value="">-- Choose Gender --</option>
+                        <option value="Male" ${patient.gender=='Male'?'selected':''}>Male</option>
+                        <option value="Female" ${patient.gender=='Female'?'selected':''}>Female</option>
+                        <option value="Others" ${patient.gender=='Others'?'selected':''}>Others</option>
+                    </select>
+                </div>
 
-                <select id="gender" name="gender" class="form-select" required oninput="validateGender()">
-                    <span id="genderError" style="color:red;"></span>
-                    <option selected disabled>Choose Gender</option>
-                    <option value="Male">Male</option>
-                    <option value="Female">Female</option>
-                    <option value="Others">Others</option>
-                </select>
-            </div>
+                <div class="col-md-6">
+                    <label for="age" class="form-label">Age</label>
+                    <input type="number" class="form-control" id="age" name="age" value="${patient.age}" required>
+                </div>
 
-            <div class="col-md-6">
-                <label for="age" class="form-label">Age</label>
-                <input type="number" class="form-control" id="age" name="age" required oninput="validateAge()">
-                <span id="ageError" style="color:red;"></span>
-            </div>
+                <div class="col-md-6">
+                    <label for="phoneNumber" class="form-label">Phone Number</label>
+                    <input type="text" class="form-control" id="phoneNumber" name="phoneNumber"
+                           value="${patient.phoneNumber}" required>
+                </div>
 
-            <div class="col-md-6">
-                <label for="phoneNumber" class="form-label">Phone Number</label>
-                <input type="text" class="form-control" id="phoneNumber" name="phoneNumber" onkeypress="return onlyNumbers(event)" required oninput="validatePhoneNo()">
-                <span id="phoneError" style="color:red;"></span>
-            </div>
+                <div class="col-md-6">
+                    <label for="email" class="form-label">Email</label>
+                    <input type="email" class="form-control" id="email" name="email" value="${patient.email}" required>
+                </div>
 
-            <div class="col-md-6">
-                <label for="email" class="form-label">Email</label>
-                <input type="email" class="form-control" id="email" name="email" required oninput="validateEmail()">
-                <span id="emailError" style="color:red;"></span>
-            </div>
+                <div class="col-md-6">
+                    <label for="bloodGroup" class="form-label">Blood Group</label>
+                    <select class="form-select" id="bloodGroup" name="bloodGroup" required>
+                        <option value="">-- Choose Blood Group --</option>
+                        <option value="a+" ${patient.bloodGroup=='a+'?'selected':''}>A +ve</option>
+                        <option value="a-" ${patient.bloodGroup=='a-'?'selected':''}>A -ve</option>
+                        <option value="b+" ${patient.bloodGroup=='b+'?'selected':''}>B +ve</option>
+                        <option value="b-" ${patient.bloodGroup=='b-'?'selected':''}>B -ve</option>
+                        <option value="ab+" ${patient.bloodGroup=='ab+'?'selected':''}>AB +ve</option>
+                        <option value="ab-" ${patient.bloodGroup=='ab-'?'selected':''}>AB -ve</option>
+                        <option value="o+" ${patient.bloodGroup=='o+'?'selected':''}>O +ve</option>
+                        <option value="o-" ${patient.bloodGroup=='o-'?'selected':''}>O -ve</option>
+                    </select>
+                </div>
 
-            <div class="col-md-6">
-                <label for="blood" class="form-label">Blood Group</label>
+                <div class="col-12">
+                    <label for="disease" class="form-label">Disease</label>
+                    <textarea class="form-control" id="disease" name="disease" required>${patient.disease}</textarea>
+                </div>
 
-                <select id="blood" name="blood" class="form-select" required >
-
-                    <option selected disabled>Choose Blood Group</option>
-                    <option value="a+">A +ve</option>
-                    <option value="a-">A -ve</option>
-                    <option value="b+">B +ve</option>
-                    <option value="b-">B -ve</option>
-                    <option value="ab+">AB +ve</option>
-                    <option value="ab-">AB -ve</option>
-                    <option value="o+">O +ve </option>
-                    <option value="o-">O -ve</option>
-                </select>
-            </div>
-
-            <div class="mb-3">
-                <label for="disease" class="form-label" style="color:black;">Disease</label>
-                <textarea name="address" class="form-control" id="disease" name="disease" placeholder="Describe the Disease"
-                          onkeypress="return onlyLetters(event)" required></textarea>
-            </div>
-
-            <div class="col-md-6">
-                <label for="specialisation" class="form-label">Specialisation</label>
-                <select class="form-select" id="specialisation" name="specialisation" required>
+                <label for="disease" class="form-label">Specialisation</label>
+                <select id="specialisation" name="specialisation" required>
                     <option value="">-- Select Specialisation --</option>
-                    <c:forEach var="doc" items="${doctors}">
-                        <option value="${doc.id}">${doc.specialisation}</option>
+                    <c:forEach var="spec" items="${slotSpecialisations}">
+                        <option value="${spec.specialisation}">${spec.specialisation}</option>
                     </c:forEach>
-
                 </select>
-            </div>
 
-            <div class="col-md-6">
-                <label for="doctorName" class="form-label">Select Doctor</label>
-                <select class="form-select" id="doctorName" name="doctorName" required>
+                <label for="disease" class="form-label">Doctor</label>
+                <select id="doctor" name="doctorId" class="form-select" required>
                     <option value="">-- Select Doctor --</option>
-                    <c:forEach var="doc" items="${doctors}">
-                        <option value="${doc.id}">${doc.doctorName}</option>
-                    </c:forEach>
                 </select>
-            </div>
 
-            <div class="col-md-6">
-                <label for="slot" class="form-label" >Select Slot</label>
-                <select class="form-select" id="slot" name="slot" required>
+                <label for="disease" class="form-label">slot</label>
+                <select id="slot" name="slotId" class="form-select" required>
                     <option value="">-- Select Slot --</option>
-                    <c:forEach var="s" items="${slots}">
-                        <option value="${s.id}">${s.fromTime} - ${s.toTime}</option>
-                    </c:forEach>
                 </select>
-            </div>
 
-            <div class="col-12 text-center mt-4">
-                <button type="submit" class="btn btn-primary px-5">Save</button>
+
+
+                <div class="col-12 text-center mt-4">
+                    <button type="submit" class="btn btn-primary px-5">Save</button>
+                </div>
             </div>
         </form>
     </div>
 </div>
 
+<script>
+    document.getElementById("specialisation").addEventListener("change", function() {
+        let specialisation = this.value.trim();
+        if (!specialisation) return;
+
+        let url = "/Hospital/getDoctorAndSlots/" + encodeURIComponent(specialisation);
+
+        fetch(url)
+            .then(res => res.json())
+            .then(data => {
+                let doctorSelect = document.getElementById("doctor");
+                doctorSelect.innerHTML = '<option value="">--Select Doctor--</option>';
+                data.doctors.forEach(doc => {
+                    let opt = document.createElement("option");
+                    opt.value = doc.id;
+                    opt.text = doc.doctorName;
+                    doctorSelect.add(opt);
+                });
+
+                let slotSelect = document.getElementById("slot");
+                slotSelect.innerHTML = '<option value="">--Select Slot--</option>';
+                data.slots.forEach(slot => {
+                    let opt = document.createElement("option");
+                    opt.value = slot.id;
+                    opt.text = slot.fromTime + " - " + slot.toTime;
+                    slotSelect.add(opt);
+                });
+            })
+            .catch(err => console.error("Error fetching doctors and slots:", err));
+    });
+</script>
+
+
 
 </body>
 </html>
-
