@@ -15,17 +15,15 @@
             crossorigin="anonymous"></script>
 
     <style>
-        /* Full page background */
         body {
             margin: 0;
             height: 100vh;
             background: url('images/hospital.png') no-repeat center center fixed;
             background-size: cover;
-            padding-top: 80px; /* space for fixed navbar */
+            padding-top: 80px;
             font-family: Arial, sans-serif;
         }
 
-        /* Fixed navbar */
         .navbar {
             position: fixed;
             top: 0;
@@ -33,11 +31,10 @@
             z-index: 1000;
         }
 
-        /* Centered login card */
         .card-container {
             width: 400px;
-            height: 400px;
-            background: rgba(255, 255, 255, 0.45); /* more transparent */
+            height: auto;
+            background: rgba(255, 255, 255, 0.45);
             backdrop-filter: blur(8px);
             border-radius: 20px;
             padding: 40px;
@@ -61,7 +58,6 @@
 </head>
 <body>
 
-<!-- Fixed Navbar -->
 <nav class="navbar navbar-dark bg-dark">
     <div class="container-fluid">
         <a class="navbar-brand fs-4" href="#">
@@ -71,7 +67,6 @@
     </div>
 </nav>
 
-<!-- Centered Login Card -->
 <div class="d-flex justify-content-center align-items-center min-vh-100">
     <div class="card-container text-center">
 
@@ -93,27 +88,26 @@
             <!-- Send OTP -->
             <button type="button" class="btn btn-primary btn-custom" onclick="sendOtp()">Send OTP</button>
 
+            <button type="button" class="btn btn-warning btn-custom d-none" id="resendBtn" onclick="resendOtp()">Resend OTP</button>
             <!-- OTP Countdown -->
-            <<div id="otpTimer" class="text-danger fw-bold mt-2 mb-3">
-            <span class="badge bg-danger">OTP valid for: 02:00</span>
-        </div>
+            <div id="otpTimer" class="text-danger fw-bold mt-2 mb-3"></div>
 
             <!-- OTP Input -->
             <div class="mb-3 text-start mt-3">
                 <label for="otp" class="form-label fw-semibold">OTP</label>
-                <input type="text" class="form-control" id="otp" name="otp" placeholder="Enter OTP" required>
+                <input type="text" class="form-control" id="otp" name="otp" placeholder="Enter OTP" required >
             </div>
 
-
-
             <!-- Submit -->
-            <button type="submit" class="btn btn-success btn-custom">Login</button>
+            <button type="submit" class="btn btn-success btn-custom" >Login</button>
         </form>
 
     </div>
 </div>
 
 <script>
+    let otpCountdown; // global variable for countdown timer
+
     // Check if user email exists
     function checkUserEmail() {
         let email = document.getElementById("emailId").value;
@@ -128,53 +122,57 @@
         }
     }
 
+    // Start OTP timer (default 120 seconds)
+    function startOtpTimer(duration = 120) {
+        clearInterval(otpCountdown);
+        let timer = duration;
 
-function startOtpTimer(duration = 120) {
-    clearInterval(otpCountdown);
-    let timer = duration;
+        const otpInput = document.getElementById('otp');
+        const submitBtn = document.querySelector('button[type="submit"]');
+        const sendBtn = document.querySelector('button[onclick="sendOtp()"]');
 
-    document.getElementById('otp').disabled = false;
-    const submitBtn = document.querySelector('button[type="submit"]');
-    submitBtn.disabled = false;
+        otpInput.disabled = false;
+        submitBtn.disabled = false;
+        sendBtn.disabled = true;
 
-    const sendBtn = document.querySelector('button[onclick="sendOtp()"]');
-    sendBtn.disabled = true; // disable send button
+        otpCountdown = setInterval(() => {
+            if (timer < 0) {
+                clearInterval(otpCountdown);
+                document.getElementById('otpTimer').innerHTML = `<span class="badge bg-danger">OTP expired. Please resend.</span>`;
+                otpInput.disabled = true;
+                submitBtn.disabled = true;
+                sendBtn.disabled = false;
+                return;
+            }
 
-    otpCountdown = setInterval(() => {
-        if (timer < 0) {
-            clearInterval(otpCountdown);
-            document.getElementById('otpTimer').textContent = "OTP expired. Please resend.";
-            document.getElementById('otp').disabled = true;
-            submitBtn.disabled = true;
-            sendBtn.disabled = false; // re-enable send button
+            let minutes = Math.floor(timer / 60).toString().padStart(2, '0');
+            let seconds = (timer % 60).toString().padStart(2, '0');
+
+            document.getElementById('otpTimer').innerHTML =
+                `<span class="badge bg-danger">OTP valid for: ${minutes}:${seconds}</span>`;
+
+            timer--;
+        }, 1000);
+    }
+
+    // Send OTP function
+    function sendOtp() {
+        let email = document.getElementById("emailId").value;
+        if (!email) {
+            alert("Please enter email first");
             return;
         }
-        const minutes = Math.floor(timer / 60).toString().padStart(2, '0');
-        const seconds = (timer % 60).toString().padStart(2, '0');
-        document.getElementById('otpTimer').textContent = `OTP valid for: ${minutes}:${seconds}`;
-        timer--;
-    }, 1000);
-}
 
+        const xhttp = new XMLHttpRequest();
+        xhttp.open("GET", "http://localhost:8080/Hospital/sendOtp/" + encodeURIComponent(email), true);
+        xhttp.send();
 
-// Send OTP function
-function sendOtp() {
-    let email = document.getElementById("emailId").value;
-    if (!email) {
-        alert("Please enter email first");
-        return;
+        xhttp.onload = function () {
+            alert(this.responseText); // backend confirmation
+            startOtpTimer(120); // start 2-minute countdown
+        }
     }
-
-    const xhttp = new XMLHttpRequest();
-    xhttp.open("GET", "http://localhost:8080/Hospital/sendOtp/" + encodeURIComponent(email), true);
-    xhttp.send();
-
-    xhttp.onload = function () {
-        alert(this.responseText); // show backend confirmation
-        startOtpTimer(120); // start 2-minute countdown
-    }
-}
-
 </script>
+
 </body>
 </html>
