@@ -1,20 +1,15 @@
 package com.xworkz.hospital.repository;
 
-
-import com.xworkz.hospital.entity.DoctorEntity;
-import com.xworkz.hospital.entity.HospitalEntity;
-import com.xworkz.hospital.entity.SlotEntity;
-import com.xworkz.hospital.entity.SpecialisationEntity;
+import com.xworkz.hospital.entity.*;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.EntityTransaction;
-import javax.persistence.Query;
+import javax.persistence.*;
 import java.util.Collections;
 import java.util.List;
 
+@Slf4j
 @Repository
 public class HospitalRepositoryImp implements HospitalRepository {
 
@@ -109,6 +104,7 @@ public class HospitalRepositoryImp implements HospitalRepository {
 
     @Override
     public boolean doctorSave(DoctorEntity doctorEntity) {
+        System.err.println("============="+doctorEntity);
         EntityManager em = null;
         EntityTransaction et = null;
 
@@ -120,7 +116,6 @@ public class HospitalRepositoryImp implements HospitalRepository {
             em.persist(doctorEntity);
             et.commit();
             System.out.println("Doctor's Data Saved");
-
             return true;
         } catch (Exception e) {
             if (et.isActive()) {
@@ -134,8 +129,7 @@ public class HospitalRepositoryImp implements HospitalRepository {
     }
 
     @Override
-    public boolean Slot(SlotEntity slotEntity) {
-
+    public boolean saveSlot(SlotEntity slotEntity) {
         EntityManager em = null;
         EntityTransaction et = null;
 
@@ -144,10 +138,9 @@ public class HospitalRepositoryImp implements HospitalRepository {
             et = em.getTransaction();
 
             et.begin();
-            em.merge(slotEntity);
+            em.persist(slotEntity);
             et.commit();
             System.out.println("Slot Assigned");
-
             return true;
         } catch (Exception e) {
             if (et.isActive()) {
@@ -155,17 +148,20 @@ public class HospitalRepositoryImp implements HospitalRepository {
             }
             e.printStackTrace();
         } finally {
-            em.close();
+            if (em != null) {
+                em.close();
+            }
         }
         return false;
     }
+
 
     @Override
     public List<DoctorEntity> getAllDoctors() {
         EntityManager em = null;
         try {
             em = emf.createEntityManager();
-            Query query = em.createQuery("SELECT d FROM DoctorEntity d");
+            Query query = em.createQuery("SELECT d FROM DoctorEntity d", DoctorEntity.class);
             return query.getResultList();
         } catch (Exception e) {
             e.printStackTrace();
@@ -190,17 +186,15 @@ public class HospitalRepositoryImp implements HospitalRepository {
         }
     }
 
-    public List<SpecialisationEntity> getAllSpecialisation() {
-        EntityManager em = null;
+    @Override
+    public List<SpecialisationEntity> getAllSpecialisations() {
+        EntityManager em = emf.createEntityManager();
+
         try {
-            em = emf.createEntityManager();
-            Query query = em.createQuery("SELECT d FROM SpecialisationEntity d");
+            Query query = em.createQuery("SELECT s FROM SpecialisationEntity s");
             return query.getResultList();
-        } catch (Exception e) {
-            e.printStackTrace();
-            return Collections.emptyList();
         } finally {
-            if (em != null) em.close();
+            em.close();
         }
     }
 
@@ -214,6 +208,33 @@ public class HospitalRepositoryImp implements HospitalRepository {
         }
     }
 
+    public DoctorEntity findDoctorByEmail(String email) {
+        EntityManager em = emf.createEntityManager();
+        try {
+            return em.createQuery("SELECT d FROM DoctorEntity d WHERE d.email = :email", DoctorEntity.class)
+                    .setParameter("email", email)
+                    .getSingleResult();
+
+        } catch (NoResultException e) {
+            return null;
+        } finally {
+            em.close();
+        }
+    }
+
+    @Override
+    public SpecialisationEntity getById(int id) {
+        EntityManager em = null;
+        try {
+            em = emf.createEntityManager();
+            return em.find(SpecialisationEntity.class, id);
+        } finally {
+            if (em != null) {
+                em.close();
+            }
+        }
+    }
+
     @Override
     public SlotEntity findSlotById(int id) {
         EntityManager em = emf.createEntityManager();
@@ -224,88 +245,79 @@ public class HospitalRepositoryImp implements HospitalRepository {
         }
     }
 
-    @Override
-    public SpecialisationEntity findSpecialisationById(int id) {
-        EntityManager em = emf.createEntityManager();
-        try {
-            return em.find(SpecialisationEntity.class, id);
-        } finally {
-            em.close();
-        }
-    }
-
-    public void updateDoctor(DoctorEntity doctor) {
-        EntityManager em = emf.createEntityManager();
-        EntityTransaction et = em.getTransaction();
-
-        try {
-            et.begin();
-            em.merge(doctor);
-            et.commit();
-        } catch (Exception e) {
-            if (et.isActive()) {
-                et.rollback();
-            }
-            e.printStackTrace();
-        } finally {
-            em.close();
-        }
-    }
+//    @Override
+//    public SpecialisationEntity findSpecialisationById(String specialisation) {
+//        EntityManager em = emf.createEntityManager();
+//        try {
+//            return em.find(SpecialisationEntity.class, specialisation);
+//        } finally {
+//            em.close();
+//        }
+//    }
 
     @Override
-    public boolean schedule(SpecialisationEntity specialisationEntity) {
-
+    public List<SlotEntity> getAllSlotSpecialisations(String specialisation) {
         EntityManager em = null;
         EntityTransaction et = null;
+        em = emf.createEntityManager();
+        et = em.getTransaction();
+        List<SlotEntity> slots = null;
 
         try {
-            em = emf.createEntityManager();
-            et = em.getTransaction();
-
             et.begin();
-            em.persist(specialisationEntity);
+            Query query = em.createNamedQuery("getAllSlotSpecialisations");
+            query.setParameter("specialisation", specialisation);
+            slots = query.getResultList();
             et.commit();
-            System.out.println("Time Scheduled");
-
-            return true;
-
         } catch (Exception e) {
             if (et.isActive()) {
                 et.rollback();
             }
-            e.printStackTrace();
-        } finally {
-            em.close();
         }
-        return false;
-    }
-
-
-    public boolean updateSlot(SlotEntity slotEntity) {
-        EntityManager em = null;
-        EntityTransaction et = null;
-
-        try {
-            em = emf.createEntityManager();
-            et = em.getTransaction();
-
-            et.begin();
-            em.merge(slotEntity); // Use merge to update the entity
-            et.commit();
-            return true;
-
-        } catch (Exception e) {
-            if (et.isActive()) {
-                et.rollback();
-            }
-            e.printStackTrace();
-        } finally {
-            if (em != null) {
+            finally{
                 em.close();
             }
+            return slots;
+        }
+
+
+    public boolean updateDoctorByEmail(String email, DoctorEntity doctorEntity) {
+        EntityManager em = null;
+        EntityTransaction et = null;
+
+        try {
+            em = emf.createEntityManager();
+            et = em.getTransaction();
+            et.begin();
+
+            DoctorEntity entity = em.createQuery(
+                            "SELECT d FROM DoctorEntity d WHERE d.email = :email", DoctorEntity.class)
+                    .setParameter("email", email)
+                    .getSingleResult();
+
+            if (entity != null) {
+
+                entity.setDoctorName(doctorEntity.getDoctorName());
+                entity.setSpecialisation(doctorEntity.getSpecialisation());
+                entity.setQualification(doctorEntity.getQualification());
+                entity.setExperience(doctorEntity.getExperience());
+                entity.setPhoneNumber(doctorEntity.getPhoneNumber());
+                entity.setAge(doctorEntity.getAge());
+                entity.setGender(doctorEntity.getGender());
+
+                em.merge(entity);
+                et.commit();
+                return true;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            if (et.isActive()) et.rollback();
+        } finally {
+            em.close();
         }
         return false;
     }
+
 
 
     @Override
@@ -337,4 +349,102 @@ public class HospitalRepositoryImp implements HospitalRepository {
         }
         return false;
     }
+
+    public List<DoctorEntity> getUnassignedDoctors(String specialisation) {
+        EntityManager em = null;
+        EntityTransaction et = null;
+        List<DoctorEntity> doctors = null;
+
+        try {
+            em = emf.createEntityManager();
+            et = em.getTransaction();
+            Query query = em.createNamedQuery("getDoctorsBySpecialisation");
+            query.setParameter("specialisation", specialisation);
+            doctors = query.getResultList();
+            System.out.println("*********");
+            System.out.println("Unassigned Doctors: " + doctors);
+        //   et.commit();
+        } catch (Exception e) {
+            if (et != null && et.isActive()) {
+                et.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            em.close();
+        }
+        return doctors;
+    }
+
+    public void updateDoctor(DoctorEntity doctor) {
+        EntityManager em = emf.createEntityManager();
+        EntityTransaction et = em.getTransaction();
+
+        try {
+            et.begin();
+            em.merge(doctor);
+            et.commit();
+        } catch (Exception e) {
+            if (et.isActive()) {
+                et.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            em.close();
+        }
+    }
+
+    @Override
+    public boolean assignSlotToDoctor(int doctorId, int slotId) {
+        EntityManager em = emf.createEntityManager();
+        EntityTransaction et = null;
+        try {
+            DoctorEntity doctor = em.find(DoctorEntity.class, doctorId);
+            SlotEntity slot = em.find(SlotEntity.class, slotId);
+
+            if (doctor != null && slot != null) {
+                et = em.getTransaction();
+                et.begin();
+                doctor.setSlotEntities(slot);  // Assign the slot
+                em.merge(doctor);
+                et.commit();
+                return true;
+            }
+            return false;
+        } catch (Exception e) {
+            if (et != null && et.isActive()) {
+                et.rollback();
+            }
+            e.printStackTrace();
+            return false;
+        } finally {
+            em.close();
+        }
+    }
+
+    public boolean deleteDoctorByEmail(String email) {
+        EntityManager em = null;
+        EntityTransaction et = null;
+        DoctorEntity doctor = null;
+        try {
+            em = emf.createEntityManager();
+            et = em.getTransaction();
+            et.begin();
+            Query query = em.createNamedQuery("DoctorEntity.findDoctorByEmail");
+            query.setParameter("email", email);
+
+            doctor = (DoctorEntity) query.getSingleResult();
+
+            if (doctor != null) {
+                em.remove(doctor);
+                et.commit();
+                return true;
+            }
+        }catch (Exception e) {
+            e.printStackTrace();
+        }finally {
+            em.close();
+        }
+        return false;
+    }
 }
+

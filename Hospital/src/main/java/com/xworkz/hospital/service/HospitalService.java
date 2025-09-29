@@ -3,6 +3,7 @@ package com.xworkz.hospital.service;
 import com.xworkz.hospital.dto.DoctorDTO;
 import com.xworkz.hospital.dto.SlotDTO;
 import com.xworkz.hospital.dto.SpecialsationDTO;
+
 import com.xworkz.hospital.entity.DoctorEntity;
 import com.xworkz.hospital.entity.HospitalEntity;
 import com.xworkz.hospital.entity.SlotEntity;
@@ -28,19 +29,29 @@ public interface HospitalService {
 
     boolean slot(SlotDTO slotDTO);
 
-   // public List<SlotDTO> getAllSlots();
-
     List<DoctorEntity> getAllDoctors();
 
     List<SlotEntity> getAllSlots();
 
     List<SpecialisationEntity> getAllSpecialisation();
 
+    boolean specialisationSave(SpecialsationDTO specialsationDTO);
+
+    DoctorDTO findDoctorByEmail(String email);
+
+    SpecialisationEntity getById(int id);
+
+    boolean updateDoctorByEmail(String email, DoctorDTO doctorDTO);
+
+    List<SlotEntity> getAllSlotSpecialisations(String specialisation);
+
+    List<DoctorEntity> getUnassignedDoctors(String specialisation);
+
     boolean assignSlotToDoctor(int doctorId, int slotId);
 
-    boolean schedule(SpecialsationDTO specialsationDTO);
+    boolean deleteDoctorByEmail(String email);
 
-    boolean assignSchedule(int specialisationId);
 
-    boolean specialisationSave(SpecialsationDTO specialsationDTO);
+
+
 }

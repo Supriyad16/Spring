@@ -4,10 +4,8 @@ package com.xworkz.hospital.service;
 import com.xworkz.hospital.dto.DoctorDTO;
 import com.xworkz.hospital.dto.SlotDTO;
 import com.xworkz.hospital.dto.SpecialsationDTO;
-import com.xworkz.hospital.entity.DoctorEntity;
-import com.xworkz.hospital.entity.HospitalEntity;
-import com.xworkz.hospital.entity.SlotEntity;
-import com.xworkz.hospital.entity.SpecialisationEntity;
+
+import com.xworkz.hospital.entity.*;
 import com.xworkz.hospital.repository.HospitalRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -92,7 +90,7 @@ public class HospitalServiceImp implements HospitalService {
             return false;
 
         return entity.getOTP().equals(otp)
-                && entity.getLocalDateTime().plusMinutes(5).isAfter(LocalDateTime.now());
+                && entity.getLocalDateTime().plusMinutes(2).isAfter(LocalDateTime.now());
     }
 
     @Override
@@ -103,25 +101,27 @@ public class HospitalServiceImp implements HospitalService {
     @Override
     public boolean doctorSave(DoctorDTO doctorDTO) {
         DoctorEntity doctorEntity = new DoctorEntity();
+        System.err.println(doctorDTO);
         BeanUtils.copyProperties(doctorDTO, doctorEntity);
+        doctorEntity.setSpecialisation(doctorDTO.getSpecialisation());
         hospitalRepository.doctorSave(doctorEntity);
-
         return true;
     }
 
+
     @Override
     public boolean slot(SlotDTO slotDTO) {
-
         SlotEntity slotEntity = new SlotEntity();
         BeanUtils.copyProperties(slotDTO, slotEntity);
-        hospitalRepository.Slot(slotEntity);
-        return true;
+        return hospitalRepository.saveSlot(slotEntity);
     }
 
     // HospitalServiceImp.java
     @Override
     public List<DoctorEntity> getAllDoctors() {
-        return hospitalRepository.getAllDoctors();
+        List<DoctorEntity> doctors = hospitalRepository.getAllDoctors();
+        System.out.println("Doctors fetched from DB: " + doctors);
+        return doctors;
     }
 
     @Override
@@ -131,40 +131,8 @@ public class HospitalServiceImp implements HospitalService {
 
     @Override
     public List<SpecialisationEntity> getAllSpecialisation() {
-        return hospitalRepository.getAllSpecialisation();
-    }
-
-
-    public boolean schedule(SpecialsationDTO specialsationDTO) {
-        SpecialisationEntity specialisationEntity = new SpecialisationEntity();
-        BeanUtils.copyProperties(specialsationDTO, specialisationEntity);
-        return hospitalRepository.schedule(specialisationEntity);
-    }
-    @Override
-    public boolean assignSlotToDoctor(int doctorId, int slotId) {
-        DoctorEntity doctor = hospitalRepository.findDoctorById(doctorId);
-        SlotEntity slot = hospitalRepository.findSlotById(slotId);
-
-        if (doctor != null && slot != null) {
-            doctor.setSlot(slot);
-
-            String availableTime = slot.getFromTime() + " - " + slot.getToTime();
-            doctor.setAvailableTime(availableTime);
-
-            hospitalRepository.updateDoctor(doctor);
-            return true;
-        }
-        return false;
-    }
-
-    public boolean assignSchedule(int specialisationId) {
-        SpecialisationEntity specialisationEntity = hospitalRepository.findSpecialisationById(specialisationId);
-        if (specialisationEntity != null) {
-           specialisationEntity.getSpecialisation();
-           hospitalRepository.schedule(specialisationEntity);
-           return true;
-        }
-        return false;
+       System.out.println("Specialisations fetched from DB: " + hospitalRepository.getAllSpecialisations());
+        return hospitalRepository.getAllSpecialisations();
     }
 
 
@@ -175,5 +143,74 @@ public class HospitalServiceImp implements HospitalService {
         BeanUtils.copyProperties(specialsationDTO, specialisationEntity);
         return  hospitalRepository.specialisationSave(specialisationEntity);
 
+    }
+
+    public DoctorDTO findDoctorByEmail(String email) {
+        DoctorEntity entity = hospitalRepository.findDoctorByEmail(email);
+        System.out.println("Doctor entity fetched: " + entity);
+        if (entity != null) {
+            DoctorDTO dto = new DoctorDTO();
+            BeanUtils.copyProperties(entity, dto);
+
+
+
+
+                dto.setSpecialisation(dto.getSpecialisation()); // store id
+                //dto.setSpecialisation(entity.getSpecialisation().getSpecialisation()); // store name
+
+            return dto;
+        }
+        return null;
+    }
+
+    @Override
+    public SpecialisationEntity getById(int id) {
+        return hospitalRepository.getById(id);
+    }
+
+
+    public boolean updateDoctorByEmail(String email,DoctorDTO doctorDTO) {
+
+        DoctorEntity doctorEntity = new DoctorEntity();
+        BeanUtils.copyProperties(doctorDTO, doctorEntity);
+        return hospitalRepository.updateDoctorByEmail(email, doctorEntity);
+    }
+
+    @Override
+    public List<SlotEntity> getAllSlotSpecialisations(String specialisation) {
+        return hospitalRepository.getAllSlotSpecialisations(specialisation);
+    }
+
+    @Override
+    public boolean assignSlotToDoctor(int doctorId, int slotId) {
+        DoctorEntity doctor = hospitalRepository.findDoctorById(doctorId);
+        SlotEntity slot = hospitalRepository.findSlotById(slotId);
+
+        if (doctor != null && slot != null) {
+            doctor.setSlotEntities(slot);
+
+            String availableTime = slot.getFromTime() + " - " + slot.getToTime();
+            doctor.setAvailableTime(availableTime);
+
+            hospitalRepository.updateDoctor(doctor);
+            return true;
+        }
+        return false;
+    }
+
+
+    @Override
+    public List<DoctorEntity> getUnassignedDoctors(String specialisation) {
+        return hospitalRepository.getUnassignedDoctors(specialisation);
+    }
+
+@Override
+    public boolean deleteDoctorByEmail(String email) {
+        DoctorEntity doctorEntity = hospitalRepository.findDoctorByEmail(email);
+        if (doctorEntity != null) {
+            hospitalRepository.deleteDoctorByEmail(email);
+            return true;
+        }
+        return false;
     }
 }

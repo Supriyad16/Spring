@@ -49,4 +49,7 @@ public interface HospitalRepository {
 
     boolean deleteDoctorByEmail(String email);
 
+   // void saveUpdatedTimeSlot(UpdatedTimeSlotEntity slotEntity);
+
+
 }
