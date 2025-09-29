@@ -1,25 +1,39 @@
 package com.xworkz.hospital.configuration;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.jdbc.datasource.DriverManagerDataSource;
-import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
-import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
+
+import org.springframework.orm.jpa.JpaTransactionManager;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ViewResolverRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import javax.sql.DataSource;
-import java.util.Properties;
+import javax.persistence.EntityManagerFactory;
+
 
 @Configuration
 @ComponentScan(basePackages = "com.xworkz.hospital")
 @EnableWebMvc
+@PropertySource("classpath:application.properties")
+@Slf4j
+@EnableTransactionManagement
+@EnableScheduling
 
 public class HospitalConfiguration implements WebMvcConfigurer {
+
+    public HospitalConfiguration(){
+        log.info("Created \t"+this.getClass().getSimpleName());
+    }
 
     public void configureDefaultServletHandling(DefaultServletHandlerConfigurer defaultServletHandlerConfigurer){
         defaultServletHandlerConfigurer.enable();
@@ -31,33 +45,16 @@ public class HospitalConfiguration implements WebMvcConfigurer {
     }
 
     @Bean
-    public LocalContainerEntityManagerFactoryBean localContainerEntityManagerFactoryBean(){
-
-
-        LocalContainerEntityManagerFactoryBean factoryBean = new LocalContainerEntityManagerFactoryBean();
-        factoryBean.setDataSource(dataSource());
-        factoryBean.setJpaProperties(jpaProperties());
-        factoryBean.setPackagesToScan("com.xworkz.hospital.entity");
-        factoryBean.setJpaVendorAdapter(new HibernateJpaVendorAdapter());
-
-        return factoryBean;
+    public static PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer(){
+        return new PropertySourcesPlaceholderConfigurer();
     }
 
-    public Properties jpaProperties(){
-        Properties properties=new Properties();
-        properties.setProperty("hibernate.hbm2ddl.auto","update");
-        return properties;
+    @Bean
+    public PlatformTransactionManager transactionManager(EntityManagerFactory emf) {
+        return new JpaTransactionManager(emf);
     }
-    //application.properties
-    //hikari
-    public DataSource dataSource(){
-        DriverManagerDataSource driverManagerDataSource = new DriverManagerDataSource();
-        driverManagerDataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
-        driverManagerDataSource.setUrl("jdbc:mysql://localhost:3306/hospital");
-        driverManagerDataSource.setUsername("root");
-        driverManagerDataSource.setPassword("Xworkzodc@123");
-        return  driverManagerDataSource;
-    }
+
+
 
     @Bean(name = "multipartResolver")
     public CommonsMultipartResolver commonsMultipartResolver (){
@@ -66,6 +63,23 @@ public class HospitalConfiguration implements WebMvcConfigurer {
         commonsMultipartResolver.setMaxInMemorySize(1025231);
         return commonsMultipartResolver;
 
+    }
+
+
+//    @Component
+//    public class MyScheduler {
+//
+//        @Scheduled(fixedRate = 5000) // Executes every 5 seconds
+//        public void fixedRateTask() {
+//            System.out.println("Fixed rate task executed at: " + System.currentTimeMillis());
+//        }
+//    }
+
+    @Bean
+    public ThreadPoolTaskScheduler threadPoolTaskScheduler(){
+        ThreadPoolTaskScheduler threadPoolTaskScheduler=new ThreadPoolTaskScheduler();
+        threadPoolTaskScheduler.setPoolSize(10);
+        return threadPoolTaskScheduler;
     }
 }
 
