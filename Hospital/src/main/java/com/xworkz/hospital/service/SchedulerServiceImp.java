@@ -15,14 +15,10 @@ public class SchedulerServiceImp implements SchedulerService {
     @Autowired
     private SchedulerRepository schedulerRepository;
 
-    @Value("${otp.expiry.minutes}")
-    private int otpExpiryMinutes;
-
-    @Scheduled(fixedRateString = "300000") // runs every 5 minutes
-    @Transactional  // Spring-managed transaction
-    public void cleanExpiredOtps() {
-        LocalDateTime cutoff = LocalDateTime.now().minusMinutes(otpExpiryMinutes);
-        int deleted = schedulerRepository.deleteExpiredOtps();
-        System.out.println("Expired OTPs cleaned: " + deleted + " | Expiry: " + otpExpiryMinutes + " minutes");
+    @Scheduled(fixedRate = 300000) // 300000 ms = 5 min
+    public void clearExpiredOtpsTask() {
+        System.out.println("Scheduler task started at: " + LocalDateTime.now());
+        int rows = schedulerRepository.clearExpiredOtps();
+        System.out.println("Expired OTPs cleared: " + rows);
     }
 }

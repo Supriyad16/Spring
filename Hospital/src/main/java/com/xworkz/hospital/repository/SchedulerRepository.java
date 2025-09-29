@@ -4,5 +4,5 @@ import java.time.LocalDateTime;
 
 public interface SchedulerRepository {
 
-    int deleteExpiredOtps();
+    int clearExpiredOtps();
 }
