@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -49,9 +51,12 @@ public class DoctorEntity {
     @Column(name = "imagePath")
     private String imagePath;
 
+  //  @OneToMany(mappedBy = "doctor", cascade = CascadeType.ALL, orphanRemoval = true)
+
     @ManyToOne
     @JoinColumn(name = "slot_id")
-    private SlotEntity slot;
+    private SlotEntity slotEntities = new SlotEntity();
+
 
 
 

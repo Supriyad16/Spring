@@ -37,8 +37,6 @@ public class DoctorDTO {
         @Max(60)
         private int age;
 
-        private String availableTime;
-
         private String imagePath;
 
 
