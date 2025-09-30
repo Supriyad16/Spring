@@ -1,16 +1,23 @@
 package com.xworkz.hospital.restcontroller;
 
 
+import com.xworkz.hospital.dto.DoctorDTO;
+import com.xworkz.hospital.dto.SlotDTO;
+import com.xworkz.hospital.entity.DoctorEntity;
 import com.xworkz.hospital.entity.HospitalEntity;
+import com.xworkz.hospital.entity.SlotEntity;
 import com.xworkz.hospital.service.HospitalService;
+import com.xworkz.hospital.service.PatientService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/")
@@ -20,6 +27,8 @@ public class HospitalRestController {
     private static final Logger log = LoggerFactory.getLogger(HospitalRestController.class);
     @Autowired
     public HospitalService hospitalService;
+    @Autowired
+    public PatientService patientService;
 
     @GetMapping(value = "/userEmail/{email}", produces = MediaType.APPLICATION_JSON_VALUE)
     public String userEmail(@PathVariable String email) {
@@ -46,5 +55,21 @@ public class HospitalRestController {
 
         return "OTP sent successfully to " + email;
     }
+
+
+    @GetMapping(value = "/getDoctorAndSlots/{specialisation}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public Map<String, Object> getDoctorAndSlots(@PathVariable String specialisation) {
+        Map<String, Object> response = new HashMap<>();
+        List<DoctorEntity> doctors = patientService.getAllDoctors(specialisation);
+        log.info("Doctors fetched: " + doctors);
+        List<SlotEntity> slots = patientService.getAllSlotSpecialisations(specialisation);
+        response.put("doctors", doctors);
+        response.put("slots", slots);
+        return response;
+    }
+
+
+
 
 }
