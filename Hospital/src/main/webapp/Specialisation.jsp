@@ -48,26 +48,29 @@
     <div class="offcanvas-body">
         <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
             <li class="nav-item"><a class="nav-link text-white" href="dashboard.jsp"><b>Home</b></a></li>
-            <li class="nav-item"><a class="nav-link text-white" href="doctor.jsp"><b>Doctor</b></a></li>
-            <li class="nav-item"><a class="nav-link text-white" href="#"><b>Slots</b></a></li>
-            <li class="nav-item"><a class="nav-link text-white" href="addSlots"><b>Add Slots</b></a></li>
+            <li class="nav-item"><a class="nav-link text-white" href="#"><b>Specialisation</b></a></li>
+            <li class="nav-item"><a class="nav-link text-white" href="check"><b>Doctor</b></a></li>
+            <li class="nav-item"><a class="nav-link text-white" href="slot"><b>Slots</b></a></li>
+            <li class="nav-item"><a class="nav-link text-white" href="disp"><b>Add Slots</b></a></li>
+            <li class="nav-item"><a class="nav-link text-white" href="DoctorList"><b>Update Doctor</b></a></li>
+
+
             <li class="nav-item mt-3"><a href="admin.jsp" class="btn btn-outline-light btn-lg w-100">Logout</a></li>
         </ul>
     </div>
 </div>
 
-
 <div class="container mt-5">
-    <h2 class="text-center mb-4" style="color:black;">Slot Allotment</h2>
+    <h2 class="text-center mb-4" style="color:black;">Specialisation</h2>
 
     <div class="card shadow col-md-5 mx-auto">
         <div class="card-body">
             <form action="specialisation" method="post">
 
                 <div class="mb-3">
-                <label for="specialisation" class="form-label" style="color:black;">Specialisation</label>
+                <label for="specialisation" class="form-label" style="color:black;"><b>Specialisation</b></label>
                 <input type="text" class="form-control" id="specialisation" name="specialisation"
-                       oninput="validateName()" onkeypress="return onlyLetters(event)" required>
+                       oninput="validateName()" onkeypress="return onlyLetters(event)" required placeholder="Add Specialisation">
                 <span id="doctorNameError" style="color:red;"></span>
         </div>
 
