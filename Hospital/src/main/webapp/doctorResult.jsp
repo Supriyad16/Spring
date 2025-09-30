@@ -95,10 +95,6 @@
                                 <td>${doctor.age}</td>
                             </tr>
 
-                            <tr>
-                                <th>Available Time</th>
-                                <td>${doctor.availableTime}</td>
-                            </tr>
 
                             <tr>
                                 <th>Image Path</th>
