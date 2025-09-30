@@ -83,9 +83,7 @@ public class PatientRepositoryImp implements PatientRepository {
         EntityManager em = emf.createEntityManager();
         try {
             Query query = em.createQuery(
-                    "SELECT s FROM SlotEntity s WHERE s.specialisation.specialisation = :spec",
-                    SlotEntity.class
-            );
+                    "SELECT s FROM SlotEntity s WHERE s.specialisation.specialisation = :spec", SlotEntity.class);
             query.setParameter("spec", specialisation);
             return query.getResultList();
         } finally {

@@ -49,9 +49,11 @@
         <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
             <li class="nav-item"><a class="nav-link text-white" href="dashboard.jsp"><b>Home</b></a></li>
             <li class="nav-item"><a class="nav-link text-white" href="Specialisation.jsp"><b>Specialisation</b></a></li>
-            <li class="nav-item"><a class="nav-link text-white" href="doctor.jsp"><b>Doctor</b></a></li>
+            <li class="nav-item"><a class="nav-link text-white" href="check"><b>Doctor</b></a></li>
             <li class="nav-item"><a class="nav-link text-white" href="#"><b>Slots</b></a></li>
-            <li class="nav-item"><a class="nav-link text-white" href="addSlots"><b>Add Slots</b></a></li>
+            <li class="nav-item"><a class="nav-link text-white" href="disp"><b>Add Slots</b></a></li>
+            <li class="nav-item"><a class="nav-link text-white" href="DoctorList"><b>Update Doctor</b></a></li>
+
             <li class="nav-item mt-3"><a href="admin.jsp" class="btn btn-outline-light btn-lg w-100">Logout</a></li>
         </ul>
     </div>
