@@ -61,7 +61,9 @@
             <li class="nav-item"><a class="nav-link text-white" href="Specialisation.jsp"><b>Specialisation</b></a></li>
             <li class="nav-item"><a class="nav-link text-white" href="#"><b>Doctor</b></a></li>
             <li class="nav-item"><a class="nav-link text-white" href="slot"><b>Slots</b></a></li>
-            <li class="nav-item"><a class="nav-link text-white" href="addSlots"><b>Add Slots</b></a></li>
+            <li class="nav-item"><a class="nav-link text-white" href="disp"><b>Add Slots</b></a></li>
+            <li class="nav-item"><a class="nav-link text-white" href="DoctorList"><b>Update Doctor</b></a></li>
+
             <li class="nav-item mt-3">
                 <a href="admin.jsp" class="btn btn-outline-light btn-lg w-100">Logout</a>
             </li>
@@ -101,16 +103,9 @@
 
             <div class="col-md-6">
                 <label for="qualification" class="form-label">Qualification</label>
-                <select id="qualification" name="qualification" class="form-select" required >
+                <input type="text" class="form-control" id="qualification" name="qualification" required >
 
-                    <option selected disabled>Choose...</option>
-                    <option value="Medicine">General Medicine</option>
-                    <option value="Pediatrics">Pediatrics</option>
-                    <option value="Radiology">Radiology</option>
-                    <option value="Dermatology">Dermatology</option>
-                    <option value="Psychiatry">Psychiatry</option>
-                    <option value=" Pathology"> Pathology</option>
-                </select>
+
             </div>
 
             <div class="col-md-6">
@@ -160,7 +155,6 @@
                 <button type="submit" class="btn btn-primary px-5">Save</button>
             </div>
 
-            <a href="DoctorList">Update</a>
         </form>
     </div>
 </div>
