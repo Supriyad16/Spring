@@ -75,6 +75,7 @@ public class HospitalConfiguration implements WebMvcConfigurer {
 //        }
 //    }
 
+
     @Bean
     public ThreadPoolTaskScheduler threadPoolTaskScheduler(){
         ThreadPoolTaskScheduler threadPoolTaskScheduler=new ThreadPoolTaskScheduler();
