@@ -18,5 +18,4 @@ public class HospitalInitializer extends AbstractAnnotationConfigDispatcherServl
     protected String[] getServletMappings() {
         return new String[]{"/"};
     }
-
 }
