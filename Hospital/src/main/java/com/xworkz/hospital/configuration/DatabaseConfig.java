@@ -19,13 +19,14 @@ public class DatabaseConfig {
 
     @Bean
     public LocalContainerEntityManagerFactoryBean entityManagerFactoryBean(){
+
         LocalContainerEntityManagerFactoryBean factoryBean = new LocalContainerEntityManagerFactoryBean();
         factoryBean.setDataSource(dataSource());
         factoryBean.setPackagesToScan("com.xworkz.hospital.entity");
         factoryBean.setJpaVendorAdapter(new org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter());
 
         Properties jpaProps = new Properties();
-        jpaProps.put("hibernate.hbm2ddl.auto", "update"); // creates/updates tables
+        jpaProps.put("hibernate.hbm2ddl.auto", "update");
         jpaProps.put("hibernate.show_sql", "true");
         jpaProps.put("hibernate.dialect", "org.hibernate.dialect.MySQL8Dialect");
         factoryBean.setJpaProperties(jpaProps);
