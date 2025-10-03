@@ -84,14 +84,29 @@ public class HospitalServiceImp implements HospitalService {
     }
 
     @Override
-    public boolean validateOtp(String email, String otp) {
+    public String validateOtp(String email, String otp) {
         HospitalEntity entity = hospitalRepository.findByEmail(email);
-        if (entity == null)
-            return false;
 
-        return entity.getOTP().equals(otp)
-                && entity.getLocalDateTime().plusMinutes(2).isAfter(LocalDateTime.now());
+        if (entity == null || entity.getOTP() == null) {
+            return "INVALID";
+        }
+
+        if (!otp.equals(entity.getOTP())) {
+            return "INVALID";
+        }
+
+        LocalDateTime otpGeneratedTime = entity.getLocalDateTime();
+        if (otpGeneratedTime == null) {
+            return "INVALID";
+        }
+
+        if (otpGeneratedTime.plusMinutes(2).isBefore(LocalDateTime.now())) {
+            return "EXPIRED";
+        }
+
+        return "VALID";
     }
+
 
     @Override
     public HospitalEntity findByEmail(String email) {
