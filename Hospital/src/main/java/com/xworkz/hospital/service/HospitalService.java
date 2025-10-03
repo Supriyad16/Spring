@@ -21,7 +21,7 @@ public interface HospitalService {
 
     void sendOtpEmail(String email, String otp);
 
-    boolean validateOtp(String email, String otp);
+    String validateOtp(String email, String otp);
 
     HospitalEntity findByEmail(String email);
 
