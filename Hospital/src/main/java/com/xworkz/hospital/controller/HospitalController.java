@@ -42,16 +42,41 @@ public class HospitalController {
     public ModelAndView admin(@RequestParam String email, @RequestParam String otp) {
         ModelAndView modelAndView = new ModelAndView();
 
-        HospitalEntity hospitalEntity = hospitalService.findByEmail(email);
+        String status = hospitalService.validateOtp(email, otp);
 
-        if (hospitalEntity != null && hospitalEntity.getOTP() != null && hospitalEntity.getOTP().equals(otp)) {
-
-            modelAndView.addObject("message", " Login successful");
+        if ("VALID".equals(status)) {
+            modelAndView.addObject("message", "Login successful");
             modelAndView.setViewName("dashboard");
+        } else if ("EXPIRED".equals(status)) {
+            modelAndView.addObject("message", "OTP has expired. Please request a new one.");
+            modelAndView.setViewName("admin");
         } else {
-            modelAndView.addObject("message", "Invalid OTP, Please try again.");
+            modelAndView.addObject("message", "Invalid OTP, please try again.");
             modelAndView.setViewName("admin");
         }
+
+        return modelAndView;
+    }
+
+    @RequestMapping("/resendOtp")
+    public ModelAndView resendOtp(@RequestParam String email) {
+        ModelAndView modelAndView = new ModelAndView();
+
+        if (email == null || email.trim().isEmpty()) {
+            modelAndView.addObject("message", "Email is missing. Cannot resend OTP.");
+            modelAndView.setViewName("admin");
+            return modelAndView;
+        }
+
+        // Generate & save new OTP
+        String newOtp = hospitalService.generateOtp();
+        hospitalService.saveOtp(email, newOtp);
+
+        // Send OTP
+        hospitalService.sendOtpEmail(email, newOtp);
+
+        modelAndView.addObject("message", "A new OTP has been sent to your email.");
+        modelAndView.setViewName("admin");
         return modelAndView;
     }
 
