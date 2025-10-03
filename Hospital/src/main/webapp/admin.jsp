@@ -15,7 +15,6 @@
             crossorigin="anonymous"></script>
     <link href="https://fonts.googleapis.com/css2?family=Quintessential&display=swap" rel="stylesheet">
 
-
     <style>
         body {
             margin: 0;
@@ -110,13 +109,8 @@
                 </button>
                 <span id="timeoutMessageId" class="text-danger ms-2"></span>
             </div>
-
-
         </form>
-
-
     </div>
-
 
 </div>
 
@@ -209,12 +203,10 @@ function resendOtp() {
         resendOtp();
         timeCount();
     }
+
 }
 
-
-
-
 </script>
-
 </body>
 </html>
+
