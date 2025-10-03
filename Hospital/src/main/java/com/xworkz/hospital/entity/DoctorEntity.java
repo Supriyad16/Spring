@@ -1,11 +1,9 @@
 package com.xworkz.hospital.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
+
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -15,13 +13,13 @@ import java.util.List;
 
 @Entity
 @Table(name="doctor_data")
+
 @NamedQueries({
         @NamedQuery(name = "DoctorEntity.getAllDoctors", query = "SELECT d FROM DoctorEntity d"),
         @NamedQuery(name = "DoctorEntity.getById", query = "SELECT d FROM DoctorEntity d WHERE d.id = :id"),
-        @NamedQuery(name="DoctorEntity.getAllSpecialisation", query = "SELECT d FROM DoctorEntity d" ),
+        @NamedQuery(name = "DoctorEntity.getAllSpecialisation", query = "SELECT d FROM DoctorEntity d" ),
         @NamedQuery(name = "DoctorEntity.findDoctorByEmail", query = "SELECT d FROM DoctorEntity d WHERE d.email = :email"),
         @NamedQuery(name = "getDoctorsBySpecialisation", query = "select e from DoctorEntity e where specialisation=:specialisation")
-
 })
 
 public class DoctorEntity {
@@ -51,13 +49,10 @@ public class DoctorEntity {
     @Column(name = "imagePath")
     private String imagePath;
 
-  //  @OneToMany(mappedBy = "doctor", cascade = CascadeType.ALL, orphanRemoval = true)
+//  @OneToMany(mappedBy = "doctor", cascade = CascadeType.ALL, orphanRemoval = true)
 
     @ManyToOne
     @JoinColumn(name = "slot_id")
     private SlotEntity slotEntities = new SlotEntity();
-
-
-
 
 }
