@@ -13,6 +13,8 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
             integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
             crossorigin="anonymous"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Quintessential&display=swap" rel="stylesheet">
+
 
     <style>
         body {
@@ -88,9 +90,6 @@
             <!-- Send OTP -->
             <button type="button" class="btn btn-primary btn-custom" onclick="sendOtp()">Send OTP</button>
 
-            <button type="button" class="btn btn-warning btn-custom d-none" id="resendBtn" onclick="resendOtp()">Resend OTP</button>
-            <!-- OTP Countdown -->
-            <div id="otpTimer" class="text-danger fw-bold mt-2 mb-3"></div>
 
             <!-- OTP Input -->
             <div class="mb-3 text-start mt-3">
@@ -100,9 +99,25 @@
 
             <!-- Submit -->
             <button type="submit" class="btn btn-success btn-custom" >Login</button>
+
+            <!-- OTP Countdown -->
+            <div id="otpTimer" class="text-danger fw-bold mt-2 mb-3"></div>
+
+            <div class="d-flex justify-content-center align-items-center mb-3">
+                <span id="timeCountId" class="text-dark fw-semibold"></span>
+                <button type="button" class="btn btn-outline-dark btn-sm ms-1" id="resendId" onclick="resetTimeOtp()" disabled>
+                    Resend OTP
+                </button>
+                <span id="timeoutMessageId" class="text-danger ms-2"></span>
+            </div>
+
+
         </form>
 
+
     </div>
+
+
 </div>
 
 <script>
@@ -122,56 +137,83 @@
         }
     }
 
-    // Start OTP timer (default 120 seconds)
-    function startOtpTimer(duration = 120) {
-        clearInterval(otpCountdown);
-        let timer = duration;
+function timeCount() {
+    let timeCountEl = document.getElementById("timeCountId");
+    let resend = document.getElementById("resendId");
+    let timeoutMessage = document.getElementById("timeoutMessageId");
 
-        const otpInput = document.getElementById('otp');
-        const submitBtn = document.querySelector('button[type="submit"]');
-        const sendBtn = document.querySelector('button[onclick="sendOtp()"]');
+    let storedExpiryTime = sessionStorage.getItem("otpExpiry");
+    let expiryTime;
 
-        otpInput.disabled = false;
-        submitBtn.disabled = false;
-        sendBtn.disabled = true;
-
-        otpCountdown = setInterval(() => {
-            if (timer < 0) {
-                clearInterval(otpCountdown);
-                document.getElementById('otpTimer').innerHTML = `<span class="badge bg-danger">OTP expired. Please resend.</span>`;
-                otpInput.disabled = true;
-                submitBtn.disabled = true;
-                sendBtn.disabled = false;
-                return;
-            }
-
-            let minutes = Math.floor(timer / 60).toString().padStart(2, '0');
-            let seconds = (timer % 60).toString().padStart(2, '0');
-
-            document.getElementById('otpTimer').innerHTML =
-                `<span class="badge bg-danger">OTP valid for: ${minutes}:${seconds}</span>`;
-
-            timer--;
-        }, 1000);
+    if (!storedExpiryTime) {
+        expiryTime = Date.now() + 120000; // 2 min
+        sessionStorage.setItem("otpExpiry", expiryTime);
+    } else {
+        expiryTime = Number(storedExpiryTime);
     }
+
+    if (timer) {
+        clearInterval(timer);
+    }
+
+    timer = setInterval(function () {
+        const remainingTime = Math.floor((expiryTime - Date.now()) / 1000);
+
+        if (remainingTime > 0) {
+            timeCountEl.textContent = `Resend OTP in ${remainingTime}s`;
+            resend.disabled = true;
+            timeoutMessage.textContent = "";
+        } else {
+            timeCountEl.textContent = "";
+            timeoutMessage.textContent = "Time Out. You can resend OTP";
+            resend.disabled = false;
+            clearInterval(timer);
+            sessionStorage.removeItem("otpExpiry");
+        }
+    }, 1000);
+}
 
     // Send OTP function
-    function sendOtp() {
-        let email = document.getElementById("emailId").value;
-        if (!email) {
-            alert("Please enter email first");
-            return;
-        }
-
-        const xhttp = new XMLHttpRequest();
-        xhttp.open("GET", "http://localhost:8080/Hospital/sendOtp/" + encodeURIComponent(email), true);
-        xhttp.send();
-
-        xhttp.onload = function () {
-            alert(this.responseText); // backend confirmation
-            startOtpTimer(120); // start 2-minute countdown
-        }
+   function sendOtp() {
+    let email = document.getElementById("emailId").value;
+    if (!email) {
+        alert("Please enter email first");
+        return;
     }
+
+    const xhttp = new XMLHttpRequest();
+    xhttp.open("GET", "http://localhost:8080/Hospital/sendOtp/" + encodeURIComponent(email), true);
+    xhttp.send();
+
+    xhttp.onload = function () {
+        alert(this.responseText); // backend confirmation
+        timeCount(); // Start the resend timer
+        startOtpTimer(120); // start 2-minute OTP validity timer
+    }
+}
+
+function resendOtp() {
+    let email = document.getElementById("emailId").value;
+    if (!email) {
+        alert("Please enter email first");
+        return;
+    }
+
+    const xhttp = new XMLHttpRequest();
+    xhttp.open("GET", "http://localhost:8080/Hospital/sendOtp/" + encodeURIComponent(email), true);
+    xhttp.send();
+
+    xhttp.onload = function () {
+        alert(this.responseText); // backend confirmation
+        startOtpTimer(120); // restart 2-minute countdown
+        resendOtp();
+        timeCount();
+    }
+}
+
+
+
+
 </script>
 
 </body>
