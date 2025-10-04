@@ -137,20 +137,20 @@
 
                     <div class="mb-3">
                         <label for="doctor" class="form-label">Doctor:</label>
-                        <select id="doctor" name="doctorId" class="form-select" required>
+                        <select id="doctor" name="doctorName" class="form-select" required>
                             <option value="">-- Select Doctor --</option>
                             <c:forEach var="doc" items="${doctors}">
-                                <option value="${doc.id}">${doc.doctorName}</option>
+                                <option value="${doc.doctorName}">${doc.doctorName}</option>
                             </c:forEach>
                         </select>
                     </div>
 
                     <div class="mb-3">
                         <label for="slot" class="form-label">Slot:</label>
-                        <select id="slot" name="slotId" class="form-select" required>
+                        <select id="slot" name="timeSlot" class="form-select" required>
                             <option value="">-- Select Slot --</option>
                             <c:forEach var="slot" items="${slots}">
-                                <option value="${slot.id}">${slot.fromTime} - ${slot.toTime}</option>
+                                <option value="${slot.fromTime}-${slot.toTime}">${slot.fromTime} - ${slot.toTime}</option>
                             </c:forEach>
                         </select>
                     </div>
