@@ -11,9 +11,10 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
-            integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
-            crossorigin="anonymous"></script>
+          integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous">
+    </script>
     <link href="https://fonts.googleapis.com/css2?family=Quintessential&display=swap" rel="stylesheet">
+
 
     <style>
         body {
@@ -55,6 +56,7 @@
             font-size: 0.9rem;
             margin-top: 5px;
         }
+
     </style>
 </head>
 <body>
@@ -78,6 +80,8 @@
         </c:if>
 
         <form action="admin" method="post">
+
+
             <!-- Email -->
             <div class="mb-3 text-start">
                 <label for="emailId" class="form-label fw-semibold">Email</label>
@@ -85,6 +89,7 @@
                        onchange="checkUserEmail()" placeholder="Enter email" required>
                 <p id="displayEmail"></p>
             </div>
+
 
             <!-- Send OTP -->
             <button type="button" class="btn btn-primary btn-custom" onclick="sendOtp()">Send OTP</button>
@@ -96,8 +101,10 @@
                 <input type="text" class="form-control" id="otp" name="otp" placeholder="Enter OTP" required >
             </div>
 
+
             <!-- Submit -->
             <button type="submit" class="btn btn-success btn-custom" >Login</button>
+
 
             <!-- OTP Countdown -->
             <div id="otpTimer" class="text-danger fw-bold mt-2 mb-3"></div>
@@ -111,10 +118,10 @@
             </div>
         </form>
     </div>
-
 </div>
 
 <script>
+
     let otpCountdown; // global variable for countdown timer
 
     // Check if user email exists
@@ -209,4 +216,5 @@ function resendOtp() {
 </script>
 </body>
 </html>
+
 
