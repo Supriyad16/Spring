@@ -3,6 +3,8 @@ package com.xworkz.hospital.entity;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @AllArgsConstructor
@@ -19,7 +21,8 @@ import javax.persistence.*;
         @NamedQuery(name = "DoctorEntity.getById", query = "SELECT d FROM DoctorEntity d WHERE d.id = :id"),
         @NamedQuery(name = "DoctorEntity.getAllSpecialisation", query = "SELECT d FROM DoctorEntity d" ),
         @NamedQuery(name = "DoctorEntity.findDoctorByEmail", query = "SELECT d FROM DoctorEntity d WHERE d.email = :email"),
-        @NamedQuery(name = "getDoctorsBySpecialisation", query = "select e from DoctorEntity e where specialisation=:specialisation")
+        @NamedQuery(name = "DoctorEntity.getDoctorsBySpecialisation", query = "SELECT e FROM DoctorEntity e WHERE e.specialisation = :specialisation"),
+        @NamedQuery(name = "DoctorEntity.findByName", query = "SELECT d FROM DoctorEntity d WHERE d.doctorName = :doctorName")
 })
 
 public class DoctorEntity {
@@ -44,15 +47,12 @@ public class DoctorEntity {
 
     private int age;
 
-    private String availableTime;
 
     @Column(name = "imagePath")
     private String imagePath;
 
-//  @OneToMany(mappedBy = "doctor", cascade = CascadeType.ALL, orphanRemoval = true)
 
-    @ManyToOne
-    @JoinColumn(name = "slot_id")
-    private SlotEntity slotEntities = new SlotEntity();
+    @OneToMany(mappedBy = "doctor", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<UpdatedTimeSlotEntity> updatedTimeSlotEntities = new ArrayList<>();
 
 }
