@@ -2,6 +2,7 @@ package com.xworkz.hospital.dto;
 
 import lombok.*;
 
+import javax.persistence.NamedQuery;
 import javax.validation.constraints.NotNull;
 
 @AllArgsConstructor
@@ -9,6 +10,9 @@ import javax.validation.constraints.NotNull;
 @Setter
 @Getter
 @ToString
+
+
+
 public class UpdatedTimeSlotDTO {
 
     private int id;
@@ -18,6 +22,8 @@ public class UpdatedTimeSlotDTO {
 
     @NotNull(message = "Doctor ID should not be null")
     private Integer doctorId;
+
+    private String doctorName;
 
 
 }
