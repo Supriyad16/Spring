@@ -47,12 +47,17 @@ public class DoctorEntity {
 
     private int age;
 
-
-    @Column(name = "imagePath")
-    private String imagePath;
+    @OneToOne(mappedBy = "doctor",cascade = CascadeType.ALL,orphanRemoval = true)
+    private ImageEntity imageEntity;
 
 
     @OneToMany(mappedBy = "doctor", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<UpdatedTimeSlotEntity> updatedTimeSlotEntities = new ArrayList<>();
+
+    @OneToMany(mappedBy = "doctor",cascade = CascadeType.ALL,orphanRemoval = true)
+    private List<PatientEntity> patientEntities =new ArrayList<>();
+
+
+
 
 }

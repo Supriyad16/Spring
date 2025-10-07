@@ -2,6 +2,7 @@ package com.xworkz.hospital.dto;
 
 import com.xworkz.hospital.entity.SpecialisationEntity;
 import lombok.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.*;
 
@@ -37,7 +38,7 @@ public class DoctorDTO {
         @Max(60)
         private int age;
 
-        private String imagePath;
+        private MultipartFile image;
 
 
 }
