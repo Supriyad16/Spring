@@ -11,7 +11,7 @@ import java.util.List;
 @NoArgsConstructor
 @Setter
 @Getter
-@ToString
+@ToString(exclude = {"updatedTimeSlotEntities", "patientEntities", "imageEntity"})
 
 @Entity
 @Table(name="doctor_data")

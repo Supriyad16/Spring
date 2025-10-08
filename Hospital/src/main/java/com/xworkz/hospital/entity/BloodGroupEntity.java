@@ -16,7 +16,7 @@ import javax.persistence.*;
 
 @Table(name = "blood_group")
 
-@NamedQuery(name = "getBloodGroupList",query = "select e from BloodGroupEntity e")
+@NamedQuery(name = "getAllBloodGroup",query = "select e from BloodGroupEntity e")
 public class BloodGroupEntity {
 
 
