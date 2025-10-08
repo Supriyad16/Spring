@@ -13,15 +13,19 @@ public class PatientDTO {
 
     private int id;
 
+    private String registrationId;
+
     private String patientName;
 
     private String gender;
 
     private int age;
 
-    private String phoneNumber;
+    private long phoneNumber;
 
     private String email;
+
+    private String address;
 
     private String bloodGroup;
 
@@ -32,4 +36,10 @@ public class PatientDTO {
     private String doctorName;
 
     private String slot;
+
+    private String fees;
+
+
+    private int slotId;
+    private int doctorId;
 }
