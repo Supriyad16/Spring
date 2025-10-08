@@ -121,99 +121,74 @@
 </div>
 
 <script>
+    function fetchDoctorsAndSlots() {
+        var specSelect = document.getElementById("specialisation");
+        var doctorSelect = document.getElementById("doctor");
+        var slotSelect = document.getElementById("slot");
 
-    let otpCountdown; // global variable for countdown timer
+        var doctorSlotsMap = {};
 
-    // Check if user email exists
-    function checkUserEmail() {
-        let email = document.getElementById("emailId").value;
-        if (!email) return;
+        specSelect.addEventListener("change", function() {
+            var spec = specSelect.value;
+            doctorSelect.innerHTML = '<option value="">-- Select Doctor --</option>';
+            slotSelect.innerHTML = '<option value="">-- Select Slot --</option>';
+            doctorSlotsMap = {};
 
-        const xhttp = new XMLHttpRequest();
-        xhttp.open("GET", "http://localhost:8080/Hospital/userEmail/" + encodeURIComponent(email), true);
-        xhttp.send();
+            if (!spec) return;
 
-        xhttp.onload = function () {
-            document.getElementById("displayEmail").innerHTML = this.responseText;
-        }
+            var xhttp = new XMLHttpRequest();
+            xhttp.open("GET", "http://localhost:8080/Hospital/api/fetchDoctorAndSlots/" + encodeURIComponent(spec), true);
+            xhttp.send();
+
+            xhttp.onload = function() {
+                if (xhttp.status === 200) {
+                    var data = JSON.parse(this.responseText);
+                    var doctorMap = {};
+
+                    for (var i = 0; i < data.length; i++) {
+                        var slotDTO = data[i];
+                        var docId = slotDTO.doctorId;
+
+                        if (!doctorMap[docId]) doctorMap[docId] = slotDTO.doctorName;
+
+                        if (!doctorSlotsMap[docId]) doctorSlotsMap[docId] = [];
+                        doctorSlotsMap[docId].push({ id: slotDTO.id, timeSlot: slotDTO.timeSlot });
+                    }
+
+                    // Populate doctor dropdown
+                    for (var id in doctorMap) {
+                        var option = document.createElement("option");
+                        option.value = id;
+                        option.text = doctorMap[id];
+                        doctorSelect.add(option);
+                    }
+                } else {
+                    console.error("Error fetching doctors: " + xhttp.status);
+                }
+            };
+        });
+
+        doctorSelect.addEventListener("change", function() {
+            var docId = doctorSelect.value;
+            slotSelect.innerHTML = '<option value="">-- Select Slot --</option>';
+
+            if (!docId || !doctorSlotsMap[docId]) return;
+
+            for (var i = 0; i < doctorSlotsMap[docId].length; i++) {
+                var slot = doctorSlotsMap[docId][i];
+                var option = document.createElement("option");
+                option.value = slot.id;
+                option.text = slot.timeSlot;
+                slotSelect.add(option);
+            }
+        });
     }
 
-function timeCount() {
-    let timeCountEl = document.getElementById("timeCountId");
-    let resend = document.getElementById("resendId");
-    let timeoutMessage = document.getElementById("timeoutMessageId");
-
-    let storedExpiryTime = sessionStorage.getItem("otpExpiry");
-    let expiryTime;
-
-    if (!storedExpiryTime) {
-        expiryTime = Date.now() + 120000; // 2 min
-        sessionStorage.setItem("otpExpiry", expiryTime);
-    } else {
-        expiryTime = Number(storedExpiryTime);
-    }
-
-    if (timer) {
-        clearInterval(timer);
-    }
-
-    timer = setInterval(function () {
-        const remainingTime = Math.floor((expiryTime - Date.now()) / 1000);
-
-        if (remainingTime > 0) {
-            timeCountEl.textContent = `Resend OTP in ${remainingTime}s`;
-            resend.disabled = true;
-            timeoutMessage.textContent = "";
-        } else {
-            timeCountEl.textContent = "";
-            timeoutMessage.textContent = "Time Out. You can resend OTP";
-            resend.disabled = false;
-            clearInterval(timer);
-            sessionStorage.removeItem("otpExpiry");
-        }
-    }, 1000);
-}
-
-    // Send OTP function
-   function sendOtp() {
-    let email = document.getElementById("emailId").value;
-    if (!email) {
-        alert("Please enter email first");
-        return;
-    }
-
-    const xhttp = new XMLHttpRequest();
-    xhttp.open("GET", "http://localhost:8080/Hospital/sendOtp/" + encodeURIComponent(email), true);
-    xhttp.send();
-
-    xhttp.onload = function () {
-        alert(this.responseText); // backend confirmation
-        timeCount(); // Start the resend timer
-        startOtpTimer(120); // start 2-minute OTP validity timer
-    }
-}
-
-function resendOtp() {
-    let email = document.getElementById("emailId").value;
-    if (!email) {
-        alert("Please enter email first");
-        return;
-    }
-
-    const xhttp = new XMLHttpRequest();
-    xhttp.open("GET", "http://localhost:8080/Hospital/sendOtp/" + encodeURIComponent(email), true);
-    xhttp.send();
-
-    xhttp.onload = function () {
-        alert(this.responseText); // backend confirmation
-        startOtpTimer(120); // restart 2-minute countdown
-        resendOtp();
-        timeCount();
-    }
-
-}
-
+    // Initialize the function
+    document.addEventListener("DOMContentLoaded", fetchDoctorsAndSlots);
 </script>
+
+
 </body>
 </html>
 
