@@ -8,6 +8,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <title>Doctor Save Result</title>
 </head>
+
 <body class="bg-light">
 
 <nav class="navbar navbar-dark bg-dark py-3">
@@ -96,11 +97,6 @@
                             </tr>
 
 
-                            <tr>
-                                <th>Image Path</th>
-                                <td>${doctor.imagePath}</td>
-                            </tr>
-
                         </table>
                     </c:if>
 
@@ -114,6 +110,5 @@
         </div>
     </div>
 </div>
-
 </body>
 </html>
