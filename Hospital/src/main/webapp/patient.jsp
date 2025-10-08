@@ -38,7 +38,7 @@
             <div class="alert alert-danger text-center">${error}</div>
         </c:if>
 
-        <form action="patientRegister" method="post">
+        <form action="patient" method="post">
             <div class="row g-4">
                 <!-- Patient Details -->
                 <div class="col-md-6">
@@ -77,13 +77,17 @@
                     <label for="bloodGroup" class="form-label">Blood Group</label>
                     <select id="bloodGroup" name="bloodGroup" class="form-select" required>
                         <option value="">-- Select Blood Group --</option>
-                        <c:forEach var="bg" items="${slotBloodGroups}">
-                            <option value="${bg.bloodGroup}" ${patient.bloodGroup == bg.bloodGroup ? 'selected' : ''}>
+                        <c:forEach var="bg" items="${bloodGroupDtos}">
+                            <option value="${bg.bloodGroup}"
+                            <c:if test="${patient.bloodGroup == bg.bloodGroup}">selected</c:if>>
                             ${bg.bloodGroup}
                             </option>
                         </c:forEach>
                     </select>
                 </div>
+
+
+
 
 
                 <div class="col-md-6">
@@ -130,74 +134,94 @@
 </div>
 
 <script>
-    function fetchDoctorsAndSlots() {
-    var specSelect = document.getElementById("specialisation");
-    var doctorSelect = document.getElementById("doctor");
-    var slotSelect = document.getElementById("slot");
-    var doctorSlotsMap = {};
+    // When specialisation changes, fetch doctors
+ document.getElementById("specialisation").addEventListener("change", function() {
+     let specialisation = this.value;
+     let doctorSelect = document.getElementById("doctor");
+     let slotSelect = document.getElementById("slot");
 
-    specSelect.addEventListener("change", function() {
-        var spec = specSelect.value;
-        doctorSelect.innerHTML = '<option value="">-- Select Doctor --</option>';
-        slotSelect.innerHTML = '<option value="">-- Select Slot --</option>';
-        doctorSlotsMap = {};
+     console.log("Selected Specialisation:", specialisation);
 
-        if (!spec) return;
+     // reset doctor and slot dropdowns
+     doctorSelect.innerHTML = "<option value=''>-- Select Doctor --</option>";
+     slotSelect.innerHTML = "<option value=''>-- Select Slot --</option>";
 
-        var xhttp = new XMLHttpRequest();
-        xhttp.open("GET", "http://localhost:8080/Hospital/api/fetchDoctorAndSlots/" + encodeURIComponent(spec), true);
-        xhttp.send();
+     if (!specialisation) return;
 
-        xhttp.onload = function() {
-            if (xhttp.status === 200) {
-                try {
-                    var data = JSON.parse(xhttp.responseText);
-                    var doctorMap = {};
-                    console.log(data)
-                    data.forEach(function(slotDTO) {
-                        var docId = slotDTO.doctorId;
-                        if (!doctorMap[docId]) doctorMap[docId] = slotDTO.doctorName;
+     // Call controller to get doctors
+     let xhr = new XMLHttpRequest();
+     xhr.open("GET", "http://localhost:8080/Hospital/api/fetchDoctor/" + specialisation, true);
+     xhr.onload = function () {
+         console.log("Doctor API response status:", xhr.status);
+         console.log("Doctor API response text:", xhr.responseText);
 
-                        if (!doctorSlotsMap[docId]) doctorSlotsMap[docId] = [];
-                        doctorSlotsMap[docId].push({ id: slotDTO.id, timeSlot: slotDTO.timeSlot });
-                    });
+         if (xhr.status === 200) {
+             let response = xhr.responseText.trim();
+             if (response && response !== "No Doctors Found" && response !== "No doctors") {
+                 let doctors = response.split(",");
+                 console.log("Parsed Doctors Array:", doctors);
+                 doctors.forEach(function (doc) {
+                     let parts = doc.split("|"); // doctorName|id
+                     console.log("Doctor parts:", parts);
+                     let option = document.createElement("option");
+                     option.value = parts[1];  // doctorId
+                     option.text = parts[0];   // doctorName
+                     doctorSelect.add(option);
+                 });
+             } else {
+                 console.log("No doctors returned for this specialisation.");
+             }
+         }
+     };
+     xhr.onerror = function() {
+         console.error("Error fetching doctors!");
+     };
+     xhr.send();
+ });
 
-                    // populate doctor dropdown
-                    for (var id in doctorMap) {
-                        var option = document.createElement("option");
-                        option.value = id;
-                        option.textContent = doctorMap[id];
-                        doctorSelect.appendChild(option);
-                    }
-                } catch (e) {
-                    console.error("Error parsing JSON: ", e, xhttp.responseText);
-                }
-            } else {
-                console.error("Error fetching doctors: " + xhttp.status);
-            }
-        };
-    });
+ // When doctor changes, fetch slots
+ document.getElementById("doctor").addEventListener("change", function() {
+     let doctorId = this.value;
+     let slotSelect = document.getElementById("slot");
 
-    doctorSelect.addEventListener("change", function() {
-        var docId = doctorSelect.value;
-        slotSelect.innerHTML = '<option value="">-- Select Slot --</option>';
+     console.log("Selected Doctor ID:", doctorId);
 
-        if (!docId || !doctorSlotsMap[docId]) return;
+     // reset slots
+     slotSelect.innerHTML = "<option value=''>-- Select Slot --</option>";
 
-        doctorSlotsMap[docId].forEach(function(slot) {
-            var option = document.createElement("option");
-            option.value = slot.id;
-            option.text = slot.timeSlot;
-            slotSelect.add(option);
-        });
-    });
-}
+     if (!doctorId) return;
 
-document.addEventListener("DOMContentLoaded", fetchDoctorsAndSlots);
+     let xhr = new XMLHttpRequest();
+     xhr.open("GET", "http://localhost:8080/Hospital/api/fetchTimeSlot?id=" + doctorId, true);
+     xhr.onload = function () {
+         console.log("TimeSlot API response status:", xhr.status);
+         console.log("TimeSlot API response text:", xhr.responseText);
+
+         if (xhr.status === 200) {
+             let response = xhr.responseText.trim();
+             if (response && response !== "Not Assigned") {
+                 let slots = response.split("|");
+                 console.log("Parsed Slots Array:", slots);
+                 slots.forEach(function (s) {
+                     let parts = s.split(","); // timeSlot,id
+                     console.log("Slot parts:", parts);
+                     let option = document.createElement("option");
+                     option.value = parts[1];  // slotId
+                     option.text = parts[0];   // timeSlot
+                     slotSelect.add(option);
+                 });
+             } else {
+                 console.log("No slots returned for this doctor.");
+             }
+         }
+     };
+     xhr.onerror = function() {
+         console.error("Error fetching slots!");
+     };
+     xhr.send();
+ });
 
 </script>
-
-
 
 </body>
 </html>
