@@ -1,20 +1,25 @@
 package com.xworkz.hospital.repository;
 
-import com.xworkz.hospital.entity.DoctorEntity;
-import com.xworkz.hospital.entity.PatientEntity;
-import com.xworkz.hospital.entity.SlotEntity;
-import com.xworkz.hospital.entity.SpecialisationEntity;
+import com.xworkz.hospital.entity.*;
 
+import javax.persistence.EntityManager;
+import javax.persistence.Query;
 import java.util.List;
 
 public interface PatientRepository {
 
     boolean patientSave(PatientEntity patientEntity);
 
-    List<SpecialisationEntity> getAllSpecialisations();
+    List<UpdatedTimeSlotEntity> getTimeSlot(int id);
 
-    List<DoctorEntity> getAllDoctors(String specialisation);
+    UpdatedTimeSlotEntity getInterval(int id);
 
-    List<SlotEntity> getAllSlotSpecialisation(String specialisation);
+    List<BloodGroupEntity> getAllBloodGroup();
+
+
 
 }
+
+
+
+
