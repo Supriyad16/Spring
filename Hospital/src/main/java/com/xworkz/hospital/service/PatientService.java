@@ -1,10 +1,9 @@
 package com.xworkz.hospital.service;
 
+import com.xworkz.hospital.dto.BloodGroupDTO;
 import com.xworkz.hospital.dto.PatientDTO;
-import com.xworkz.hospital.entity.DoctorEntity;
-import com.xworkz.hospital.entity.PatientEntity;
-import com.xworkz.hospital.entity.SlotEntity;
-import com.xworkz.hospital.entity.SpecialisationEntity;
+import com.xworkz.hospital.dto.UpdatedTimeSlotDTO;
+import com.xworkz.hospital.entity.*;
 
 import java.util.List;
 
@@ -12,9 +11,8 @@ public interface PatientService {
 
     boolean patientSave(PatientDTO patientDTO);
 
-    List<SpecialisationEntity> getAllSpecialisation();
+    List<BloodGroupDTO> getAllBloodGroup();
 
-    List<DoctorEntity> getAllDoctors(String specialisation);
+    List<UpdatedTimeSlotDTO> getTimeSlot(int id);
 
-    List<SlotEntity> getAllSlotSpecialisations(String specialisation);
 }
