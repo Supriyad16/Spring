@@ -57,17 +57,7 @@ public class HospitalRestController {
     }
 
 
-    @GetMapping(value = "/getDoctorAndSlots/{specialisation}", produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    public Map<String, Object> getDoctorAndSlots(@PathVariable String specialisation) {
-        Map<String, Object> response = new HashMap<>();
-        List<DoctorEntity> doctors = patientService.getAllDoctors(specialisation);
-        log.info("Doctors fetched: " + doctors);
-        List<SlotEntity> slots = patientService.getAllSlotSpecialisations(specialisation);
-        response.put("doctors", doctors);
-        response.put("slots", slots);
-        return response;
-    }
+
 
 
 
