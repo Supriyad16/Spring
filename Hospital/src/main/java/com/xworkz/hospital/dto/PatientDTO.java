@@ -40,6 +40,6 @@ public class PatientDTO {
     private String fees;
 
 
-    private int slotId;
-    private int doctorId;
+    private Integer slotId;
+    private Integer doctorId;
 }
