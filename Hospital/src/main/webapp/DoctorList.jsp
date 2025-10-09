@@ -90,6 +90,7 @@
                     <th>Experience</th>
                     <th>Phone</th>
                     <th>Age</th>
+                    <th>Images</th>
                     <th>Actions</th>
                 </tr>
                 </thead>
@@ -104,13 +105,30 @@
                         <td>${doc.phoneNumber}</td>
                         <td>${doc.age}</td>
                         <td class="text-center">
+                            <c:choose>
+                                <c:when test="${not empty doc.imagePath}">
+                                    <img src="download?imagePath=${doc.imagePath}"
+                                         alt="Profile"
+                                         class="img-fluid rounded-circle"
+                                         style="width: 60px; height: 60px; object-fit: cover;"/>
+                                </c:when>
+                                <c:otherwise>
+                                    <span class="text-muted">No Image</span>
+                                </c:otherwise>
+                            </c:choose>
+                        </td>
+
+
+                        <td class="text-center">
                             <a href="UpdateDoctor?email=${doc.email}" class="btn btn-sm btn-warning me-2">
                                 <i class="bi bi-pencil-square"></i> Update
                             </a>
-                            <a href="delete?email=${doc.email}" class="btn btn-sm btn-danger"
+                            <a href="delete?email=${doc.email}"
+                               class="btn btn-sm btn-danger"
                                onclick="return confirm('Are you sure you want to delete this doctor?');">
                                 <i class="bi bi-trash"></i> Delete
                             </a>
+
                         </td>
                     </tr>
                 </c:forEach>
