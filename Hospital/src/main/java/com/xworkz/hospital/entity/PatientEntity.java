@@ -1,6 +1,5 @@
 package com.xworkz.hospital.entity;
 
-import com.xworkz.hospital.dto.BloodGroupDTO;
 import lombok.*;
 
 import javax.persistence.*;
