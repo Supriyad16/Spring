@@ -1,6 +1,5 @@
 package com.xworkz.hospital.dto;
 
-import com.xworkz.hospital.entity.SpecialisationEntity;
 import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -38,9 +37,10 @@ public class DoctorDTO {
         @Max(60)
         private int age;
 
+        private String imagePath;
+
+        // For uploading new image in update form
         private MultipartFile image;
-
-
 }
 
 

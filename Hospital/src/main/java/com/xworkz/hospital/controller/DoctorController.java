@@ -4,6 +4,7 @@ package com.xworkz.hospital.controller;
 import com.xworkz.hospital.dto.DoctorDTO;
 import com.xworkz.hospital.entity.DoctorEntity;
 import com.xworkz.hospital.entity.SpecialisationEntity;
+import com.xworkz.hospital.service.DoctorService;
 import com.xworkz.hospital.service.HospitalService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
@@ -17,11 +18,9 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+
 import java.util.List;
-import java.util.stream.Collectors;
+
 
 @Controller
 @RequestMapping("/")
@@ -30,13 +29,13 @@ import java.util.stream.Collectors;
 public class DoctorController {
 
     @Autowired
-    private HospitalService hospitalService;
+    private DoctorService doctorService;
 
 
         @GetMapping("/check")
         public String check(Model model) {
             {
-                List<SpecialisationEntity> specialisations = hospitalService.getAllSpecialisation();
+                List<SpecialisationEntity> specialisations = doctorService.getAllSpecialisation();
                 System.out.println("Doctor details are saved" + specialisations);
                 model.addAttribute("slotSpecialisations", specialisations);
                 return "doctor";
@@ -44,46 +43,71 @@ public class DoctorController {
         }
 
 
-        @PostMapping("/doctor")
-        public ModelAndView registerDoctor(@RequestParam("image") MultipartFile multipartFile, @Valid @ModelAttribute DoctorDTO doctorDTO, BindingResult bindingResult, ModelAndView modelAndView) throws IOException {
+    @PostMapping("/doctor")
+    public ModelAndView registerDoctor(@RequestParam("image") MultipartFile multipartFile,
+                                       @Valid @ModelAttribute("doctor") DoctorDTO doctorDTO,
+                                       BindingResult bindingResult,
+                                       ModelAndView modelAndView) throws IOException {
 
-            if (!multipartFile.isEmpty()) {
-                byte[] bytes = multipartFile.getBytes();
-                Path path = Paths.get("E:\\images\\" + doctorDTO.getDoctorName() + System.currentTimeMillis() + ".jpg");
-                Files.write(path, bytes);
-                String imageName = path.getFileName().toString();
-                doctorDTO.setImagePath(imageName);
-                System.out.println("Saved image as: " + imageName);
-            }
-
-            if (bindingResult.hasErrors()) {
-                bindingResult.getAllErrors().forEach(error -> System.out.println(error.getDefaultMessage()));
-                modelAndView.addObject("doctor", doctorDTO);
-                modelAndView.setViewName("doctor");
-            } else if (multipartFile.isEmpty()) {
-                modelAndView.addObject("error", "Please upload a profile image");
-                modelAndView.addObject("doctor", doctorDTO);
-                modelAndView.setViewName("doctor");
-            } else {
-                boolean saved = hospitalService.doctorSave(doctorDTO);
-                if (saved) {
-                    System.out.println("===================");
-                    modelAndView.addObject("message", "Doctor details saved successfully!");
-                    modelAndView.addObject("doctor", doctorDTO);
-                    modelAndView.setViewName("doctorResult");
-                } else {
-                    modelAndView.addObject("error", "Failed to save doctor details. Try again.");
-                    modelAndView.addObject("doctor", doctorDTO);
-                    modelAndView.setViewName("doctor");
-                }
-            }
-
-            List<SpecialisationEntity> specialisations = hospitalService.getAllSpecialisation();
-            System.out.println("specialisations" + specialisations);
-            modelAndView.addObject("slotSpecialisations", specialisations);
-
+        // Validate image
+        if (multipartFile.isEmpty()) {
+            modelAndView.addObject("error", "Please upload a profile image");
+            modelAndView.addObject("doctor", doctorDTO);
+            modelAndView.setViewName("doctor");
             return modelAndView;
         }
+
+        // Validate form fields
+        if (bindingResult.hasErrors()) {
+            bindingResult.getAllErrors().forEach(error ->
+                    System.out.println(error.getDefaultMessage()));
+            modelAndView.addObject("doctor", doctorDTO);
+            modelAndView.setViewName("doctor");
+        } else {
+            boolean saved = doctorService.doctorSave(multipartFile, doctorDTO);
+            if (saved) {
+                modelAndView.addObject("message", "Doctor details saved successfully!");
+                modelAndView.addObject("doctor", doctorDTO);
+                modelAndView.setViewName("doctorResult");
+            } else {
+                modelAndView.addObject("error", "Failed to save doctor details. Try again.");
+                modelAndView.addObject("doctor", doctorDTO);
+                modelAndView.setViewName("doctor");
+            }
+        }
+
+        // Load Specialisations for dropdown
+        List<SpecialisationEntity> specialisations = doctorService.getAllSpecialisation();
+        modelAndView.addObject("slotSpecialisations", specialisations);
+
+        return modelAndView;
     }
+
+    // Load Doctor form
+    @GetMapping("/form")
+    public ModelAndView doctorForm(ModelAndView modelAndView) {
+        modelAndView.addObject("doctor", new DoctorDTO());
+        List<SpecialisationEntity> specialisations = doctorService.getAllSpecialisation();
+        modelAndView.addObject("slotSpecialisations", specialisations);
+        modelAndView.setViewName("doctor");
+        return modelAndView;
+    }
+
+    @GetMapping("/delete")
+    public String deleteDoctorByEmail(@RequestParam("email") String email, Model model) {
+        log.info("Deleting doctor with email: {}", email);
+
+        boolean deleted = doctorService.deleteDoctorByEmail(email);
+
+        if (deleted) {
+            model.addAttribute("message", "Doctor with email " + email + " deleted successfully.");
+        } else {
+            model.addAttribute("error", "Doctor with email " + email + " not found or could not be deleted.");
+        }
+
+        // after deletion, redirect to doctor list page
+        return "redirect:/check"; // adjust to your list-mapping JSP (check.jsp or similar)
+    }
+}
 
 
