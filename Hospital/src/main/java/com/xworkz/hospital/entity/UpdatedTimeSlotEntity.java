@@ -10,7 +10,7 @@ import java.util.List;
 @NoArgsConstructor
 @Setter
 @Getter
-@ToString
+@ToString(exclude = {"doctor", "pateintEntities"})
 
 @Entity
 @Table(name = "updated_time_slot_data")
@@ -19,7 +19,7 @@ import java.util.List;
 @NamedQuery(name = "getIntervalById",query = "select e from UpdatedTimeSlotEntity e where e.id=:id")
 @NamedQuery(name = "getTimeSlotId",query = "select e from UpdatedTimeSlotEntity e where e.doctor.id=:id")
 
-public class UpdatedTimeSlotEntity {
+public class UpdatedTimeSlotEntity extends AuditEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

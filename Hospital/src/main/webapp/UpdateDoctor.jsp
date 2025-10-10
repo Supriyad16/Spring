@@ -19,7 +19,7 @@
         <div class="alert alert-danger">${error}</div>
     </c:if>
 
-    <form action="updateDoctor" method="post">
+    <form action="updateDoctor" method="post" enctype="multipart/form-data">
         <input type="hidden" name="id" value="${doc.id}">
         <input type="hidden" name="email" value="${doc.email}">
 
@@ -29,15 +29,15 @@
         </div>
 
         <div class="mb-3">
-            <label>Specialisation</label>
-            <select name="specialisation" class="form-select" required>
-                <c:forEach var="spec" items="${specialisations}">
-                    <option value="${spec.id}"
-                    <c:if test="${doc.specialisation eq spec.specialisation}">selected</c:if>>
-                    ${spec.specialisation}
-                    </option>
-                </c:forEach>
-            </select>
+        <select name="specialisation" class="form-select" required>
+            <option value="">-- Select Specialisation --</option>
+            <c:forEach var="spec" items="${specialisations}">
+                <option value="${spec.specialisation}"
+                <c:if test="${doc.specialisation eq spec.specialisation}">selected</c:if>>
+                ${spec.specialisation}
+                </option>
+            </c:forEach>
+        </select>
         </div>
 
         <div class="mb-3">
@@ -69,9 +69,23 @@
             </select>
         </div>
 
+        <div class="mb-3">
+            <label for="image" class="form-label">Upload Profile Picture</label>
+            <input type="file" class="form-control" id="image" name="image" accept="image/*">
+            <small id="profilePictureError" class="text-danger"></small>
+
+            <!-- Show existing image preview -->
+            <c:if test="${not empty doc.imagePath}">
+                <img src="download?imagePath=${doc.imagePath}"
+                     alt="Profile"
+                     style="width:100px; height:100px; object-fit:cover; margin-top:10px;">
+            </c:if>
+
+        </div>
+
         <div class="d-flex justify-content-between">
             <button type="submit" class="btn btn-success">Save</button>
-            <a href="${pageContext.request.contextPath}/doctor/list" class="btn btn-secondary">Back</a>
+            <a href="DoctorList" class="btn btn-secondary">Back</a>
         </div>
 
     </form>
