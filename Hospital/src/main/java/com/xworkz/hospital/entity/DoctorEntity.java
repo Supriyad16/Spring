@@ -22,7 +22,8 @@ import java.util.List;
         @NamedQuery(name = "DoctorEntity.getAllSpecialisation", query = "SELECT d FROM DoctorEntity d" ),
         @NamedQuery(name = "DoctorEntity.findDoctorByEmail", query = "SELECT d FROM DoctorEntity d WHERE d.email = :email"),
         @NamedQuery(name = "DoctorEntity.getDoctorsBySpecialisation", query = "SELECT e FROM DoctorEntity e WHERE e.specialisation = :specialisation"),
-        @NamedQuery(name = "DoctorEntity.findByName", query = "SELECT d FROM DoctorEntity d WHERE d.doctorName = :doctorName")
+        @NamedQuery(name = "DoctorEntity.findByName", query = "SELECT d FROM DoctorEntity d WHERE d.doctorName = :doctorName"),
+        @NamedQuery(name = "DoctorEntity.getDoctorsProfilePicture", query = "SELECT d, i.savedName FROM DoctorEntity d JOIN d.imageEntity i")
 })
 
 public class DoctorEntity {
