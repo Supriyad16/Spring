@@ -7,6 +7,7 @@ import com.xworkz.hospital.dto.SpecialsationDTO;
 
 import com.xworkz.hospital.entity.*;
 import com.xworkz.hospital.repository.HospitalRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,6 +19,7 @@ import java.time.LocalDateTime;
 import java.util.*;
 
 @Service
+@Slf4j
 public class HospitalServiceImp implements HospitalService {
 
     @Autowired
@@ -113,23 +115,23 @@ public class HospitalServiceImp implements HospitalService {
         return hospitalRepository.findByEmail(email);
     }
 
-    @Override
-    public boolean doctorSave(DoctorDTO doctorDTO) {
-        DoctorEntity doctorEntity = new DoctorEntity();
-        System.err.println(doctorDTO);
-        BeanUtils.copyProperties(doctorDTO, doctorEntity);
-        doctorEntity.setSpecialisation(doctorDTO.getSpecialisation());
-        hospitalRepository.doctorSave(doctorEntity);
-        return true;
-    }
+//    @Override
+//    public boolean doctorSave(DoctorDTO doctorDTO) {
+//        DoctorEntity doctorEntity = new DoctorEntity();
+//        System.err.println(doctorDTO);
+//        BeanUtils.copyProperties(doctorDTO, doctorEntity);
+//        doctorEntity.setSpecialisation(doctorDTO.getSpecialisation());
+//        hospitalRepository.doctorSave(doctorEntity);
+//        return true;
+//    }
 
 
-    @Override
-    public boolean slot(SlotDTO slotDTO) {
-        SlotEntity slotEntity = new SlotEntity();
-        BeanUtils.copyProperties(slotDTO, slotEntity);
-        return hospitalRepository.saveSlot(slotEntity);
-    }
+//    @Override
+//    public boolean slot(SlotDTO slotDTO) {
+//        SlotEntity slotEntity = new SlotEntity();
+//        BeanUtils.copyProperties(slotDTO, slotEntity);
+//        return hospitalRepository.saveSlot(slotEntity);
+//    }
 
     // HospitalServiceImp.java
     @Override
@@ -144,52 +146,42 @@ public class HospitalServiceImp implements HospitalService {
         return hospitalRepository.getAllSlots();
     }
 
+
     @Override
     public List<SpecialisationEntity> getAllSpecialisation() {
-       System.out.println("Specialisations fetched from DB: " + hospitalRepository.getAllSpecialisations());
+        System.out.println("Specialisations fetched from DB: " + hospitalRepository.getAllSpecialisations());
         return hospitalRepository.getAllSpecialisations();
     }
 
 
-    @Override
-    public boolean specialisationSave(SpecialsationDTO specialsationDTO) {
+//    public DoctorDTO findDoctorByEmail(String email) {
+//        DoctorEntity entity = hospitalRepository.findDoctorByEmail(email);
+//        System.out.println("Doctor entity fetched: " + entity);
+//        if (entity != null) {
+//            DoctorDTO dto = new DoctorDTO();
+//            BeanUtils.copyProperties(entity, dto);
+//
+//
+//                dto.setSpecialisation(dto.getSpecialisation()); // store id
+//                //dto.setSpecialisation(entity.getSpecialisation().getSpecialisation()); // store name
+//
+//            return dto;
+//        }
+//        return null;
+//    }
 
-        SpecialisationEntity specialisationEntity = new SpecialisationEntity();
-        BeanUtils.copyProperties(specialsationDTO, specialisationEntity);
-        return  hospitalRepository.specialisationSave(specialisationEntity);
-
-    }
-
-    public DoctorDTO findDoctorByEmail(String email) {
-        DoctorEntity entity = hospitalRepository.findDoctorByEmail(email);
-        System.out.println("Doctor entity fetched: " + entity);
-        if (entity != null) {
-            DoctorDTO dto = new DoctorDTO();
-            BeanUtils.copyProperties(entity, dto);
-
-
-
-
-                dto.setSpecialisation(dto.getSpecialisation()); // store id
-                //dto.setSpecialisation(entity.getSpecialisation().getSpecialisation()); // store name
-
-            return dto;
-        }
-        return null;
-    }
-
-    @Override
-    public SpecialisationEntity getById(int id) {
-        return hospitalRepository.getById(id);
-    }
+//    @Override
+//    public SpecialisationEntity getById(int id) {
+//        return hospitalRepository.getById(id);
+//    }
 
 
-    public boolean updateDoctorByEmail(String email,DoctorDTO doctorDTO) {
-
-        DoctorEntity doctorEntity = new DoctorEntity();
-        BeanUtils.copyProperties(doctorDTO, doctorEntity);
-        return hospitalRepository.updateDoctorByEmail(email, doctorEntity);
-    }
+//    public boolean updateDoctorByEmail(String email,DoctorDTO doctorDTO) {
+//
+//        DoctorEntity doctorEntity = new DoctorEntity();
+//        BeanUtils.copyProperties(doctorDTO, doctorEntity);
+//        return hospitalRepository.updateDoctorByEmail(email, doctorEntity);
+//    }
 
     @Override
     public List<SlotEntity> getAllSlotSpecialisations(String specialisation) {
@@ -197,19 +189,25 @@ public class HospitalServiceImp implements HospitalService {
     }
 
     @Override
-    public boolean assignSlotToDoctor(int doctorId, int slotId) {
-        DoctorEntity doctor = hospitalRepository.findDoctorById(doctorId);
-        SlotEntity slot = hospitalRepository.findSlotById(slotId);
+    public boolean assignSlotToDoctor(String doctorName, String timeSlot) {
+        DoctorEntity doctorEntity = hospitalRepository.findByName(doctorName);
+        if (doctorEntity == null) {
+            log.info("Doctor not found with name: " + doctorName);
+            return false;
+        }
 
-        if (doctor != null && slot != null) {
-            doctor.setSlotEntities(slot);
+        UpdatedTimeSlotEntity timeSlotEntity = new UpdatedTimeSlotEntity();
+        timeSlotEntity.setDoctor(doctorEntity);
+        timeSlotEntity.setTimeSlot(timeSlot);
+        timeSlotEntity.setDoctorName(doctorEntity.getDoctorName());
 
-            String availableTime = slot.getFromTime() + " - " + slot.getToTime();
-            doctor.setAvailableTime(availableTime);
+        boolean updated = hospitalRepository.assignSlotToDoctor(timeSlotEntity);
 
-            hospitalRepository.updateDoctor(doctor);
+        if (updated) {
+            log.info("Slot assigned to doctor successfully");
             return true;
         }
+        log.info("Failed to assign slot to doctor");
         return false;
     }
 
@@ -218,14 +216,5 @@ public class HospitalServiceImp implements HospitalService {
     public List<DoctorEntity> getUnassignedDoctors(String specialisation) {
         return hospitalRepository.getUnassignedDoctors(specialisation);
     }
-
-@Override
-    public boolean deleteDoctorByEmail(String email) {
-        DoctorEntity doctorEntity = hospitalRepository.findDoctorByEmail(email);
-        if (doctorEntity != null) {
-            hospitalRepository.deleteDoctorByEmail(email);
-            return true;
-        }
-        return false;
-    }
 }
+

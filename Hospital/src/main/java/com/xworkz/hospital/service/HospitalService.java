@@ -25,9 +25,9 @@ public interface HospitalService {
 
     HospitalEntity findByEmail(String email);
 
-    boolean doctorSave(DoctorDTO doctorDTO);
+//    boolean doctorSave(DoctorDTO doctorDTO);
 
-    boolean slot(SlotDTO slotDTO);
+//    boolean slot(SlotDTO slotDTO);
 
     List<DoctorEntity> getAllDoctors();
 
@@ -35,21 +35,21 @@ public interface HospitalService {
 
     List<SpecialisationEntity> getAllSpecialisation();
 
-    boolean specialisationSave(SpecialsationDTO specialsationDTO);
+//    boolean specialisationSave(SpecialsationDTO specialsationDTO);
 
-    DoctorDTO findDoctorByEmail(String email);
+//    DoctorDTO findDoctorByEmail(String email);
 
-    SpecialisationEntity getById(int id);
+//    SpecialisationEntity getById(int id);
 
-    boolean updateDoctorByEmail(String email, DoctorDTO doctorDTO);
+//    boolean updateDoctorByEmail(String email, DoctorDTO doctorDTO);
 
     List<SlotEntity> getAllSlotSpecialisations(String specialisation);
 
     List<DoctorEntity> getUnassignedDoctors(String specialisation);
 
-    boolean assignSlotToDoctor(int doctorId, int slotId);
+    boolean assignSlotToDoctor(String doctorName, String timeSlot);
 
-    boolean deleteDoctorByEmail(String email);
+
 
 
 
