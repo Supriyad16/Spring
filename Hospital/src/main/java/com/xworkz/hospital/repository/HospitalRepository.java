@@ -13,9 +13,9 @@ public interface HospitalRepository {
 
     void save(HospitalEntity entity);
 
-    boolean doctorSave(DoctorEntity doctorEntity);
+//    boolean doctorSave(DoctorEntity doctorEntity);
 
-    boolean saveSlot(SlotEntity slotEntity);
+//    boolean saveSlot(SlotEntity slotEntity);
 
     List<DoctorEntity> getAllDoctors();
 
@@ -27,29 +27,29 @@ public interface HospitalRepository {
 
     DoctorEntity findDoctorById(int id);
 
-    DoctorEntity findDoctorByEmail(String email);
+//    DoctorEntity findDoctorByEmail(String email);
 
     SlotEntity findSlotById(int id);
 
-    SpecialisationEntity getById(int id);
+//    SpecialisationEntity getById(int id);
 
   //  SpecialisationEntity findSpecialisationById(String specialisation);
 
     List<SlotEntity> getAllSlotSpecialisations(String specialisation);
 
-    boolean  updateDoctorByEmail(String email, DoctorEntity updatedDoctor);
+   // boolean  updateDoctorByEmail(String email, DoctorEntity updatedDoctor);
 
-    boolean specialisationSave(SpecialisationEntity specialisationEntity);
+//    boolean specialisationSave(SpecialisationEntity specialisationEntity);
 
     List<DoctorEntity> getUnassignedDoctors(String specialisation);
 
     void updateDoctor(DoctorEntity doctor);
 
-    boolean assignSlotToDoctor(int doctorId, int slotId);
-
-    boolean deleteDoctorByEmail(String email);
+    boolean assignSlotToDoctor(UpdatedTimeSlotEntity updatedTimeSlotEntity);
 
    // void saveUpdatedTimeSlot(UpdatedTimeSlotEntity slotEntity);
+
+    DoctorEntity findByName(String doctorName);
 
 
 }
