@@ -15,7 +15,7 @@ import javax.persistence.*;
 
 @NamedQuery(name = "getAllSlots", query = "SELECT s FROM SlotEntity s")
 @NamedQuery(name="getAllSlotSpecialisations", query = "SELECT s FROM SlotEntity s WHERE s.specialisation = :specialisation")
-public class SlotEntity {
+public class SlotEntity extends AuditEntity {
 
 
     @Id

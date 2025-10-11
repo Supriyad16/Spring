@@ -15,7 +15,7 @@ import javax.persistence.*;
 @Table(name="specialsation_data")
 
 
-public class SpecialisationEntity {
+public class SpecialisationEntity extends AuditEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
