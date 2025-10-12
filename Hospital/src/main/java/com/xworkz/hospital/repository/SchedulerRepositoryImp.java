@@ -18,8 +18,7 @@ public class SchedulerRepositoryImp implements SchedulerRepository {
     public int clearExpiredOtps() {
         LocalDateTime cutoff = LocalDateTime.now().minusMinutes(5);
         Query query = entityManager.createQuery(
-                "UPDATE HospitalEntity h SET h.OTP = NULL WHERE h.localDateTime < :cutoff"
-        );
+                "UPDATE HospitalEntity h SET h.OTP = NULL WHERE h.localDateTime < :cutoff");
         query.setParameter("cutoff", cutoff);
         return query.executeUpdate();
     }
