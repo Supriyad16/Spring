@@ -11,6 +11,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -53,36 +54,51 @@ public class PatientServiceImp implements PatientService {
 
 
     @Override
+    @Transactional
     public boolean patientSave(PatientDTO patientDTO) {
-        if (patientDTO != null) {
-            PatientEntity pateintEntity = new PatientEntity();
-            pateintEntity.setRegistrationId(patientDTO.getRegistrationId());
-            pateintEntity.setPatientName(patientDTO.getPatientName());
-            pateintEntity.setAge(patientDTO.getAge());
-            pateintEntity.setBloodGroup(patientDTO.getBloodGroup());
-            pateintEntity.setEmail(patientDTO.getEmail());
-            pateintEntity.setPhoneNumber(patientDTO.getPhoneNumber());
-            pateintEntity.setAddress(patientDTO.getAddress());
-            pateintEntity.setDisease(patientDTO.getDisease());
-            pateintEntity.setSpecialisation(patientDTO.getSpecialisation());
-            pateintEntity.setFees(patientDTO.getFees());
-            pateintEntity.setDoctorName(patientDTO.getDoctorName());
-            pateintEntity.setSlot(patientDTO.getSlot());
+        if (patientDTO == null) return false;
 
-            DoctorEntity entity1 = doctorRepository.findById(patientDTO.getDoctorId());
-            log.info(entity1.toString());
-            if (entity1 != null) {
-                pateintEntity.setDoctor(entity1);
-            }
+        PatientEntity patientEntity = new PatientEntity();
+        patientEntity.setRegistrationId(patientDTO.getRegistrationId());
+        patientEntity.setPatientName(patientDTO.getPatientName());
+        patientEntity.setAge(patientDTO.getAge());
+        patientEntity.setGender(patientDTO.getGender());
+        patientEntity.setBloodGroup(patientDTO.getBloodGroup());
+        patientEntity.setEmail(patientDTO.getEmail());
+        patientEntity.setPhoneNumber(patientDTO.getPhoneNumber());
+        patientEntity.setAddress(patientDTO.getAddress());
+        patientEntity.setDisease(patientDTO.getDisease());
+        patientEntity.setSpecialisation(patientDTO.getSpecialisation());
+        patientEntity.setFees(patientDTO.getFees());
+        patientEntity.setDoctorName(patientDTO.getDoctorName());
+        patientEntity.setSlot(patientDTO.getSlot());
 
-            UpdatedTimeSlotEntity entity2 = patientRepository.getInterval(patientDTO.getSlotId());
-            if (entity2 != null) {
-                pateintEntity.setSlotEntity(entity2);
+        // Set doctor
+        if (patientDTO.getDoctorId() != null) {
+            DoctorEntity doctorEntity = doctorRepository.findById(patientDTO.getDoctorId());
+            if (doctorEntity != null) {
+                patientEntity.setDoctor(doctorEntity);
+                patientEntity.setDoctorName(doctorEntity.getDoctorName());
+            } else {
+                log.warn("Doctor not found with ID: {}", patientDTO.getDoctorId());
             }
-            return true;
         }
 
-        return false;
+        // Set slot
+        if (patientDTO.getSlotId() != null) {
+            UpdatedTimeSlotEntity slotEntity = patientRepository.getInterval(patientDTO.getSlotId());
+            if (slotEntity != null) {
+                patientEntity.setSlotEntity(slotEntity);
+                patientEntity.setSlot(slotEntity.getTimeSlot());
+            } else {
+                log.warn("Slot not found with ID: {}", patientDTO.getSlotId());
+            }
+        }
 
+        // Save to DB
+        patientRepository.patientSave(patientEntity);
+        log.info("Patient saved: {}", patientEntity);
+
+        return true;
     }
 }
