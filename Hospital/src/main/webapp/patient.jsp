@@ -44,7 +44,8 @@
                 <div class="col-md-6">
                     <label for="patientName" class="form-label">Patient Name</label>
                     <input type="text" class="form-control" id="patientName" name="patientName"
-                           value="${patient.patientName}" required>
+                           value="${patient.patientName}" oninput="validatePatientName()" required>
+                    <span id="patientNameError" style="color:red;"></span>
                 </div>
 
                 <div class="col-md-6">
@@ -61,18 +62,21 @@
 
                 <div class="col-md-6">
                     <label for="age" class="form-label">Age</label>
-                    <input type="number" class="form-control" id="age" name="age" value="${patient.age}" required>
+                    <input type="number" class="form-control" id="age" name="age" value="${patient.age}" oninput="validateAge()" required>
+                    <span id="patientAgeError" style="color:red;"></span>
                 </div>
 
                 <div class="col-md-6">
                     <label for="phoneNumber" class="form-label">Phone Number</label>
                     <input type="text" class="form-control" id="phoneNumber" name="phoneNumber"
-                           value="${patient.phoneNumber}" required>
+                           value="${patient.phoneNumber}" oninput="validatePhoneNumber()" required>
+                    <span id="patientPhoneErrorId" style="color:red;"></span>
                 </div>
 
                 <div class="col-md-6">
                     <label for="email" class="form-label">Email</label>
-                    <input type="email" class="form-control" id="email" name="email" value="${patient.email}" required>
+                    <input type="email" class="form-control" id="email" name="email" value="${patient.email}" oninput="validateEmail()" required>
+                    <span id="patientEmailError" style="color:red;"></span>
                 </div>
 
                 <div class="col-md-6">
@@ -88,18 +92,16 @@
                     </select>
                 </div>
 
-
-
-
-
                 <div class="col-md-6">
                     <label for="address" class="form-label">Address</label>
-                    <input type="text" class="form-control" id="address" name="address" value="${patient.address}" required>
+                    <input type="text" class="form-control" id="address" name="address" value="${patient.address}" oninput="validateAddress()" required>
+                    <span id="addressError" style="color:red;"></span>
                 </div>
 
                 <div class="col-12">
                     <label for="disease" class="form-label">Disease</label>
-                    <textarea class="form-control" id="disease" name="disease" required>${patient.disease}</textarea>
+                    <textarea class="form-control" id="disease" name="disease" oninput="validateDisease()" required>${patient.disease} </textarea>
+                    <span id="diseaseError" style="color:red;"></span>
                 </div>
 
                 <!-- Dynamic Selection -->
@@ -120,26 +122,24 @@
                     </select>
                 </div>
 
+                <div class="col-md-4">
+                    <label for="slot" class="form-label">Time Slot</label>
+                    <select id="slot" name="slotId" class="form-select" required>
+                        <option selected disabled>-- Select Slot --</option>
+                    </select>
+                </div>
 
+                <div class="col-12 text-center mt-4">
+                    <button type="submit" class="btn btn-primary px-5">Save</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
 
-                                    <div class="col-md-4">
-                                        <label for="slot" class="form-label">Time Slot</label>
-                                        <select id="slot" name="slotId" class="form-select" required>
-                                            <option selected disabled>-- Select Slot --</option>
-                                        </select>
-                                    </div>
-
-                                    <div class="col-12 text-center mt-4">
-                                        <button type="submit" class="btn btn-primary px-5">Save</button>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-
-                    <script>
-                        // When specialisation changes, fetch doctors
-                     document.getElementById("specialisation").addEventListener("change", function() {
+<script>
+    // When specialisation changes, fetch doctors
+    document.getElementById("specialisation").addEventListener("change", function() {
                          let specialisation = this.value;
                          let doctorSelect = document.getElementById("doctor");
                          let slotSelect = document.getElementById("slot");
@@ -225,7 +225,7 @@
                          xhr.send();
                      });
 
-                    </script>
-
-                    </body>
-                    </html>
+</script>
+<script src="patient.js"></script>
+</body>
+</html>
