@@ -16,7 +16,7 @@ import javax.persistence.*;
 @NamedQuery(name = "PatientEntity.getByEmail", query = "select  e from PatientEntity e where e.email=:email")
 @NamedQuery(name = "PatientEntity.getByRegistrationId", query = "SELECT e FROM PatientEntity e WHERE e.registrationId = :regId")
 
-public class PatientEntity {
+public class PatientEntity extends AuditEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
