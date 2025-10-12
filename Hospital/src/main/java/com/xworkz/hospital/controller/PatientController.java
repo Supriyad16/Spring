@@ -105,5 +105,4 @@ public class PatientController {
 
         return view;
     }
-
-    }
+}
