@@ -138,8 +138,6 @@ public class HospitalController {
     }
 
 
-
-
     @GetMapping("download")
     public void download(HttpServletResponse response, @RequestParam String imagePath)throws IOException{
         response.setContentType("image/jpeg");
