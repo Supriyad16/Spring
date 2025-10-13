@@ -60,7 +60,7 @@ public class PatientController {
         view.addObject("slotSpecialisations", specializationDtos);
         view.addObject("bloodGroupDtos", bloodGroupDtos);
 
-        // Validation errors
+
         if (result.hasErrors()) {
             List<String> errorMessages = result.getAllErrors()
                     .stream()
@@ -72,7 +72,7 @@ public class PatientController {
             return view;
         }
 
-        // Safe Registration ID
+
         if (dto != null) {
             String patientNamePart = dto.getPatientName() != null
                     ? dto.getPatientName().substring(0, Math.min(2, dto.getPatientName().length()))
