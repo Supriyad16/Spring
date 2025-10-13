@@ -85,5 +85,4 @@ public class SlotController {
 
         return modelAndView;
     }
-
 }
