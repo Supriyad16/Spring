@@ -34,6 +34,7 @@ public class AddSlotController {
             model.addAttribute("slotSpecialisations", specialisations);
             return "addSlots";
         }
+
     }
 
 
