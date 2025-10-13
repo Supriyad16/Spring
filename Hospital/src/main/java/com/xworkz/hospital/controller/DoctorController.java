@@ -76,14 +76,14 @@ public class DoctorController {
             }
         }
 
-        // Load Specialisations for dropdown
+
         List<SpecialisationEntity> specialisations = doctorService.getAllSpecialisation();
         modelAndView.addObject("slotSpecialisations", specialisations);
 
         return modelAndView;
     }
 
-    // Load Doctor form
+
     @GetMapping("/form")
     public ModelAndView doctorForm(ModelAndView modelAndView) {
         modelAndView.addObject("doctor", new DoctorDTO());
@@ -105,8 +105,8 @@ public class DoctorController {
             model.addAttribute("error", "Doctor with email " + email + " not found or could not be deleted.");
         }
 
-        // after deletion, redirect to doctor list page
-        return "redirect:/check"; // adjust to your list-mapping JSP (check.jsp or similar)
+
+        return "redirect:/check";
     }
 }
 
