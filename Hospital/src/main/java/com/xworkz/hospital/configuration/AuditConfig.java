@@ -16,5 +16,6 @@ public class AuditConfig {
     @Bean
     public AuditorAware<String> auditorProvider(ObjectFactory<HttpSession> session) {
         return new AuditAwareImp(session);
+
     }
 }
