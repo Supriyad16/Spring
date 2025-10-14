@@ -55,5 +55,4 @@ public class DatabaseConfig {
         dataSource.setJdbcUrl(url);
         return dataSource;
     }
-
 }
