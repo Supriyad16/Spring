@@ -62,7 +62,6 @@ public class HospitalConfiguration implements WebMvcConfigurer {
         commonsMultipartResolver.setMaxUploadSize(1025231);
         commonsMultipartResolver.setMaxInMemorySize(1025231);
         return commonsMultipartResolver;
-
     }
 
 
