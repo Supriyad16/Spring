@@ -72,3 +72,5 @@ function validateDisease() {
         return true;
     }
 }
+
+
