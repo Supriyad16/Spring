@@ -49,7 +49,10 @@
 
         <a class="btn btn-primary text-white fw-bold" href="admin.jsp">Login</a>
 
-        <a class="btn btn-primary text-white fw-bold" href="patient">Patient</a>
+        <a class="btn btn-primary text-white fw-bold" href="patientList">Patient List</a>
+
+
+        <!--        <a class="btn btn-primary text-white fw-bold" href="patient">Patient</a>-->
 
     </div>
 </div>
