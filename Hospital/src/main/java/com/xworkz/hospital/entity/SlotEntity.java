@@ -1,6 +1,7 @@
 package com.xworkz.hospital.entity;
 
 import lombok.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 
@@ -15,8 +16,13 @@ import javax.persistence.*;
 
 @NamedQuery(name = "getAllSlots", query = "SELECT s FROM SlotEntity s")
 @NamedQuery(name="getAllSlotSpecialisations", query = "SELECT s FROM SlotEntity s WHERE s.specialisation = :specialisation")
-public class SlotEntity extends AuditEntity {
+@NamedQuery(
+        name = "checkDuplicates",
+        query = "SELECT s FROM SlotEntity s WHERE s.specialisation = :spec AND s.fromTime = :fromTime AND s.toTime = :toTime"
+)
 
+
+public class SlotEntity extends AuditEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,10 +30,10 @@ public class SlotEntity extends AuditEntity {
 
     private String specialisation;
 
+    //@DateTimeFormat(iso = DateTimeFormat.ISO.TIME)
     private String fromTime;
 
+    //@DateTimeFormat(iso = DateTimeFormat.ISO.TIME)
     private String toTime;
-
-
 
 }
