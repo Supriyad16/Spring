@@ -17,13 +17,15 @@ import java.util.List;
 @Table(name="doctor_data")
 
 @NamedQueries({
-        @NamedQuery(name = "DoctorEntity.getAllDoctors", query = "SELECT d FROM DoctorEntity d"),
+        @NamedQuery(name="DoctorEntity.getAllDoctors", query="SELECT d FROM DoctorEntity d WHERE d.doctorName = :doctor"),
         @NamedQuery(name = "DoctorEntity.getById", query = "SELECT d FROM DoctorEntity d WHERE d.id = :id"),
         @NamedQuery(name = "DoctorEntity.getAllSpecialisation", query = "SELECT d FROM DoctorEntity d" ),
         @NamedQuery(name = "DoctorEntity.findDoctorByEmail", query = "SELECT d FROM DoctorEntity d WHERE d.email = :email"),
         @NamedQuery(name = "DoctorEntity.getDoctorsBySpecialisation", query = "SELECT e FROM DoctorEntity e WHERE e.specialisation = :specialisation"),
         @NamedQuery(name = "DoctorEntity.findByName", query = "SELECT d FROM DoctorEntity d WHERE d.doctorName = :doctorName"),
-        @NamedQuery(name = "DoctorEntity.getDoctorsProfilePicture", query = "SELECT d, i.savedName FROM DoctorEntity d JOIN d.imageEntity i")
+        @NamedQuery(name = "DoctorEntity.getDoctorsProfilePicture", query = "SELECT d, i.savedName FROM DoctorEntity d JOIN d.imageEntity i"),
+        @NamedQuery(name = "DoctorEntity.getDoctorEmailCount", query = "select count(e) from DoctorEntity e where e.email = :email")
+
 })
 
 public class DoctorEntity {
@@ -57,8 +59,6 @@ public class DoctorEntity {
 
     @OneToMany(mappedBy = "doctor",cascade = CascadeType.ALL,orphanRemoval = true)
     private List<PatientEntity> patientEntities =new ArrayList<>();
-
-
 
 
 }
