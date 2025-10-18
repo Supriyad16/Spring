@@ -8,6 +8,7 @@ import com.xworkz.hospital.entity.HospitalEntity;
 import com.xworkz.hospital.entity.SlotEntity;
 import com.xworkz.hospital.service.HospitalService;
 import com.xworkz.hospital.service.PatientService;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,14 +22,14 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/")
+@Slf4j
 
 public class HospitalRestController {
 
-    private static final Logger log = LoggerFactory.getLogger(HospitalRestController.class);
+
     @Autowired
     public HospitalService hospitalService;
-    @Autowired
-    public PatientService patientService;
+
 
     @GetMapping(value = "/userEmail/{email}", produces = MediaType.APPLICATION_JSON_VALUE)
     public String userEmail(@PathVariable String email) {

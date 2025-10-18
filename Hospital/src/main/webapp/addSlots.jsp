@@ -81,6 +81,8 @@
             <li class="nav-item"><a class="nav-link text-white" href="slot"><b>Slots</b></a></li>
             <li class="nav-item"><a class="nav-link text-white" href="#"><b>Add Slots</b></a></li>
             <li class="nav-item"><a class="nav-link text-white" href="DoctorList"><b>Update Doctor</b></a></li>
+            <li class="nav-item"><a class="nav-link text-white" href="patient"><b>Patient</b></a></li>
+
 
             <li class="nav-item mt-3"><a href="admin.jsp" class="btn btn-outline-light btn-lg w-100">Logout</a></li>
         </ul>
@@ -161,6 +163,7 @@
         </div>
     </c:if>
 </div>
+
 
 </body>
 </html>
