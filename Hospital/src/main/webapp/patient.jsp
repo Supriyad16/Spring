@@ -38,7 +38,7 @@
             <div class="alert alert-danger text-center">${error}</div>
         </c:if>
 
-        <form action="patient" method="post">
+        <form action="patient" method="post" enctype="multipart/form-data">
             <div class="row g-4">
                 <!-- Patient Details -->
                 <div class="col-md-6">
@@ -127,6 +127,12 @@
                     <select id="slot" name="slotId" class="form-select" required>
                         <option selected disabled>-- Select Slot --</option>
                     </select>
+                </div>
+
+                <div class="mb-3">
+                    <label for="images" class="form-label">Upload Profile Picture</label>
+                    <input type="file" class="form-control" id="images" name="images" multiple accept="image/*" required >
+                    <small id="profilePictureError" class="text-danger"></small>
                 </div>
 
                 <div class="col-12 text-center mt-4">
