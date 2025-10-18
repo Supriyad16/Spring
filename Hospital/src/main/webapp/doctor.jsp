@@ -63,6 +63,8 @@
             <li class="nav-item"><a class="nav-link text-white" href="slot"><b>Slots</b></a></li>
             <li class="nav-item"><a class="nav-link text-white" href="disp"><b>Add Slots</b></a></li>
             <li class="nav-item"><a class="nav-link text-white" href="DoctorList"><b>Update Doctor</b></a></li>
+            <li class="nav-item"><a class="nav-link text-white" href="patient"><b>Patient</b></a></li>
+
 
             <li class="nav-item mt-3">
                 <a href="admin.jsp" class="btn btn-outline-light btn-lg w-100">Logout</a>
@@ -80,7 +82,7 @@
             <div class="col-md-6">
             <label for="doctorName" class="form-label">Doctor Name</label>
             <input type="text" class="form-control" id="doctorName" name="doctorName"
-                    oninput="validateName()" onkeypress="return onlyLetters(event)" required>
+                    oninput="validateName()" onkeypress="return onlyLetters(event)"  required>
             <span id="doctorNameError" style="color:red;"></span>
             </div>
 
@@ -117,8 +119,10 @@
 
             <div class="col-md-6">
                 <label for="email" class="form-label">Email</label>
-                <input type="email" class="form-control" id="email" name="email" required oninput="validateEmail()">
+                <input type="email" class="form-control" id="email" name="email" required onchange="doctorEmail()" oninput="validateEmail()">
                 <span id="emailError" style="color:red;"></span>
+                <span id="displayEmail" style="color:red;"></span>
+
             </div>
 
             <div class="col-md-6">
@@ -159,5 +163,22 @@
     </div>
 </div>
 
+<script>
+    function doctorEmail() {
+    let email = document.getElementById("email").value;
+        if (!email) return;
+
+        const xhttp = new XMLHttpRequest();
+        xhttp.open("GET", "http://localhost:8080/Hospital/doctorEmail/" + encodeURIComponent(email), true);
+        xhttp.send();
+
+        xhttp.onload = function () {
+            document.getElementById("displayEmail").innerHTML = this.responseText;
+            console.log("Doctor email check");
+            console.log("Calling:", "http://localhost:8080/Hospital/doctorEmail/" + encodeURIComponent(email));
+
+        };
+    }
+</script>
 </body>
 </html>
