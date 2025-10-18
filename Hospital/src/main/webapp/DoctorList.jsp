@@ -67,6 +67,8 @@
             <li class="nav-item"><a class="nav-link text-white" href="slot"><b>Slots</b></a></li>
             <li class="nav-item"><a class="nav-link text-white" href="disp"><b>Add Slots</b></a></li>
             <li class="nav-item"><a class="nav-link text-white" href="#"><b>Update Doctor</b></a></li>
+            <li class="nav-item"><a class="nav-link text-white" href="patient"><b>Patient</b></a></li>
+
             <li class="nav-item mt-3">
                 <a href="admin.jsp" class="btn btn-outline-light btn-lg w-100">Logout</a>
             </li>
