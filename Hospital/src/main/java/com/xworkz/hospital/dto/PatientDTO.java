@@ -39,7 +39,7 @@ public class PatientDTO {
 
     private String fees;
 
-
     private Integer slotId;
+
     private Integer doctorId;
 }
