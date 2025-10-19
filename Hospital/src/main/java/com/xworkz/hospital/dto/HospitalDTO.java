@@ -12,7 +12,6 @@ import javax.validation.constraints.Pattern;
 @Setter
 @ToString
 
-
 public class HospitalDTO {
 
     @NotNull
