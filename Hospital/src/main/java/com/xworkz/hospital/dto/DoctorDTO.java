@@ -41,6 +41,7 @@ public class DoctorDTO {
 
         // For uploading new image in update form
         private MultipartFile image;
+
 }
 
 
