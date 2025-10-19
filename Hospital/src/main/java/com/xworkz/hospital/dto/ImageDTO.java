@@ -15,13 +15,22 @@ import java.sql.Timestamp;
 public class ImageDTO {
 
     private String originalImageName;
+
     private String savedName;
+
     private String fileType;
+
     private long fileSize;
+
     private String filePath;
+
     private Timestamp dateTime;
+
     private String createdBy;
+
     private Timestamp createdAt;
+
     private String updatedBy;
+
     private Timestamp updatedAt;
 }
