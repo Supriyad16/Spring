@@ -17,9 +17,8 @@ public class SlotRestController {
     private SlotService slotService;
 
     @PostMapping("/checkDuplicate")
-    public String checkDuplicate(@RequestParam String specialisation,
-                                 @RequestParam String fromTime,
-                                 @RequestParam String toTime) {
+    public String checkDuplicate(@RequestParam String specialisation, @RequestParam String fromTime, @RequestParam String toTime) {
+
         System.err.println("Slot rest controller called");
         boolean exists = slotService.isDuplicateSlot(specialisation, fromTime, toTime);
         System.err.println(exists);
