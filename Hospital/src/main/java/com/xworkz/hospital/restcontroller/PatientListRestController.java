@@ -49,6 +49,7 @@ public class PatientListRestController {
         }
     }
 
+
     // ✅ Changed endpoint name to avoid ambiguity with PatientRestController
     @GetMapping("/fetchTimeSlotList")
     public ResponseEntity<String> getTimeOfDoctors(@RequestParam int id) {
