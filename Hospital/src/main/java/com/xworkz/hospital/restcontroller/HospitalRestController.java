@@ -56,11 +56,4 @@ public class HospitalRestController {
 
         return "OTP sent successfully to " + email;
     }
-
-
-
-
-
-
-
 }
