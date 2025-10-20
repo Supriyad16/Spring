@@ -19,6 +19,7 @@ public class DoctorRestController {
     @Autowired
     public DoctorService doctorService;
 
+
     @GetMapping(value = "/doctorEmail/{email}", produces = MediaType.APPLICATION_JSON_VALUE)
     public String userDoctorEmail(@PathVariable String email) {
         log.info("Rest Controller");
