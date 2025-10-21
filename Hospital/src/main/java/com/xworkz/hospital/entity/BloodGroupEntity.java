@@ -27,4 +27,5 @@ public class BloodGroupEntity {
     @Column(name = "patient_blood_group")
     private String bloodGroup;
 
+
 }
