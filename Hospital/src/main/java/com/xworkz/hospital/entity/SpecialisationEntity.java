@@ -24,5 +24,4 @@ public class SpecialisationEntity extends AuditEntity{
     @Column(name = "specialisation")
     private String specialisation;
 
-
 }
