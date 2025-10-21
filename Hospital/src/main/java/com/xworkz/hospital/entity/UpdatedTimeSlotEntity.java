@@ -27,7 +27,6 @@ public class UpdatedTimeSlotEntity extends AuditEntity{
 
     private String timeSlot;
 
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "doctor_id", nullable = false)
     private DoctorEntity doctor;
@@ -39,11 +38,3 @@ public class UpdatedTimeSlotEntity extends AuditEntity{
     private List<PatientEntity> pateintEntities=new ArrayList<>();
 
 }
-
-
-
-
-
-
-
-
