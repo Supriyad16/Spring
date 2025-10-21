@@ -18,8 +18,7 @@ import javax.persistence.*;
 @NamedQuery(name="getAllSlotSpecialisations", query = "SELECT s FROM SlotEntity s WHERE s.specialisation = :specialisation")
 @NamedQuery(
         name = "checkDuplicates",
-        query = "SELECT s FROM SlotEntity s WHERE s.specialisation = :spec AND s.fromTime = :fromTime AND s.toTime = :toTime"
-)
+        query = "SELECT s FROM SlotEntity s WHERE s.specialisation = :spec AND s.fromTime = :fromTime AND s.toTime = :toTime")
 
 
 public class SlotEntity extends AuditEntity {
