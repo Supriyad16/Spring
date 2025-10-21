@@ -53,4 +53,5 @@ public class PatientImageEntity {
     @ManyToOne
     @JoinColumn(name = "patient_id", referencedColumnName = "id")
     private PatientEntity patientEntity;
+
 }

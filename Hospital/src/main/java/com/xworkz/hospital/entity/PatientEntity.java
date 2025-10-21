@@ -64,6 +64,4 @@ public class PatientEntity extends AuditEntity {
     @OneToMany(mappedBy = "patientEntity", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<PatientImageEntity> images = new ArrayList<>();
 
-
-
 }
