@@ -14,6 +14,7 @@ import java.sql.Timestamp;
 @NoArgsConstructor
 @Entity
 @Table(name = "image_data")
+
 public class ImageEntity {
 
     @Id

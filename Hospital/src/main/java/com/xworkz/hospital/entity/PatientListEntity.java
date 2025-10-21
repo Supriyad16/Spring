@@ -47,4 +47,5 @@ public class PatientListEntity {
     @OneToMany(mappedBy = "patientEntity", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<PatientImageEntity> images = new ArrayList<>();
 
+
 }
