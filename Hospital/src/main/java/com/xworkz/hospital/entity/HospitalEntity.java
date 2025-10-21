@@ -17,6 +17,7 @@ import java.time.LocalDateTime;
 @NamedQuery(name = "getEmailCount", query = "select count(e) from HospitalEntity e where e.email = :email")
 @NamedQuery(name = "getByEmail" ,query = "select entity from HospitalEntity entity where entity.email =:email")
 
+
 public class HospitalEntity extends AuditEntity{
 
     @Id
