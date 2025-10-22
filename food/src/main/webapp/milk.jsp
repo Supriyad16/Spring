@@ -1,5 +1,3 @@
-
-
 <html>
 <body>
 <h2>Milk</h2>
