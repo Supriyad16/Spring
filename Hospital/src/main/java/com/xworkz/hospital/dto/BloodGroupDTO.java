@@ -12,7 +12,6 @@ import lombok.*;
 public class BloodGroupDTO {
 
 
-
         private String bloodGroup;
     }
 
