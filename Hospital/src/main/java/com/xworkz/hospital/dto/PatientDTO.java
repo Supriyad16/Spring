@@ -42,4 +42,5 @@ public class PatientDTO {
     private Integer slotId;
 
     private Integer doctorId;
+
 }
