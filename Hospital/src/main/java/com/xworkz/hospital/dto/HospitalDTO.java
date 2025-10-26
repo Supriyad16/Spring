@@ -21,4 +21,5 @@ public class HospitalDTO {
     @NotNull
     private String OTP;
 
+
 }

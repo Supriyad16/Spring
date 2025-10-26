@@ -31,4 +31,5 @@ public class PatientImageDTO {
     private String updatedBy;
 
     private Timestamp updatedAt;
+
 }
