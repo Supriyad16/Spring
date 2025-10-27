@@ -79,6 +79,7 @@ public class DoctorRepositoryImp implements DoctorRepository {
         return entity;
     }
 
+    @Override
     public List<DoctorEntity> getDoctorsBySpecialisation(String specialisation) {
         EntityManager em = null;
         List<DoctorEntity> doctors = null;
@@ -231,5 +232,38 @@ public class DoctorRepositoryImp implements DoctorRepository {
         return false;
     }
 
+    @Override
+    public int getDoctorEmailCount(String email) {
+        EntityManager em = null;
+        EntityTransaction et = null;
+        Integer count = 0;
 
+        try {
+            em = emf.createEntityManager();
+            et = em.getTransaction();
+            et.begin();
+
+            Query query = em.createNamedQuery("DoctorEntity.getDoctorEmailCount");
+            query.setParameter("email", email);
+            Object object = query.getSingleResult();
+            Long result = (Long) query.getSingleResult();
+            count = result.intValue();
+            System.out.println("Count is " + count);
+            System.out.println(object.toString());
+            et.commit();
+
+        } catch (Exception e) {
+            if (et != null && et.isActive()) {
+                et.rollback();
+            }
+            e.printStackTrace();
+
+        } finally {
+            if (em != null) {
+                em.close();
+            }
+
+            return count;
+        }
+    }
 }
