@@ -33,5 +33,3 @@ public class HospitalEntity extends AuditEntity{
     private LocalDateTime localDateTime;
 
 }
-
-
