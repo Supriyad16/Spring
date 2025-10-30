@@ -3,6 +3,7 @@ package com.xworkz.hospital.dto;
 import lombok.*;
 
 import javax.validation.constraints.*;
+import java.time.LocalDateTime;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -54,5 +55,9 @@ public class PatientDTO {
     private Integer slotId;
 
     private Integer doctorId;
+
+    private String otp;
+
+    private LocalDateTime localDateTime;
 
 }
