@@ -49,8 +49,9 @@
 
         <a class="btn btn-primary text-white fw-bold" href="admin.jsp">Login</a>
 
-        <a class="btn btn-primary text-white fw-bold" href="patientList">Patient List</a>
+<!--        <a class="btn btn-primary text-white fw-bold" href="patientList">Patient List</a>-->
 
+        <a class="btn btn-primary text-white fw-bold" href="patientLogin.jsp">Patient Login</a>
 
         <!--        <a class="btn btn-primary text-white fw-bold" href="patient">Patient</a>-->
 
