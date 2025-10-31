@@ -26,8 +26,8 @@ public class PatientDTO {
     private String gender;
 
     @NotNull
-    @Min(12)
-    @Max(60)
+    @Min(1)
+    @Max(90)
     private int age;
 
     @NotNull(message = "Phone number is required")
