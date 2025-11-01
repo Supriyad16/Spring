@@ -16,7 +16,7 @@ function validateAge(){
 let patientAge=document.getElementById("age").value;
 let patientAgeError=document.getElementById("patientAgeError");
 if(patientAge<1 || patientAge>100){
-patientAgeError.innerHTML="Age should be 0-100 ";
+patientAgeError.innerHTML="Age should be 1-100 ";
 }else{
 patientAgeError.innerHTML="";
 }
