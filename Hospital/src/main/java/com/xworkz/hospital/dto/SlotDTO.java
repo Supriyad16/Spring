@@ -2,7 +2,12 @@ package com.xworkz.hospital.dto;
 
 import lombok.*;
 
-@Data
+@Setter
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
+@ToString
+
 
 public class SlotDTO {
 
@@ -14,7 +19,4 @@ public class SlotDTO {
 
     private String toTime;
 
-
-
 }
-
