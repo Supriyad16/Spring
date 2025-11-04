@@ -82,7 +82,6 @@
         <form action="admin" method="post">
 
 
-            <!-- Email -->
             <div class="mb-3 text-start">
                 <label for="emailId" class="form-label fw-semibold">Email</label>
                 <input type="email" class="form-control" id="emailId" name="email"
@@ -91,22 +90,18 @@
             </div>
 
 
-            <!-- Send OTP -->
             <button type="button" class="btn btn-primary btn-custom" onclick="sendOtp()">Send OTP</button>
 
 
-            <!-- OTP Input -->
             <div class="mb-3 text-start mt-3">
                 <label for="otp" class="form-label fw-semibold">OTP</label>
                 <input type="text" class="form-control" id="otp" name="otp" placeholder="Enter OTP" required >
             </div>
 
 
-            <!-- Submit -->
             <button type="submit" class="btn btn-success btn-custom" >Login</button>
 
 
-            <!-- OTP Countdown -->
             <div id="otpTimer" class="text-danger fw-bold mt-2 mb-3"></div>
 
             <div class="d-flex justify-content-center align-items-center mb-3">
@@ -121,9 +116,9 @@
 </div>
 
 <script>
-    let timer; // global countdown variable
+    let timer;
 
-    // ✅ Check if user email exists
+    //  Check if user email exists
     function UserEmail() {
         let email = document.getElementById("emailId").value;
         if (!email) return;
@@ -137,7 +132,7 @@
         };
     }
 
-    // ✅ Countdown for resend OTP (2 minutes)
+
     function timeCount() {
         let timeCountEl = document.getElementById("timeCountId");
         let resend = document.getElementById("resendId");
@@ -165,7 +160,7 @@
         }, 1000);
     }
 
-    // ✅ Send OTP
+    //  Send OTP
     function sendOtp() {
         let email = document.getElementById("emailId").value;
         if (!email) {
@@ -185,7 +180,7 @@
         };
     }
 
-    // ✅ Resend OTP
+    //  Resend OTP
     function resetTimeOtp() {
         let email = document.getElementById("emailId").value;
         if (!email) {

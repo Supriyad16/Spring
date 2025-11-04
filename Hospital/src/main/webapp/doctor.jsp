@@ -64,6 +64,8 @@
             <li class="nav-item"><a class="nav-link text-white" href="disp"><b>Add Slots</b></a></li>
             <li class="nav-item"><a class="nav-link text-white" href="DoctorList"><b>Update Doctor</b></a></li>
             <li class="nav-item"><a class="nav-link text-white" href="patient"><b>Patient</b></a></li>
+            <li class="nav-item"><a class="nav-link text-white" href="patientList"><b>Patient List</b></a></li>
+
 
 
             <li class="nav-item mt-3">
