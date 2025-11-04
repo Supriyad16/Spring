@@ -108,9 +108,8 @@
         <!-- jQuery (required for AJAX) -->
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-      <script>
-          // When specialisation changes, fetch doctors
-document.getElementById("specialisation").addEventListener("change", function() {
+        <script>
+    document.getElementById("specialisation").addEventListener("change", function() {
     let specialisation = this.value;
     let doctorSelect = document.getElementById("doctor");
     let slotSelect = document.getElementById("slot");
@@ -122,7 +121,8 @@ document.getElementById("specialisation").addEventListener("change", function() 
 
     if (!specialisation) return;
 
-    // ✅ UPDATED: using /api/patientList/fetchDoctorList
+    <!--*-*-*-*-->
+
     let xhr = new XMLHttpRequest();
     xhr.open("GET", "http://localhost:8080/Hospital/api/patientList/fetchDoctorList/" + specialisation, true);
     xhr.onload = function () {
@@ -152,7 +152,7 @@ document.getElementById("doctor").addEventListener("change", function() {
 
     if (!doctorId) return;
 
-    // ✅ UPDATED: using /api/patientList/fetchTimeSlotList
+<!--*-*-*-->
     let xhr = new XMLHttpRequest();
     xhr.open("GET", "http://localhost:8080/Hospital/api/patientList/fetchTimeSlotList?id=" + doctorId, true);
     xhr.onload = function () {

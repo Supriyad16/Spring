@@ -186,6 +186,14 @@ public class DoctorServiceImp implements DoctorService {
         }
         return false;
     }
+
+    @Override
+    public int getDoctorEmailCount(String email) {
+
+        int count = doctorRepository.getDoctorEmailCount(email);
+        System.out.println(count);
+        return count;
+    }
 }
 
 
