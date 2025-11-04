@@ -105,9 +105,6 @@ public class DoctorController {
             model.addAttribute("error", "Doctor with email " + email + " not found or could not be deleted.");
         }
 
-
         return "redirect:/check";
     }
 }
-
-
