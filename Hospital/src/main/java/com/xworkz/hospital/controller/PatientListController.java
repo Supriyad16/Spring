@@ -1,30 +1,20 @@
 package com.xworkz.hospital.controller;
 
-import com.xworkz.hospital.dto.BloodGroupDTO;
 import com.xworkz.hospital.dto.PatientDTO;
-import com.xworkz.hospital.dto.SpecialsationDTO;
-import com.xworkz.hospital.entity.BloodGroupEntity;
-import com.xworkz.hospital.entity.DoctorEntity;
-import com.xworkz.hospital.entity.SlotEntity;
+import com.xworkz.hospital.entity.PatientEntity;
 import com.xworkz.hospital.entity.SpecialisationEntity;
 import com.xworkz.hospital.service.DoctorService;
-import com.xworkz.hospital.service.PatientService;
+import com.xworkz.hospital.service.PatientListService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
-import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/")
@@ -32,41 +22,42 @@ import java.util.stream.Collectors;
 public class PatientListController {
 
     @Autowired
-    private PatientService patientService;
+    private DoctorService doctorService;
 
     @Autowired
-    private DoctorService doctorService;
+    private PatientListService patientListService;
+
 
     @GetMapping("/patientList")
     public String getSpecialisationList(Model model) {
         List<SpecialisationEntity> specialisation = doctorService.getAllSpecialisation();
-        log.info(specialisation.toString());
         model.addAttribute("slotSpecialisations", specialisation);
-        return "patientList";
+        return "patientList";  // JSP with dropdowns
     }
 
 
     @PostMapping("/patientDetails")
-    public ModelAndView getDoctorsDetails(@Valid PatientDTO dto, BindingResult result, ModelAndView view)  {
-        view.setViewName("patient");
+    public ModelAndView getPatientDetails(@RequestParam("specialisation") String specialisation,
+                                          @RequestParam("doctorId") int doctorId,
+                                          @RequestParam("slotId") int slotId,
+                                          ModelAndView view) {
 
-        // Debug: print DTO received from form
-        log.info("Received PatientDTO: {}", dto);
+        view.setViewName("patientListDisplay");
 
-        // Reload dropdowns
-        List<SpecialisationEntity> specializationDtos = doctorService.getAllSpecialisation();
-        view.addObject("slotSpecialisations", specializationDtos);
+        log.info("Fetching patients for Specialisation: {}, Doctor ID: {}, Slot ID: {}", specialisation, doctorId, slotId);
 
+        List<PatientDTO> patientList = patientListService.findPatientsByCriteria(specialisation, doctorId, slotId);
+        System.err.println("*-*-* List od patients *-*-*"+patientList);
 
-        if (result.hasErrors()) {
-            List<String> errorMessages = result.getAllErrors()
-                    .stream()
-                    .map(error -> error.getDefaultMessage())
-                    .collect(Collectors.toList());
-            view.addObject("validationErrors", errorMessages);
-            view.addObject("dto", dto);
-            log.info("Validation errors: {}", errorMessages);
+        if (patientList == null || patientList.isEmpty()) {
+            log.warn("No patients found for given filters.");
+            view.addObject("message", "No patients found for the selected criteria.");
+        } else {
+            log.info("Found {} patients", patientList.size());
         }
+
+        view.addObject("patientList", patientList);
         return view;
+
     }
 }
