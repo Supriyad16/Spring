@@ -28,6 +28,7 @@ public class DoctorRestController {
             return "Email already exists";
         } else {
             return " ";
+
         }
     }
 }
