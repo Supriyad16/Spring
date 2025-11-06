@@ -112,6 +112,8 @@ console.log("Calling duplicate slot API with:", specialisation, fromTime, toTime
             <li class="nav-item"><a class="nav-link text-white" href="DoctorList"><b>Update Doctor</b></a></li>
             <li class="nav-item"><a class="nav-link text-white" href="patient"><b>Patient</b></a></li>
             <li class="nav-item mt-3"><a href="admin.jsp" class="btn btn-outline-light btn-lg w-100">Logout</a></li>
+            <li class="nav-item"><a class="nav-link text-white" href="patientList"><b>Patient List</b></a></li>
+
         </ul>
     </div>
 </div>
@@ -130,7 +132,7 @@ console.log("Calling duplicate slot API with:", specialisation, fromTime, toTime
                     <select class="form-select" id="specialisation" name="specialisation" onchange="CheckTimeSlot()" required>
                         <option value="">-- Select Specialisation --</option>
                         <c:forEach var="doc" items="${doctors}">
-                            <option value="${doc.specialisation}">${doc.specialisation}</option>
+                            <option value="${doc.id}">${doc.specialisation}</option>
                         </c:forEach>
                     </select>
                 </div>
