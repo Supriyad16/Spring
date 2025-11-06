@@ -25,4 +25,6 @@ public interface DoctorService {
 
     boolean deleteDoctorByEmail(String email);
 
+    int getDoctorEmailCount(String email);
+
 }
