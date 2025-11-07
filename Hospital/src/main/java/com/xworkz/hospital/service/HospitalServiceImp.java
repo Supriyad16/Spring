@@ -10,6 +10,7 @@ import com.xworkz.hospital.repository.HospitalRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.mail.*;
@@ -24,6 +25,8 @@ public class HospitalServiceImp implements HospitalService {
 
     @Autowired
     private HospitalRepository hospitalRepository;
+
+    private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
 
     @Override
@@ -43,11 +46,13 @@ public class HospitalServiceImp implements HospitalService {
     public void saveOtp(String email, String otp) {
         HospitalEntity entity = hospitalRepository.findByEmail(email);
         if (entity != null) {
-            entity.setOTP(otp);
+            String encodedOtp = passwordEncoder.encode(otp);
+            entity.setOTP(encodedOtp);
             entity.setLocalDateTime(LocalDateTime.now());
             hospitalRepository.save(entity);
         }
     }
+
 
     public void sendOtpEmail(String email, String otp) {
         final String username = "dinakaranctsupriya@gmail.com";
@@ -87,13 +92,15 @@ public class HospitalServiceImp implements HospitalService {
 
     @Override
     public String validateOtp(String email, String otp) {
+
         HospitalEntity entity = hospitalRepository.findByEmail(email);
+        log.info("OTP generated for {} at {}", email, LocalDateTime.now());
 
         if (entity == null || entity.getOTP() == null) {
             return "INVALID";
         }
 
-        if (!otp.equals(entity.getOTP())) {
+        if (!passwordEncoder.matches(otp, entity.getOTP())) {
             return "INVALID";
         }
 
@@ -215,6 +222,7 @@ public class HospitalServiceImp implements HospitalService {
     @Override
     public List<DoctorEntity> getUnassignedDoctors(String specialisation) {
         return hospitalRepository.getUnassignedDoctors(specialisation);
+
     }
 }
 
