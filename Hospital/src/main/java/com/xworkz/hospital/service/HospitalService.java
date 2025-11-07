@@ -50,8 +50,4 @@ public interface HospitalService {
     boolean assignSlotToDoctor(String doctorName, String timeSlot);
 
 
-
-
-
-
 }
