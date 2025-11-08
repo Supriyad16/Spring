@@ -1,6 +1,5 @@
 package com.xworkz.hospital.entity;
 
-
 import lombok.*;
 
 import javax.persistence.*;
