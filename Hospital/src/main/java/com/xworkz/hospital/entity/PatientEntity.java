@@ -22,8 +22,6 @@ import java.util.List;
 @NamedQuery(name = "PatientEntity.getAllPatients", query = "SELECT p FROM PatientEntity p " + "JOIN FETCH p.doctor " + "JOIN FETCH p.slotEntity " + "WHERE p.specialisation = :spec " + "AND p.doctor.id = :docId " + "AND p.slotEntity.id = :slotId")
 @NamedQuery(name = "PatientEntity.getPatientEmailCount", query = "select count(e) from PatientEntity e where e.email = :email")
 
-
-
 public class PatientEntity extends AuditEntity {
 
 
