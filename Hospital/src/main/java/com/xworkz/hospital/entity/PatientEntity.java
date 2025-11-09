@@ -23,6 +23,7 @@ import java.util.List;
 @NamedQuery(name = "PatientEntity.getPatientEmailCount", query = "select count(e) from PatientEntity e where e.email = :email")
 
 
+
 public class PatientEntity extends AuditEntity {
 
     @Id
