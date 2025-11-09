@@ -55,7 +55,6 @@ public class HospitalConfiguration implements WebMvcConfigurer {
     }
 
 
-
     @Bean(name = "multipartResolver")
     public CommonsMultipartResolver commonsMultipartResolver (){
         CommonsMultipartResolver commonsMultipartResolver = new CommonsMultipartResolver();
