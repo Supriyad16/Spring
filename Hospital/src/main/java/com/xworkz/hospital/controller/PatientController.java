@@ -15,10 +15,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -48,7 +50,7 @@ public class PatientController {
         return "patient"; // JSP page
     }
     @PostMapping("/patient")
-    public ModelAndView registerPatient(@Valid PatientDTO dto, BindingResult result, ModelAndView view) {
+    public ModelAndView registerPatient(@RequestParam("images") List<MultipartFile> multipartFile, @Valid PatientDTO dto, BindingResult result, ModelAndView view) throws IOException {
         view.setViewName("patient");
 
         // Debug: print DTO received from form
@@ -93,7 +95,7 @@ public class PatientController {
             log.info("Saving patient DTO to DB: {}", dto);
 
             // Save patient
-            boolean saved = patientService.patientSave(dto);
+            boolean saved = patientService.patientSave(multipartFile,dto);
             log.info("Save status: {}", saved);
 
             if (saved) {
@@ -102,7 +104,6 @@ public class PatientController {
                 view.addObject("saveError", "Failed to save patient details. Please try again.");
             }
         }
-
         return view;
     }
 }
