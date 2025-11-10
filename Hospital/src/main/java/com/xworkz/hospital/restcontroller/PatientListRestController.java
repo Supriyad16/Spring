@@ -23,7 +23,7 @@ public class PatientListRestController {
     @Autowired
     private PatientService patientService;
 
-    // ✅ Changed endpoint name to avoid duplicate mapping
+
     @GetMapping("/fetchDoctorList/{specialisation}")
     public String getSpecialisation(@PathVariable String specialisation) {
         log.info("Fetching doctors by specialisation: {}", specialisation);
@@ -50,7 +50,6 @@ public class PatientListRestController {
     }
 
 
-    // ✅ Changed endpoint name to avoid ambiguity with PatientRestController
     @GetMapping("/fetchTimeSlotList")
     public ResponseEntity<String> getTimeOfDoctors(@RequestParam int id) {
         List<UpdatedTimeSlotDTO> interval = patientService.getTimeSlot(id);
