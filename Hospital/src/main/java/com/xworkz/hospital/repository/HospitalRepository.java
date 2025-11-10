@@ -6,7 +6,6 @@ import java.util.List;
 
 public interface HospitalRepository {
 
-
     HospitalEntity findByEmail(String email);
 
     int getEmailCount(String email);
