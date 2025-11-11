@@ -48,8 +48,7 @@ public class PatientListServiceImp implements PatientListService {
         for (PatientEntity entity : entities) {
             PatientDTO dto = new PatientDTO();
             BeanUtils.copyProperties(entity, dto);
-            // If BeanUtils doesn't copy nested/linked properties like doctorName or slotTime,
-            // set them manually, for example:
+
             dto.setDoctorName(entity.getDoctor().getDoctorName());
             dto.setSlot(entity.getSlotEntity().getTimeSlot());
             dtos.add(dto);
