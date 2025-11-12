@@ -36,7 +36,7 @@ public class HospitalRestController {
         log.info("Rest Controller");
         long count = hospitalService.getEmailCount(email);
         if (count == 0) {
-            return "Invalid Email ";
+            return "Invalid Email";
         } else {
             return " ";
         }
