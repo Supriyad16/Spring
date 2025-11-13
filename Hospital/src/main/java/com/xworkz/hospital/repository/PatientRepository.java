@@ -16,10 +16,6 @@ public interface PatientRepository {
 
     List<BloodGroupEntity> getAllBloodGroup();
 
-
-
 }
-
-
 
 
