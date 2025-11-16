@@ -23,7 +23,6 @@ import java.util.List;
 
 public class PatientEntity extends AuditEntity {
 
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
