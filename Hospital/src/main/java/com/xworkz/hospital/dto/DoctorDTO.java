@@ -39,7 +39,6 @@ public class DoctorDTO {
 
         private String imagePath;
 
-        // For uploading new image in update form
         private MultipartFile image;
 
 }
