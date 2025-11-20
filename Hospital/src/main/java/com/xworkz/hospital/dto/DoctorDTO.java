@@ -40,5 +40,4 @@ public class DoctorDTO {
         private String imagePath;
 
         private MultipartFile image;
-
 }
