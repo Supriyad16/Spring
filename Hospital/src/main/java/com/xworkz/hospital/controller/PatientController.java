@@ -104,6 +104,7 @@ public class PatientController {
                 view.addObject("saveError", "Failed to save patient details. Please try again.");
             }
         }
+
         return view;
     }
 }
