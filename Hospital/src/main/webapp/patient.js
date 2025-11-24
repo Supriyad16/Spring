@@ -33,6 +33,7 @@ let emailPattern=/^[a-z0-9._]+@gmail\.com$/;
     } else {
         patientEmailError.innerHTML = "";
     }
+
 }
 
 
