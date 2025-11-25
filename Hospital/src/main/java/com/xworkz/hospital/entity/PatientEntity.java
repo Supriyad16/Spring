@@ -13,6 +13,7 @@ import java.util.List;
 @Getter
 @ToString(exclude = {"images", "doctor", "slotEntity"})
 
+
 @Entity
 @Table(name = "patient_data")
 
