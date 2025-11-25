@@ -11,6 +11,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="validation.js"></script>
     <style>
+
         body {
             margin: 0;
             min-height: 100vh;
