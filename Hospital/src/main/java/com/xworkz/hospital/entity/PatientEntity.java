@@ -17,6 +17,7 @@ import java.util.List;
 @Entity
 @Table(name = "patient_data")
 
+
 @NamedQuery(name = "PatientEntity.getByEmail", query = "select  e from PatientEntity e where e.email=:email")
 @NamedQuery(name = "PatientEntity.getByRegistrationId", query = "SELECT e FROM PatientEntity e WHERE e.registrationId = :regId")
 @NamedQuery(name = "PatientEntity.getAllPatients", query = "SELECT p FROM PatientEntity p " + "JOIN FETCH p.doctor " + "JOIN FETCH p.slotEntity " + "WHERE p.specialisation = :spec " + "AND p.doctor.id = :docId " + "AND p.slotEntity.id = :slotId")
