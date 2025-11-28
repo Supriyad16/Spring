@@ -71,4 +71,5 @@ public class PatientEntity extends AuditEntity {
     private String otp;
 
     private LocalDateTime localDateTime;
+
 }
