@@ -72,5 +72,4 @@ public class PatientEntity extends AuditEntity {
 
     private LocalDateTime localDateTime;
 
-
 }
