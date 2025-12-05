@@ -43,4 +43,5 @@ public class DoctorDTO {
         private MultipartFile image;
 
 
+
 }
