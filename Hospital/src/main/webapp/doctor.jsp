@@ -3,6 +3,7 @@
 
 <html lang="en">
 <head>
+
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Doctor Registration - Hospital</title>
@@ -12,7 +13,6 @@
     <script src="validation.js"></script>
     <style>
 
-
         body {
             margin: 0;
             min-height: 100vh;
@@ -21,6 +21,7 @@
             padding-top: 80px;
             color: #fff;
         }
+
 
 
         .form-container {
