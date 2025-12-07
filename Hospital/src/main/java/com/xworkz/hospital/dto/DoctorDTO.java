@@ -8,7 +8,6 @@ import javax.validation.constraints.*;
 @Data
 public class DoctorDTO {
 
-
         private int id;
 
         @NotNull
