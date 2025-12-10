@@ -22,7 +22,6 @@ patientAgeError.innerHTML="";
 }
 }
 
-
 function validateEmail(){
 let patientEmail=document.getElementById("email").value;
 let patientEmailError=document.getElementById("patientEmailError");
