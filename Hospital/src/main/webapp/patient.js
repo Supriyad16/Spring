@@ -12,6 +12,7 @@ patientNameError.innerHTML=" "
 }
 }
 
+
 function validateAge(){
 let patientAge=document.getElementById("age").value;
 let patientAgeError=document.getElementById("patientAgeError");
