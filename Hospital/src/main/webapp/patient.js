@@ -60,6 +60,7 @@ function validateAddress() {
     }
 }
 
+
 function validateDisease() {
     let disease = document.getElementById("disease").value.trim();
     let diseaseError = document.getElementById("diseaseError");
