@@ -1,15 +1,16 @@
 package com.xworkz.hospital.restcontroller;
 
 import com.xworkz.hospital.dto.DoctorDTO;
+import com.xworkz.hospital.dto.PatientDTO;
 import com.xworkz.hospital.dto.UpdatedTimeSlotDTO;
 import com.xworkz.hospital.service.DoctorService;
+import com.xworkz.hospital.service.PatientLoginService;
 import com.xworkz.hospital.service.PatientService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,6 +24,9 @@ public class PatientRestController {
 
     @Autowired
     private PatientService patientService;
+
+    @Autowired
+    private PatientLoginService patientLoginService;
 
 
     @GetMapping("fetchDoctor/{specialisation}")
@@ -51,7 +55,6 @@ public class PatientRestController {
         }
     }
 
-
     @GetMapping("/fetchTimeSlot")
     public ResponseEntity<String> getTimeSlot(@RequestParam int id){
         List<UpdatedTimeSlotDTO> interval = patientService.getTimeSlot(id);
@@ -66,4 +69,32 @@ public class PatientRestController {
             return ResponseEntity.ok(String.join("|",mappedValues));
         }
     }
+
+    @GetMapping(value = "/PatientEmail/{email}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public String userPatientEmail(@PathVariable String email) {
+        log.info("Patient Rest Controller");
+        long count = patientLoginService.getPatientEmailCount(email);
+        if (count == 0) {
+            return "Invalid Email";
+        } else {
+            return " ";
+        }
+    }
+
+
+    @GetMapping(value = "/sendOtp/{email}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public String sendOtpToPatient(@PathVariable String email) {
+        System.out.println("Sending OTP to: " + email);
+        PatientDTO patientDTO = patientLoginService.findPatientByEmail(email);
+        if (patientDTO == null) {
+            return "Email not found in database!";
+        }
+
+        String otp = patientLoginService.generateOtp();
+        patientLoginService.saveOtp(email, otp);
+        patientLoginService.sendOtpToPatient(email, otp);
+
+        return "OTP sent successfully to " + email;
+    }
+
 }
