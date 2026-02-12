@@ -31,6 +31,7 @@ public class PatientRepositoryImp implements PatientRepository {
             em.persist(patientEntity);
             et.commit();
 
+
             System.out.println("Patient details saved successfully: " + patientEntity);
             return true;
 
@@ -48,26 +49,26 @@ public class PatientRepositoryImp implements PatientRepository {
     }
 
 
-        @Override
-        public List<BloodGroupEntity> getAllBloodGroup() {
+    @Override
+    public List<BloodGroupEntity> getAllBloodGroup() {
 
-            EntityManager em =emf.createEntityManager();
-            EntityTransaction et=em.getTransaction();
-            List<BloodGroupEntity> bloodGroupEntities = null;
-            try {
-                et.begin();
-                Query query=em.createNamedQuery("getAllBloodGroup");
-                bloodGroupEntities= query.getResultList();
-                et.commit();
-            } catch (Exception e) {
-                if (et.isActive()) {
-                    et.rollback();
-                }
-            } finally {
-                em.close();
+        EntityManager em = emf.createEntityManager();
+        EntityTransaction et = em.getTransaction();
+        List<BloodGroupEntity> bloodGroupEntities = null;
+        try {
+            et.begin();
+            Query query = em.createNamedQuery("getAllBloodGroup");
+            bloodGroupEntities = query.getResultList();
+            et.commit();
+        } catch (Exception e) {
+            if (et.isActive()) {
+                et.rollback();
             }
-            return bloodGroupEntities;
+        } finally {
+            em.close();
         }
+        return bloodGroupEntities;
+    }
 
 
 //@Override
@@ -109,17 +110,16 @@ public class PatientRepositoryImp implements PatientRepository {
     }
 
 
-
     @Override
     public UpdatedTimeSlotEntity getInterval(int id) {
-        EntityManager em=emf.createEntityManager();
-        EntityTransaction transaction=em.getTransaction();
-        UpdatedTimeSlotEntity interval=null;
+        EntityManager em = emf.createEntityManager();
+        EntityTransaction transaction = em.getTransaction();
+        UpdatedTimeSlotEntity interval = null;
         try {
             transaction.begin();
-            Query query=em.createNamedQuery("getIntervalById");
-            query.setParameter("id",id);
-            interval=(UpdatedTimeSlotEntity) query.getSingleResult();
+            Query query = em.createNamedQuery("getIntervalById");
+            query.setParameter("id", id);
+            interval = (UpdatedTimeSlotEntity) query.getSingleResult();
             transaction.commit();
         } catch (Exception e) {
             if (transaction.isActive()) {
@@ -133,7 +133,3 @@ public class PatientRepositoryImp implements PatientRepository {
 
 
 }
-
-
-
-
